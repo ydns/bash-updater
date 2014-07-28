@@ -40,10 +40,7 @@ ret=`curl --basic \
 	--silent \
 	https://ydns.eu/api/v1/update/?host=$YDNS_HOST`
 
-if [ "$ret" = "ok" ]; then
-	echo "Update: OK"
-	exit 0
-else
+if [ "$ret" != "ok" ]; then
 	echo "Update failed: $ret"
-	exit 1
+	exit 90
 fi
