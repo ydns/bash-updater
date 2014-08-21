@@ -38,6 +38,7 @@ fi
 ret=`curl --basic \
 	-u "$YDNS_USER:$YDNS_PASSWD" \
 	--silent \
+	--sslv3 \
 	https://ydns.eu/api/v1/update/?host=$YDNS_HOST`
 
 if [ "$ret" != "ok" ]; then
