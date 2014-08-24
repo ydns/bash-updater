@@ -24,24 +24,127 @@
 YDNS_USER="user@host.xx"
 YDNS_PASSWD="secret"
 YDNS_HOST="myhost.ydns.eu"
+YDNS_LASTIP_FILE="/tmp/ydns_last_ip"
 
 ##
 # Don't change anything below.
 ##
+YDNS_UPD_VERSION="20140824.1"
+
 if ! hash curl 2>/dev/null; then
 	echo "ERROR: cURL is missing."
 	exit 1
 fi
 
-# if this fails with error 60 your certificate store does not contain the certificate,
-# either add it or use -k (disable certificate check
-ret=`curl --basic \
-	-u "$YDNS_USER:$YDNS_PASSWD" \
-	--silent \
-	--sslv3 \
-	https://ydns.eu/api/v1/update/?host=$YDNS_HOST`
+usage () {
+	echo "YDNS Updater"
+	echo ""
+	echo "Usage: $0 [options]"
+	echo ""
+	echo "Available options are:"
+	echo "  -h             Display usage"
+	echo "  -H HOST        YDNS host to update"
+	echo "  -u USERNAME    YDNS username for authentication"
+	echo "  -p PASSWORD    YDNS password for authentication"
+	echo "  -v             Display version"
+	echo "  -V             Enable verbose output"
+	exit 0
+}
 
-if [ "$ret" != "ok" ]; then
-	echo "Update failed: $ret"
-	exit 90
+## Shorthand function to update the IP address
+update_ip_address () {
+	# if this fails with error 60 your certificate store does not contain the certificate,
+	# either add it or use -k (disable certificate check
+	ret=`curl --basic \
+		-u "$YDNS_USER:$YDNS_PASSWD" \
+		--silent \
+		--sslv3 \
+		https://ydns.eu/api/v1/update/?host=$YDNS_HOST`
+
+	echo $ret
+}
+
+## Shorthand function to display version
+show_version () {
+	echo "YDNS Updater version $YDNS_UPD_VERSION"
+	exit 0
+}
+
+## Shorthand function to write a message
+write_msg () {
+	if [ $verbose -ne 1 ]; then
+		return
+	fi
+
+	outfile=1
+
+	if [ -n "$2" ]; then
+		outfile=$2
+	fi
+
+	echo "[`date +%Y/%m/%dT%H:%M:%S`] $1" >&$outfile
+}
+
+verbose=0
+
+while getopts "hH:p:u:vV" opt; do
+	case $opt in
+		h)
+			usage
+			;;
+
+		H)
+			YDNS_HOST=$OPTARG
+			;;
+
+		p)
+			YDNS_PASSWD=$OPTARG
+			;;
+
+		u)
+			YDNS_USER=$OPTARG
+			;;
+
+		v)
+			show_version
+			;;
+
+		V)
+			verbose=1
+			;;
+	esac
+done
+
+# Retrieve current public IP address
+current_ip=`curl --silent --sslv3 https://ydns.eu/api/v1/ip`
+write_msg "Current IP: $current_ip"
+
+# Get last known IP address that was stored locally
+if [ -f "$YDNS_LASTIP_FILE" ]; then
+	last_ip=`head -n 1 $YDNS_LASTIP_FILE`
+else
+	last_ip=""
+fi
+
+if [ "$current_ip" != "$last_ip" ]; then
+	ret=$(update_ip_address)
+
+	case "$ret" in
+		badauth)
+			write_msg "YDNS host updated failed: $YDNS_HOST (authentication failed)" 2
+			exit 90
+			;;
+
+		ok)
+			write_msg "YDNS host updated successfully: $YDNS_HOST ($current_ip)"
+			exit 0
+			;;
+
+		*)
+			write_msg "YDNS host update failed: $YDNS_HOST ($ret)" 2
+			exit 91
+			;;
+	esac
+else
+	write_msg "Not updating YDNS host $YDNS_HOST: IP address unchanged" 2
 fi
