@@ -29,7 +29,7 @@ YDNS_LASTIP_FILE="/tmp/ydns_last_ip"
 ##
 # Don't change anything below.
 ##
-YDNS_UPD_VERSION="20140824.1"
+YDNS_UPD_VERSION="20141015.1"
 
 if ! hash curl 2>/dev/null; then
 	echo "ERROR: cURL is missing."
@@ -137,6 +137,7 @@ if [ "$current_ip" != "$last_ip" ]; then
 
 		ok)
 			write_msg "YDNS host updated successfully: $YDNS_HOST ($current_ip)"
+			echo "$current_ip" > $YDNS_LASTIP_FILE
 			exit 0
 			;;
 
