@@ -25,6 +25,7 @@ YDNS_USER="user@host.xx"
 YDNS_PASSWD="secret"
 YDNS_HOST="myhost.ydns.eu"
 YDNS_LASTIP_FILE="/tmp/ydns_last_ip"
+YDNS_LASTIP6_FILE="/tmp/ydns_last_ip6"
 
 ##
 # Don't change anything below.
@@ -55,13 +56,20 @@ usage () {
 update_ip_address () {
 	# if this fails with error 60 your certificate store does not contain the certificate,
 	# either add it or use -k (disable certificate check
-	ret=`curl --basic \
+	ret=`curl -4 --basic \
+		-u "$YDNS_USER:$YDNS_PASSWD" \
+		--silent \
+		--sslv3 \
+		https://ydns.eu/api/v1/update/?host=$YDNS_HOST`
+
+	ret6=`curl -6 --basic \
 		-u "$YDNS_USER:$YDNS_PASSWD" \
 		--silent \
 		--sslv3 \
 		https://ydns.eu/api/v1/update/?host=$YDNS_HOST`
 
 	echo $ret
+	echo $ret6
 }
 
 ## Shorthand function to display version
@@ -116,14 +124,24 @@ while getopts "hH:p:u:vV" opt; do
 done
 
 # Retrieve current public IP address
-current_ip=`curl --silent --sslv3 https://ydns.eu/api/v1/ip`
+current_ip=`curl -4 --silent --sslv3 https://ydns.eu/api/v1/ip`
 write_msg "Current IP: $current_ip"
+
+current_ip6=`curl -6 --silent --sslv3 https://ydns.eu/api/v1/ip`
+write_msg "Current IP6: $current_ip6"
+
 
 # Get last known IP address that was stored locally
 if [ -f "$YDNS_LASTIP_FILE" ]; then
 	last_ip=`head -n 1 $YDNS_LASTIP_FILE`
 else
 	last_ip=""
+fi
+
+if [ -f "$YDNS_LASTIP6_FILE" ]; then
+	last_ip6=`head -n 1 $YDNS_LASTIP6_FILE`
+else
+	last_ip6=""
 fi
 
 if [ "$current_ip" != "$last_ip" ]; then
@@ -143,6 +161,30 @@ if [ "$current_ip" != "$last_ip" ]; then
 
 		*)
 			write_msg "YDNS host update failed: $YDNS_HOST ($ret)" 2
+			exit 91
+			;;
+	esac
+else
+	write_msg "Not updating YDNS host $YDNS_HOST: IP address unchanged" 2
+fi
+
+if [ "$current_ip6" != "$last_ip6" ]; then
+	ret6=$(update_ip_address)
+
+	case "$ret6" in
+		badauth)
+			write_msg "YDNS host updated failed: $YDNS_HOST (authentication failed)" 2
+			exit 90
+			;;
+
+		ok)
+			write_msg "YDNS host updated successfully: $YDNS_HOST ($current_ip6)"
+			echo "$current_ip6" > $YDNS_LASTIP6_FILE
+			exit 0
+			;;
+
+		*)
+			write_msg "YDNS host update failed: $YDNS_HOST ($ret6)" 2
 			exit 91
 			;;
 	esac
