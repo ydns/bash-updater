@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # yDNS Updater, updates your yDNS host.
 # Copyright (C) 2013 Christian Jurk <cj@ydns.eu>
