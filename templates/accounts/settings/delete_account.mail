@@ -1,0 +1,8 @@
+{% extends "base.mail" %}
+{% load i18n %}
+
+{% block content %}{% blocktrans %}Hi!
+
+This mail confirms that your YDNS user account has been completely removed.{% endblocktrans %}
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% load i18n %}
+	{% if hosts.count > 0 %}<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>{% trans "Hostname" %}</th>
+				<th>{% trans "Content" %}</th>
+				<th>{% trans "State" %}</th>
+				<th>{% trans "Last updated" %}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for host in hosts %}<tr>
+				<td><a href="{% url 'hosts:detail' host.name %}">{{ host }}</a></td>
+				<td>
+				    {% if host.records.count == 0 %}
+				        <span class="text-muted">{% trans "No records found" %}</span>
+				    {% else %}
+					    {% for record in host.records.all %}
+						    <span title="{% blocktrans with rr_type=record.type %}Record type: {{ rr_type }}{% endblocktrans %}" data-placement="left" data-toggle="tooltip">{{ record.content }}</span>
+					    {% endfor %}
+				    {% endif %}
+				</td>
+				<td>{{ host.get_status_label|safe }}</td>
+				<td>
+					{% with latest=host.get_latest_record %}
+						{% if latest %}
+							{% if latest.date_last_modified %}{{ latest.date_last_modified|date:_("Y/m/d H:i T") }}{% else %}{% trans "Never updated" %}{% endif %}
+						{% else %}
+							<span class="text-danger">{% trans "No records" %}</span>
+						{% endif %}
+					{% endwith %}
+				</td>
+			</tr>{% endfor %}
+		</tbody>
+	</table>{% endif %}

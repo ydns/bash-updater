@@ -1,0 +1,10 @@
+{% load i18n %}
+<ul class="nav nav-list">
+	<li class="nav-header">{% blocktrans with eid=entry.id|stringformat:'04d' %}HBL #{{ eid }}{% endblocktrans %}</li>
+	<li data-nav-id="cp-hbl-overview"><a href="{% url 'cp:hbl:detail' entry.id %}">{% trans "Entry Overview" %}</a></li>
+	<li class="nav-header">{% trans "Danger Zone" %}</li>
+	<li data-nav-id="cp-hbl-edit"><a href="{% url 'cp:hbl:edit' entry.id %}">{% trans "Edit Entry" %}</a></li>
+	<li data-nav-id="cp-hbl-delete"><a href="{% url 'cp:hbl:delete' entry.id %}">{% trans "Delete Entry" %}</a></li>
+	<li class="nav-divider"></li>
+	<li><a href="{% url 'cp:hbl:home' %}">{% trans "Back to Host Blacklist" %}</a></li>
+</ul>

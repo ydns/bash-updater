@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Control Panel" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-2">
+			{% include "cp/ebl/sidenav.html" %}
+		</div>
+		<div class="col-lg-10">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "Edit Email Blacklist Entry" %}</h3>
+				<form class="aui" method="post" action="{% url 'cp:ebl:edit' entry.id %}">
+					{% csrf_token %}
+					<div class="form-group{% if errors.pattern %} has-error{% endif %}">
+						<label for="id_pattern">{% trans "Regex Pattern" %}</label>
+						<textarea name="pattern" id="id_pattern" rows="6" required class="form-control form-control-mono" placeholder="{% trans "Enter regular expression…" %}">{% if post.pattern %}{{ post.pattern }}{% else %}{{ entry.name }}{% endif %}</textarea>
+						{% if errors.pattern %}<p class="help-block">{{ errors.pattern }}</p>{% endif %}
+					</div>
+					<div class="form-group">
+						<label for="id_reason">{% trans "Reason" %}</label>
+						<textarea name="reason" id="id_reason" rows="3" class="form-control" placeholder="{% trans "Optional" %}">{% if post.reason %}{{ post.reason }}{% elif entry.reason %}{{ entry.reason }}{% endif %}</textarea>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">{% trans "Update Entry" %}</button>
+					</div>
+				</form>
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="cp"],[data-nav-id="cp-ebl-edit"]').addClass('active');
+		});
+	</script>
+{% endblock %}

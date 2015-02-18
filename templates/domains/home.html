@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Domains" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-12">
+			<section class="section">
+				<h3 class="section-header page-header">
+					{% trans "Domains" %}
+		            <span class="pull-right">
+			            <a href="{% url 'domains:create' %}" class="btn btn-link">{% trans "Create Domain" %}</a>
+		            </span>
+				</h3>
+
+			    {% if domains.count == 0 %}
+			    <p>{% trans "No domains found." %}</p>
+			    {% else %}
+	            <table class="table table-bordered table-striped">
+	            	<thead>
+	            		<tr>
+	            			<th>{% trans "Domain name" %}</th>
+	            			<th>{% trans "Status" %}</th>
+	            			<th>{% trans "Owner" %}</th>
+	            			<th>{% trans "Creation Date" %}</th>
+	            		</tr>
+	            	</thead>
+	            	<tbody>
+	            		{% for domain in domains %}<tr>
+	            			<td><a href="{% url 'domains:detail' domain.name %}">{{ domain }}</a></td>
+	            			<td>
+	            				{{ domain.get_status_label }}
+	            				{% if domain.is_official %}<span class="label label-subtle" title="{% trans "Official YDNS domain" %}" data-toggle="tooltip"><i class="fa fa-check fa-fw"></i></span>{% endif %}
+	            			</td>
+	            			<td>
+	            				{% if not domain.public_owner %}
+	            					<span class="text-muted">{% trans "Not disclosed" %}</span>
+	            				{% elif domain.is_official %}
+	            					<a href="https://ydns.eu">YDNS</a>
+	            				{% else %}
+	            					<a href="#">{{ domain.owner.email }}</a>
+	            				{% endif %}
+	            			</td>
+	            			<td>{{ domain.date_created|date:_("Y/m/d H:i T") }}</td>
+	            		</tr>{% endfor %}
+	            	</tbody>
+	            </table>
+			    {% endif %}
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="domains"]').addClass('active');
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+{% endblock %}

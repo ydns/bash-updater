@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ host }} &mdash; {% trans "Journal" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-3">
+            {% include "hosts/sidenav.html" %}
+		</div>
+	    <div class="col-lg-9">
+			<section class="section">
+				<h3 class="section-header page-header">
+	                {% trans "Journal" %}
+	                <span class="pull-right">
+					    <a href="{% url 'hosts:clear_journal' host.name %}" class="btn btn-link">{% trans "Clear Journal" %}</a>
+					</span>
+	            </h3>
+			    {% if host.journal.count == 0 %}
+			    	<p class="text-danger">{% trans "The journal is empty." %}</p>
+			    {% else %}
+			    	<table class="table table-bordered">
+			    		<thead>
+			    			<tr>
+			    				<th>{% trans "Date" %}</th>
+			    				<th>{% trans "Message" %}</th>
+			    				<th>{% trans "User" %}</th>
+			    			</tr>
+			    		</thead>
+			    		<tbody>
+			    			{% for msg in host.journal %}<tr>
+			    				<td>{{ msg.date_created|date:_("Y/m/d H:i T") }}</td>
+			    				<td>{{ msg.message }}</td>
+			    				<td>{{ msg.user.email|default:_("Not available") }}</td>
+			    			</tr>{% endfor %}
+			    		</tbody>
+			    	</table>
+			    {% endif %}
+	        </section>
+	    </div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="hosts"],[data-nav-id="host-journal"]').addClass('active');
+		});
+	</script>
+{% endblock %}

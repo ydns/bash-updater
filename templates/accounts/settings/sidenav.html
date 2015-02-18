@@ -1,0 +1,11 @@
+{% load i18n %}
+<ul class="nav nav-list">
+	<li class="nav-header">{% trans "General" %}</li>
+	<li data-nav-id="account"><a href="{% url 'accounts:settings:home' %}">{% trans "Account" %}</a></li>
+	<li data-nav-id="api-access"><a href="{% url 'accounts:settings:api_access' %}">{% trans "API Access" %}</a></li>
+	<li data-nav-id="delete-account"><a href="{% url 'accounts:settings:delete_account' %}">{% trans "Delete Account" %}</a></li>
+	<li class="nav-header">{% trans "Security" %}</li>
+	<li data-nav-id="change-password"><a href="{% url 'accounts:settings:change_password' %}">{% trans "Change Password" %}</a></li>
+	<li data-nav-id="two-factor-auth"><a href="{% url 'accounts:settings:two_factor_auth' %}">{% trans "Two-Factor Authentication" %}</a></li>
+	<li data-nav-id="journal"><a href="{% url 'accounts:settings:journal' %}">{% trans "Journal" %}</a></li>
+</ul>

@@ -1,0 +1,10 @@
+{% load i18n %}
+<ul class="nav nav-list">
+	<li class="nav-header">{% trans "General" %}</li>
+	<li data-nav-id="domain"><a href="{% url 'domains:detail' domain.name %}">{% trans "Domain Details" %}</a></li>
+	{% if is_manager %}<li data-nav-id="domain-hosts"><a href="{% url 'domains:hosts:home' domain.name %}">{% trans "Hosts" %} <span class="badge {% if domain.hosts.count == 0 %}badge-subtle{% endif %}">{{ domain.hosts.count }}</span></a></li>
+	<li data-nav-id="domain-records"><a href="{% url 'domains:records:home' domain.name %}">{% trans "Records" %} <span class="badge {% if domain.records.count == 0 %}badge-subtle{% endif %}">{{ domain.records.count }}</span></a></li>
+	{% if domain.is_moderated %}<li data-nav-id="domain-mq"><a href="{% url 'domains:mq:home' domain.name %}">{% trans "Moderation Queue" %} <span class="badge {% if domain.get_host_requests.count == 0 %}badge-subtle{% endif %}">{{ domain.get_host_requests.count }}</span></a></li>{% endif %}
+	<li data-nav-id="domain-settings"><a href="{% url 'domains:settings' domain.name %}">{% trans "Settings" %}</a></li>
+	<li data-nav-id="delete-domain"><a href="{% url 'domains:delete' domain.name %}">{% trans "Delete Domain" %}</a></li>{% endif %}
+</ul>

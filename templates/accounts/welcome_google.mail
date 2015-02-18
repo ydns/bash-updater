@@ -1,0 +1,13 @@
+{% extends "base.mail" %}
+{% load i18n %}
+
+{% block content %}{% blocktrans %}Hi!
+
+Welcome to YDNS.
+
+You have used the Google login for the first time, which created a new account on YDNS.
+No further action is needed - your account is already activated and you can using it.
+
+In case you have any questions, please write to support@ydns.eu and we'll assist you as soon as possible.{% endblocktrans %}
+
+{% endblock %}

@@ -1,0 +1,8 @@
+django>=1.7
+requests
+requests-oauthlib
+googler
+django-jsonfield
+python-dateutil
+dnspython3
+netaddr

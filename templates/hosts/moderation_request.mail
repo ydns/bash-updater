@@ -1,0 +1,16 @@
+{% extends "base.mail" %}
+{% load i18n %}
+
+{% block content %}{% blocktrans with domain_name=hr.domain|stringformat:'s' accept_url=accept_url reject_url=reject_url %}Hi,
+
+A new moderation request for a host of your domain {{ domain_name }} is waiting for you.
+
+To accept the host, click the link below:
+    {{ accept_url }}
+
+To reject the host, click the link below:
+    {{ reject_url }}
+
+In case you have any questions, please write to support@ydns.eu and we'll assist you as soon as possible.{% endblocktrans %}
+
+{% endblock %}

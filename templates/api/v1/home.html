@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "API" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-3">
+            {% include "api/sidenav.html" %}
+		</div>
+	    <div class="col-lg-9">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "API v1 Documentation" %}</h3>
+			    <p class="text-warning"><em>{% blocktrans %}<strong>Warning:</strong> This API version is obsolete. For new applications, please consider using the <a href="#">REST API v2</a>.{% endblocktrans %}</em></p>
+			    <p>{% url 'api:v1:documentation_pdf' as doc_url %}{% blocktrans with doc_url=doc_url %}For the PDF version of this document, <a href="{{ doc_url }}">click here</a> <em>(english only)</em>.{% endblocktrans %}</p>
+			    <p>{% url 'accounts:settings:api_access' as api_access_url %}{% blocktrans with api_access_url=api_access_url %}The YDNS update API should work with most legacy dynamic DNS updaters. Update calls are performed by issuing simple HTTP GET requests to the following resources. All requests must use an HTTP authorization header with your account details (if using a native account), or using the API username and password which can be found <a href="{{ api_access_url }}">here</a>.{% endblocktrans %}</p>
+
+			    <h4 class="margin-top-20 page-header">{% trans "Tables of Content" %}</h4>
+			    <ol>
+			    	<li>
+			    		<a href="#update">{% trans "Performing update calls" %}</a>
+			    		<ol>
+			    			<li><a href="#update-parameters">{% trans "Parameters" %}</a></li>
+			    			<li><a href="#update-examples">{% trans "Examples" %}</a></li>
+			    			<li><a href="#update-return-codes">{% trans "Return Codes" %}</a></li>
+			    		</ol>
+			    	</li>
+			    	<li><a href="#ip">{% trans "IP Address retrieval" %}</a></li>
+			    </ol>
+			    <h4 class="margin-top-20 page-header">{% trans "Performing update calls" %}<a name="update"></a></h4>
+			    <p>To perform update calls, you can use the resource below. The use of https is recommended, but some older updater clients don't support TLS connections. That's why you can also use http if you wish.</p>
+			    <div class="callout callout-info">
+			    	<h4><i class="fa fa-info-circle fa-fw"></i> Update resource</h4>
+			    	<p><code>https://ydns.eu/api/v1/update/</code></p>
+			    </div>
+
+			    <h4>{% trans "Parameters" %}<a name="update-parameters"></a></h4>
+			    <p>The following parameters can be used to control the behaviour of the update resource.</p>
+			    <table class="table table-bordered table-striped">
+			    	<thead>
+			    		<tr>
+			    			<th>Parameter</th>
+			    			<th>Required</th>
+			    			<th>Type</th>
+			    			<th>Value</th>
+			    			<th>Description</th>
+			    		</tr>
+			    	</thead>
+			    	<tbody>
+			    		<tr>
+			    			<td><code>host</code></td>
+			    			<td>yes</td>
+			    			<td>string</td>
+			    			<td>example.ydns.eu</td>
+			    			<td>Your yDNS hostname you'd like to update.</td>
+			    		</tr>
+			    		<tr>
+			    			<td><code>ip</code></td>
+			    			<td>no</td>
+			    			<td>IP Address</td>
+			    			<td>Example: 127.0.0.1 or ::1</td>
+			    			<td>If this parameter is present, it will override the updater script to use that IP Address instead of the REMOTE_ADDR it receives from the web server. The IP Address can either be a IPv4 or IPv6 address in the standard notation.</td>
+			    		</tr>
+			    		<tr>
+			    			<td><code>record_id</code></td>
+			    			<td>no</td>
+			    			<td>integer</td>
+			    			<td>Example: 1234</td>
+			    			<td>If this parameter is present, it will force to update the specified record instead of trying to lookup the best suitable one. If you have multiple records on your hosts, you can use that to specify which record to update. The record id can be displayed by hovering over the record type within host records.</td>
+			    		</tr>
+			    	</tbody>
+			    </table>
+
+			    <h4 class="margin-top-20">{% trans "Examples" %}<a name="update-examples"></a></h4>
+			    <p>
+			    	<code>https://ydns.eu/api/v1/update/?host=example.ydns.eu</code><br>
+			    	Update the IP address of host "example.ydns.eu" with the IP Address as seen by the web server.
+			    </p>
+			    <p>
+			    	<code>https://ydns.eu/api/v1/update/?host=example.ydns.eu&ip=123.45.67.89</code><br>
+			    	Update the IP address of host "example.ydns.eu" with IPv4 Address "123.45.67.89".
+			    </p>
+			    <p>
+			    	<code>https://ydns.eu/api/v1/update/?host=example.ydns.eu&record_id=1234</code><br>
+			    	Update the Content of host "example.ydns.eu" with the IP Address as seen by the web server.
+			    </p>
+
+			    <h4 class="margin-top-20">{% trans "Return Codes" %}<a name="update-return-codes"></a></h4>
+			    <p>On successful update requests, the update resource will return a HTTP status code 200 with the response content "ok". On errors, the following HTTP error codes are returned with the appropriate error messages in the response content:</p>
+			    <table class="table table-bordered table-striped">
+			    	<thead>
+			    		<tr>
+			    			<th>HTTP status code</th>
+			    			<th>Description</th>
+			    		</tr>
+			    	</thead>
+			    	<tbody>
+			    		<tr>
+			    			<td><code>400</code></td>
+			    			<td>The action could not be performed due to invalid input parameters.</td>
+			    		</tr>
+			    		<tr>
+			    			<td><code>401</code></td>
+			    			<td>The action could not be performed due to authentication issues.</td>
+			    		</tr>
+			    		<tr>
+			    			<td><code>404</code></td>
+			    			<td>The action could not be performed because the host you'd like to update cannot be found.</td>
+			    		</tr>
+			    	</tbody>
+			    </table>
+
+			    <h4 class="margin-top-20 page-header">{% trans "IP Address retrieval" %}<a name="ip"></a></h4>
+			    <p>You can query the public IP address as seen by YDNS with the following endpoint:</p>
+
+			    <p><code>https://ydns.eu/api/v1/ip</code></p>
+			    <p>It will return your public IP address as string. If you'd like to get the response as JSON, you can append .json to the endpoint:</p>
+
+			    <p><code>https://ydns.eu/api/v1/ip.json</code></p>
+			    <p>An example response would be:</p>
+
+			    <pre>{"ip": "111.111.111.111", "address_type": 4}</pre>
+			    <p>The <span class="text-mono">address_type</span> field is 4 when an IPv4 address has been detected or 6 for an IPv6 address.</p>
+	        </section>
+	    </div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="api-v1"]').addClass('active');
+		});
+	</script>
+{% endblock %}

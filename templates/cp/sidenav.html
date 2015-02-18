@@ -1,0 +1,14 @@
+{% load i18n %}
+<ul class="nav nav-list">
+	<li class="nav-header">{% trans "General" %}</li>
+	<li data-nav-id="cp-overview"><a href="{% url 'cp:home' %}">{% trans "Overview" %}</a></li>
+	<li data-nav-id="cp-users"><a href="{% url 'cp:users:home' %}">{% trans "User accounts" %} <span class="badge{% if users.count == 0 %} badge-subtle {% endif %}">{{ users.count }}</span></a></li>
+    <li data-nav-id="cp-beta"><a href="{% url 'cp:beta:home' %}">Beta program</a></li>
+	<li class="nav-header">{% trans "Blacklisting" %}</li>
+	<li data-nav-id="cp-dbl"><a href="{% url 'cp:dbl:home' %}">{% trans "Domain Blacklist" %}</a></li>
+    <li data-nav-id="cp-ebl"><a href="{% url 'cp:ebl:home' %}">{% trans "Email Blacklist" %}</a></li>
+	<li data-nav-id="cp-hbl"><a href="{% url 'cp:hbl:home' %}">{% trans "Host Blacklist" %}</a></li>
+    <li class="nav-divider"></li>
+    <li data-nav-id="cp-mail"><a href="{% url 'cp:mail:create' %}">{% trans "Send mail" %}</a></li>
+    <li data-nav-id="cp-broadcast"><a href="{% url 'cp:mail:broadcast' %}">Send broadcast</a></li>
+</ul>

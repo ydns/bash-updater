@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "User Control Panel" %}: {% trans "Users" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-2">
+			{% include "cp/users/sidenav.html" %}
+		</div>
+		<div class="col-lg-10">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "Domains" %}</h3>
+			{% if u.domains.count == 0 %}
+				<p>{% trans "This user has not any domains." %}</p>
+				{% else %}
+					<table class="table table-striped table-bordered">
+						<thead>
+							<tr>
+								<th>{% trans "Domain" %}</th>
+								<th>{% trans "Hosts" %}</th>
+								<th>{% trans "Status" %}</th>
+								<th>{% trans "Creation Date" %}</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for domain in u.domains.all %}<tr>
+								<td><a href="{% url 'domains:detail' domain.name %}">{{ domain }}</a></td>
+								<td>{{ domain.hosts.count }}</td>
+								<td>{{ domain.get_status_label }}</td>
+								<td>{{ domain.date_created|date:_('Y/m/d H:i:s T') }}</td>
+							</tr>{% endfor %}
+						</tbody>
+					</table>
+				{% endif %}
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="cp"],[data-nav-id="cp-users-domains"]').addClass('active');
+		});
+	</script>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Two-Factor Authentication" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-3">
+            {% include "accounts/settings/sidenav.html" %}
+		</div>
+	    <div class="col-lg-9">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "Two-factor authentication" %}</h3>
+			    <p>{% trans "Two-Factor Authentication adds an additional security layer to your user account. In case someone gets access to your account password, the two-factor authentication will require confirmation from a second source to confirm login requests." %}</p>
+			    <p>{% trans "<strong>Please note:</strong> This additional security is not available for API requests. Use of this feature is only suggested if you're an advanced user." %}</p>
+
+			    {% if user.otp_active %}
+			    	<div class="callout callout-success">
+			    		<h4><i class="fa fa-check fa-fw"></i> {% trans "Two-factor authentication is active." %}</h4>
+			    		<p>{% trans "Your account is protected by requiring an additional authentication token to authorize." %}</p>
+			    	</div>
+			    {% else %}
+			    	<div class="callout callout-danger">
+			    		<h4><i class="fa fa-exclamation-triangle fa-fw"></i> {% trans "Two-factor authentication is not active." %}</h4>
+			    		<p>{% url 'accounts:settings:two_factor_setup' as setup_url %}{% blocktrans with setup_url=setup_url %}<a href="{{ setup_url }}">Setup</a> the two-factor authentication now.{% endblocktrans %}</p>
+			    	</div>
+			    {% endif %}
+
+			    <p>
+			    	<a href="{% url 'accounts:settings:two_factor_setup' %}">{% trans "Setup two-factor authentication" %}</a><br>
+			    	<a href="{% url 'accounts:settings:two_factor_instructions' %}">{% trans "Installation instructions" %}</a><br>
+			    	<a href="{% url 'accounts:settings:two_factor_recovery_codes' %}">{% trans "Download recovery codes" %}</a>
+			    </p>
+	        </section>
+	    </div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="two-factor-auth"]').addClass('active');
+		});
+	</script>
+{% endblock %}

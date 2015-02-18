@@ -1,0 +1,12 @@
+{% extends "base.mail" %}
+{% load i18n %}
+
+{% block content %}{% blocktrans with name=name %}Hi!
+
+Your request for host "{{ name }}" has been accepted by it's domain owner.
+
+The host has been created and you can start using it now.
+
+In case you have any questions, please write to support@ydns.eu and we'll assist you as soon as possible.{% endblocktrans %}
+
+{% endblock %}

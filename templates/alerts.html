@@ -1,0 +1,6 @@
+{% if sys_messages %}
+    {% for message in sys_messages %}<div class="callout callout-{{ message.level }}">
+        <h4>{{ message.title }}</h4>
+        <p>{{ message.message|linebreaksbr }}</p>
+    </div>{% endfor %}
+{% endif %}

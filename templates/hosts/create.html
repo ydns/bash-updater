@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Create Host" %} &mdash; YDNS{% endblock %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/select2.css" %}">
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-offset-3 col-lg-6">
+			<section class="section">
+			    <h3 class="section-header page-header">
+				    {% trans "Create Host" %}
+				    <span class="pull-right">
+					    <a href="#modal-help" class="aui-button aui-button-link" data-toggle="modal"><i class="fa fa-question-circle fa-fw"></i></a>
+				    </span>
+				</h3>
+			    <form class="create-host-form form-horizontal" id="create-host-form" method="post" action="{% url 'hosts:create' %}">
+			    	{% csrf_token %}
+			    	<div class="form-group{% if errors.domain %} has-error has-feedback{% elif post.domain %} has-success has-feedback{% endif %}">
+			    		<label for="id_domain" class="col-lg-3 control-label">{% trans "Domain" %}</label>
+			    		<div class="col-lg-5">
+			    			<select name="domain" id="id_domain" class="form-control" style="width:100%" data-placeholder="{% trans "Choose…" %}">
+			    				<option></option>
+			    				{% if domains.official %}<optgroup label="{% trans "Official YDNS domains" %}">
+			    					{% for domain in domains.official %}<option value="{{ domain.name }}">{{ domain }}</option>{% endfor %}
+			    				</optgroup>{% endif %}
+			    				{% if domains.other %}<optgroup label="{% trans "User-shared domains" %}">
+			    					{% for domain in domains.other %}<option value="{{ domain.name }}">{{ domain }}</option>{% endfor %}
+			    				</optgroup>{% endif %}
+			    			</select>
+                        	{% if errors.domain %}<p class="help-block">{{ errors.domain }}</p>{% endif %}
+			    		</div>
+			    	</div>
+			    	<div class="form-group{% if errors.name %} has-error has-feedback{% endif %}">
+			    		<label for="id_name" class="col-lg-3 control-label">{% trans "Host name" %}</label>
+			    		<div class="col-lg-5">
+			    			<input type="text" class="form-control" id="id_name" name="name" maxlength="63" required autocomplete="off" placeholder="{% trans "Enter a host name…" %}"{% if post.name %} value="{{ post.name }}"{% endif %}>
+                        	{% if errors.name %}<i class="fa fa-exclamation-triangle feedback" aria-hidden="true"></i>{% endif %}
+                            {% if errors.name %}<p class="help-block">{{ errors.name }}</p>{% endif %}
+			    		</div>
+			    	</div>
+			    	<div class="form-group" id="fg-msg">
+			    		<div class="col-lg-offset-3 col-lg-9">
+			    			<p class="form-control-static"></p>
+			    		</div>
+			    	</div>
+			    	<div class="form-group">
+			    		<div class="col-lg-offset-3 col-lg-9">
+			    			<button type="submit" class="btn btn-primary" disabled id="create-btn">{% trans "Create Host" %}</button>
+			    		</div>
+			    	</div>
+			    </form>
+	        </section>
+	    </div>
+	</div>
+
+	<!-- Modal for help assistance -->
+	<div class="modal" id="modal-help" tabindex="-1" role="dialog" aria-labelledby="modal-help-title" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="modal-help-title">{% trans "Help" %}</h4>
+				</div>
+				<div class="modal-body">
+					<p>Creating a host is easy: Just choose a name for your host and a domain. Once your host is created, you can start adding records. If you use dynamic DNS, records for your IP updates are automatically created if they don't exist.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript" src="{% static "js/select2.min.js" %}"></script>
+	<script type="text/javascript">
+		$(function() {
+			{% if current_domain %}$('#id_domain').val('{{ current_domain }}');{% endif %}
+			$('select.form-control').select2();
+			$('[data-nav-id="hosts"]').addClass('active');
+			$('#id_name').on('keyup', function() {
+				$.post("{% url 'hosts:xhr_check_availability' %}", $('#create-host-form').serialize(), function(data) {
+					if (data.success) {
+						$('#fg-msg p').html(data.message).addClass('text-success').removeClass('text-danger');
+						$('#fg-msg').show();
+						$('#create-btn').removeAttr('disabled');
+					} else {
+						$('#fg-msg p').html(data.message).addClass('text-danger').removeClass('text-success');
+						$('#fg-msg').show();
+						$('#create-btn').attr('disabled', 'disabled');
+					}
+				});
+			});
+			$('#id_domain').on('change', function() {
+				$('#create-btn').attr('disabled', 'disabled');
+				$('#fg-msg').hide();
+				$('#id_name').val('');
+			});
+		});
+	</script>
+{% endblock %}

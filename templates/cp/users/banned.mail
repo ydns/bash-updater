@@ -1,0 +1,15 @@
+{% extends "base.mail" %}
+{% load i18n %}
+
+{% block content %}{% blocktrans %}Hi!
+
+Your YDNS user account has been banned.
+
+Reason:
+
+	{{ reason }}
+
+
+For more information regarding this, please contact our support team at support@ydns.eu{% endblocktrans %}
+
+{% endblock %}

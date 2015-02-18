@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ host }} &mdash; {% trans "Journal" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-3">
+            {% include "hosts/sidenav.html" %}
+		</div>
+	    <div class="col-lg-9">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "Delete Host" %}</h3>
+			    <p>{% trans "You are about to delete this host. If you proceed, all underlying records are deleted." %}</p>
+			    <p><strong>{% trans "Do you really want to proceed?" %}</strong></p>
+
+			    <form method="post" action="{% url 'hosts:delete' host.name %}">
+			    	{% csrf_token %}
+			    	<button type="submit" class="btn btn-danger">{% trans "Delete this host" %}</button>
+			    	<a href="{% url 'hosts:detail' host.name %}" class="btn btn-link">{% trans "Cancel" %}</a>
+			    </form>
+	        </section>
+	    </div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="hosts"],[data-nav-id="host-delete"]').addClass('active');
+		});
+	</script>
+{% endblock %}

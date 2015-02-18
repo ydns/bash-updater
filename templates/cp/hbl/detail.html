@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Control Panel" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-2">
+			{% include "cp/hbl/sidenav.html" %}
+		</div>
+		<div class="col-lg-10">
+			<section class="section">
+				<h3 class="section-header page-header">{% blocktrans with entry_id=entry.id %}Host Blacklist Entry #{{ entry_id }}{% endblocktrans %}</h3>
+				<dl class="dl-horizontal text-left">
+					<dt>{% trans "Creation Date" %}</dt>
+					<dd>{{ entry.date_created|date:_("Y/m/d H:i T") }}</dd>
+					<dt>{% trans "Author" %}</dt>
+					<dd>
+						{% if entry.user %}
+							{{ entry.user.email }}
+						{% else %}
+							<span class="text-muted">{% trans "Not available" %}</span>
+						{% endif %}
+					</dd>
+				</dl>
+
+				<pre title="{% trans "Pattern" %}" data-toggle="tooltip">{{ entry.name }}</pre>
+				{% if entry.reason %}<pre title="{% trans "Reason" %}" data-toggle="tooltip">{{ entry.reason }}</pre>{% endif %}
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="cp"],[data-nav-id="cp-hbl-overview"]').addClass('active');
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "User Control Panel" %}: {% trans "Users" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-2">
+			{% include "cp/sidenav.html" %}
+		</div>
+		<div class="col-lg-10">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "User accounts" %}</h3>
+			    <form class="aui form-inline" id="form-filter">
+			    	<div class="form-group" style="width:300px">
+			    		<label for="id_query">{% trans "Search" %}</label><br>
+			    		<input type="text" name="query" id="id_query" class="text" placeholder="{% trans "Search by email, alias, etc…" %}"{% if filter.query %} value="{{ filter.query }}{% endif %}">
+			    	</div>
+			    	<div class="form-group">
+			    		<label for="id_type">{% trans "Account Type" %}</label><br>
+			    		<select name="type" id="id_type" data-placeholder="{% trans "All" %}" style="width:100%">
+			    			<option></option>
+			    			{% for v, label in account_types %}<option value="{{ v }}"{% if filter.type and filter.type == v %} selected{% endif %}>{{ label }}</option>{% endfor %}
+			    		</select>
+			    	</div>
+			    	<div class="form-group">
+			    		<label for="id_rpp">{% trans "Results per page" %}</label><br>
+			    		<select name="rpp" id="id_rpp" class="form-control" style="width:100%">
+			    			{% for i in results_per_page %}<option{% if filter.rpp and filter.rpp == i %} selected{% endif %}>{{ i }}</option>{% endfor %}
+			    		</select>
+			    	</div>
+			    	<div class="form-group">
+			    		<label>&nbsp;</label><br>
+			    		<button type="submit" class="btn btn-primary">{% trans "Search" %}</button>
+			    	</div>
+			    </form>
+
+			    <div id="data-results" class="margin-top-20">
+			    	<i class="fa fa-refresh fa-spin fa-2x text-muted"></i>
+			    </div>
+			</section>
+		</div>
+    </div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript" src="{% static "js/select2.min.js" %}"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('.aui select').select2();
+			$('[data-nav-id="cp"],[data-nav-id="cp-users"]').addClass('active');
+			load_results();
+		});
+
+		function load_results() {
+			var formData = $('form#form-filter').serialize();
+			var $dataResults = $('#data-results');
+
+			$dataResults
+				.html('<i class="fa fa-refresh fa-spin fa-2x text-muted"></i>')
+				.load('{% url 'cp:users:results' %}?' + formData);
+		}
+	</script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Sign up" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-offset-3 col-lg-6">
+			<section class="section">
+				<h3 class="section-header page-header">
+					{% trans "Sign up" %}
+					<span class="pull-right">
+					    <form id="social-form" method="post" action="{% url 'accounts:google_sign_in' %}">
+						    {% csrf_token %}
+						    <input type="submit" value="{% trans 'Sign up with your Google account' %}">
+					    </form>
+					</span>
+				</h3>
+			    <script type="text/javascript">
+ 			    	var RecaptchaOptions = { theme: 'white' };
+			    </script>
+			    <form class="signup-form form-horizontal" id="signup-form" method="post" action="{% url 'accounts:signup' %}">
+			    	{% csrf_token %}
+			    	<div class="form-group{% if errors.email %} has-error has-feedback{% elif post.email %} has-success has-feedback{% endif %}">
+			    		<label for="id_email" class="col-lg-3 control-label">{% trans "Email address" %}</label>
+			    		<div class="col-lg-9">
+			    			<input type="email" class="form-control" id="id_email" name="email"{% if not post.email %} autofocus{% endif %} required{% if post.email %} value="{{ post.email }}"{% endif %}>
+                        	{% if errors.email or post.email %}<i class="fa {{ errors.email|yesno:'fa-exclamation-triangle,fa-check-circle' }} feedback" aria-hidden="true"></i>{% endif %}
+                        	{% if errors.email %}<p class="help-block">{{ errors.email }}</p>{% endif %}
+			    		</div>
+			    	</div>
+			    	<div class="form-group{% if errors.password %} has-error has-feedback{% endif %}">
+			    		<label for="id_password" class="col-lg-3 control-label">{% trans "Password" %}</label>
+			    		<div class="col-lg-9">
+			    			<input type="password" class="form-control" id="id_password" name="password" required placeholder="{% trans "Choose a password…" %}"{% if from_homepage and post.password %} value="{{ post.password }}"{% endif %}>
+                        	{% if errors.password %}<i class="fa fa-exclamation-triangle feedback" aria-hidden="true"></i>{% endif %}
+                            {% if errors.password %}<p class="help-block">{{ errors.password }}</p>{% endif %}
+			    		</div>
+			    	</div>
+			    	<div class="form-group{% if errors.password_rpt %} has-error has-feedback{% endif %}">
+			    		<label for="id_password_rpt" class="col-lg-3 control-label">{% trans "Repeat password" %}</label>
+			    		<div class="col-lg-9">
+			    			<input type="password" class="form-control" id="id_password_rpt" name="password_rpt" required placeholder="{% trans "Repeat the password…" %}">
+                        	{% if errors.password_rpt %}<i class="fa fa-exclamation-triangle feedback" aria-hidden="true"></i>{% endif %}
+                            {% if errors.password_rpt %}<p class="help-block">{{ errors.password_rpt }}</p>{% endif %}
+			    		</div>
+			    	</div>
+			    	<div class="form-group{% if errors.recaptcha %} has-error{% endif %}">
+			    		<div class="col-lg-offset-3 col-lg-9">
+			    			{{ recaptcha_html|safe }}
+			    			{% if errors.recaptcha %}<p class="help-block">{{ errors.recaptcha }}</p>{% endif %}
+			    		</div>
+			    	</div>
+			    	<div class="checkbox{% if errors.terms %} has-error{% endif %}">
+			    		<label class="col-lg-offset-3">
+			    			<input type="checkbox" name="terms" required{% if from_homepage and post.terms and not errors.terms %} checked{% endif %}>
+			    			{% url 'terms' as terms_url %}{% blocktrans with terms_url=terms_url %}I have read and accept the <a href="{{ terms_url }}" target="_blank">Terms and Conditions</a>{% endblocktrans %}
+			    			{% if errors.terms %}<p class="help-block">{{ errors.terms }}</p>{% endif %}
+			    		</label>
+			    	</div>
+			    	<div class="form-group">
+			    		<div class="col-lg-offset-3 col-lg-9">
+			    			<button type="submit" class="btn btn-primary">{% trans "Sign up" %}</button>
+			    		</div>
+			    	</div>
+			    </form>
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			YDNS_focusNextError("form#signup-form");
+		});
+	</script>
+{% endblock %}

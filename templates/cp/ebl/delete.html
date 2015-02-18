@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Control Panel" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-2">
+			{% include "cp/ebl/sidenav.html" %}
+		</div>
+		<div class="col-lg-10">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "Delete Email Blacklist Entry" %}</h3>
+				<div class="callout callout-danger">
+					<h4><i class="fa fa-exclamation-triangle fa-fw"></i> {% trans "Danger" %}</h4>
+					<p>{% trans "You are about to delete this entry." %}</p>
+					<p><strong>{% trans "Do you really want to proceed?" %}</strong></p>
+					<p></p>
+					<form method="post" action="{% url 'cp:ebl:delete' entry.id %}">
+						{% csrf_token %}
+						<button type="submit" class="btn btn-primary">{% trans "Delete Entry" %}</button>
+						<a href="{% url 'cp:ebl:detail' entry.id %}" class="btn btn-link">{% trans "Cancel" %}</a>
+					</form>
+				</div>
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="cp"],[data-nav-id="cp-ebl-delete"]').addClass('active');
+		});
+	</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ domain }} &mdash; YDNS{% endblock %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/select2.css" %}">
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-3">
+            {% include "domains/sidenav.html" %}
+		</div>
+	    <div class="col-lg-9">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "Moderation Queue" %}</h3>
+			    {% if not domain.get_host_requests %}
+			    	<p>{% trans "No pending host requests found." %}</p>
+			    {% else %}
+			    	<form method="post" action="{% url 'domains:mq:masschoice' domain.name %}" id="form-masschoice">
+			    		{% csrf_token %}
+			    		<table class="table table-striped table-bordered" id="table-entries">
+			    			<thead>
+			    				<tr>
+			    					<th width="10"><input type="checkbox" class="checkall"></th>
+			    					<th>{% trans "Host Name" %}</th>
+			    					<th>{% trans "Request Date" %}</th>
+			    					<th class="text-center">{% trans "Action" %}</th>
+			    				</tr>
+			    			</thead>
+			    			<tbody>
+			    				{% for hr in domain.get_host_requests %}<tr>
+			    					<td><input type="checkbox" name="hr" value="{{ hr.name }}"></td>
+			    					<td>{{ hr }}</td>
+			    					<td>{{ hr.date_created|date:_("Y/m/d H:i T") }}</td>
+			    					<td class="text-center">
+			    						<a href="{% url 'domains:mq:choice' domain.name hr.name 'accept' %}">{% trans "Accept" %}</a> &nbsp;
+			    						<a href="{% url 'domains:mq:choice' domain.name hr.name 'reject' %}">{% trans "Reject" %}</a>
+			    					</td>
+			    				</tr>{% endfor %}
+			    			</tbody>
+			    		</table>
+			    		<select id="id_choice" name="choice" data-placeholder="{% trans "Selected…" %}" style="width:200px">
+			    			<option></option>
+			    			<option value="accept">{% trans "Accept" %}</option>
+			    			<option value="reject">{% trans "Reject" %}</option>
+			    		</select>
+			    	</form>
+			    {% endif %}
+	        </section>
+	    </div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript" src="{% static 'js/select2.min.js' %}"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('select').select2();
+			$('[data-nav-id="domains"],[data-nav-id="domain-mq"]').addClass('active');
+			$('.checkall').on('click', function () {
+        		$('#table-entries tbody').find(':checkbox').prop('checked', this.checked);
+    		});
+			$('#id_choice').on('change', function() {
+				$('#form-masschoice').submit();
+			});
+		});
+	</script>
+{% endblock %}

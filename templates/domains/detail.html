@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ domain }} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-3">
+            {% include "domains/sidenav.html" %}
+		</div>
+	    <div class="col-lg-9">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "Domain Details" %}</h3>
+			    {% if domain.is_official %}<div class="callout callout-info">
+			    	<h4>{% trans "Official YDNS Domain" %}</h4>
+			    	<p>{% trans "This domain is provided by the YDNS project and provides a guaranteed availability." %} <a href="#modal-info" data-toggle="modal">{% trans "What does that mean?" %}</a></p>
+			    </div>{% endif %}
+
+			    <dl class="dl-horizontal text-left margin-top-20">
+			    	<dt>{% trans "Creation Date" %}</dt>
+			    	<dd>{{ domain.date_created|date:_("Y/m/d H:i T") }}</dd>
+			    	<dt>{% trans "Access Type" %}</dt>
+			    	<dd>{{ domain.get_access_type.get_label }}</dd>
+			    	<dt>{% trans "Status" %}</dt>
+			    	<dd>{{ domain.get_status_label }}</dd>
+			    	<dt>{% trans "Owner" %}</dt>
+			    	<dd>
+			    		{% if not domain.public_owner %}
+			    			<span class="text-muted">{% trans "Not disclosed" %}</span>
+			    		{% elif domain.is_official %}
+			    			<a href="https://ydns.eu">YDNS</a>
+			    		{% else %}
+			    			<a href="#">{{ domain.owner.email }}</a>
+			    		{% endif %}
+			    	</dd>
+			    </dl>
+	        </section>
+	    </div>
+	</div>
+
+	<!-- Modal for info purposes -->
+	<div class="modal" id="modal-info" tabindex="-1" role="dialog" aria-labelledby="modal-info-title" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="modal-info-title">{% trans "What does that mean?" %}</h4>
+				</div>
+				<div class="modal-body">
+					<p>YDNS allows it's users to share their domains with others. While this is generally a great thing, we have also seen problems with that.</p>
+					<p>Some people may stop using the YDNS nameservers for their domains. Once that happens, all YDNS user hosts using those domains will become non-functional. Our platform detects such problems and notifies our staff about that.</p>
+					<p>In either case we recommend our users to use official YDNS domains, as we never use these domains for anything else than YDNS. Your hosts remain functional for their entire lifetime.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="domains"],[data-nav-id="domain"]').addClass('active');
+		});
+	</script>
+{% endblock %}

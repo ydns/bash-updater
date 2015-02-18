@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Create Domain" %} &mdash; YDNS{% endblock %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/select2.css" %}">
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-offset-3 col-lg-6">
+			<section class="section">
+			    <h3 class="section-header page-header">
+					{% trans "Create Domain" %}
+					<span class="pull-right">
+						<button type="button" data-target="#modal-help" class="btn btn-link" data-toggle="modal"><i class="fa fa-question-circle fa-fw"></i></button>
+					</span>
+				</h3>
+			    <form class="create-domain-form form-horizontal" id="create-domain-form" method="post" action="{% url 'domains:create' %}">
+			    	{% csrf_token %}
+			    	<div class="form-group{% if errors.name %} has-error has-feedback{% endif %}">
+			    		<label for="id_name" class="col-lg-3 control-label">{% trans "Domain name" %}</label>
+			    		<div class="col-lg-6">
+			    			<input type="text" class="form-control" id="id_name" name="name" required autocomplete="off" placeholder="{% trans "Enter your domain name…" %}"{% if post.name %} value="{{ post.name }}"{% endif %}>
+                        	{% if errors.name %}<i class="fa fa-exclamation-triangle feedback" aria-hidden="true"></i>{% endif %}
+                            {% if errors.name %}<p class="help-block">{{ errors.name }}</p>{% endif %}
+			    		</div>
+			    	</div>
+			    	<div class="form-group{% if errors.type %} has-error{% endif %}">
+			    		<label for="id_type" class="col-lg-3 control-label">{% trans "Type" %}</label>
+			    		<div class="col-lg-4">
+			    			<select name="type" id="id_type" class="form-control" style="width:100%">
+			    				<option value="public"{% if post.type == 'public' %} selected{% endif %}>{% trans "Public" %}</option>
+			    				<option value="private"{% if post.type == 'private' %} selected{% endif %}>{% trans "Private" %}</option>
+			    				<option value="moderated"{% if post.type == 'moderated' %} selected{% endif %}>{% trans "Moderated" %}</option>
+			    			</select>
+			    			{% if errors.type %}<p class="help-block">{{ errors.type }}</p>{% endif %}
+			    		</div>
+			    	</div>
+			    	<div class="form-group margin-top-20">
+			    		<div class="col-lg-offset-3 col-lg-9">
+			    			<button type="submit" class="btn btn-primary">{% trans "Create Domain" %}</button>
+			    		</div>
+			    	</div>
+			    </form>
+	        </section>
+	    </div>
+	</div>
+
+	<!-- Modal for help assistance -->
+	<div class="modal" id="modal-help" tabindex="-1" role="dialog" aria-labelledby="modal-help-title" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="modal-help-title">{% trans "Help" %}</h4>
+				</div>
+				<div class="modal-body">
+					<p class="text-danger"><strong>Warning:</strong> This feature requires you to know how to configure the nameserver records of your domain on your registrar's configuration panel.</p>
+					<p>YDNS allows you to host your domain records and to share your domain for use with others.</p>
+
+					<h4>Which type shall I choose?</h4>
+					<dl>
+						<dt>Public</dt>
+						<dd>Anyone can create available hosts using your domain.</dd>
+						<dt>Private</dt>
+						<dd>Only you can create hosts using your domain. The domain is not listed on the domains page for anyone else than you.</dd>
+						<dt>Moderated</dt>
+						<dd>Anyone can create hosts using your domain, but require prior moderation before they go live.</dd>
+					</dl>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript" src="{% static "js/select2.min.js" %}"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('select.form-control').select2({minimumResultsForSearch: -1});
+			YDNS_fixSelect2Arrows("form.aui");
+			$('[data-nav-id="domains"]').addClass('active');
+		});
+	</script>
+{% endblock %}

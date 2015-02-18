@@ -1,0 +1,1934 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: YDNS\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-01-07 13:02+0000\n"
+"PO-Revision-Date: 2015-01-07 14:29+0100\n"
+"Last-Translator: Christian Jurk <cj@tfmt.de>\n"
+"Language-Team: YDNS <dev@ydns.eu>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.7.1\n"
+
+#: accounts/models.py:95 templates/accounts/signup.html:13
+#: templates/accounts/signup.html.py:65 templates/base.html:56
+#: templates/home.html:41
+msgid "Sign up"
+msgstr "Anmelden"
+
+#: accounts/models.py:97 templates/accounts/login.html:9
+#: templates/accounts/login_otp.html:12 templates/base.html:55
+#: templates/home.html:40
+msgid "Login"
+msgstr "Login"
+
+#: accounts/models.py:99 accounts/settings/views.py:283
+msgid "Two-factor authentication enabled"
+msgstr "Zwei-Faktor-Authentifizierung aktiviert"
+
+#: accounts/models.py:101 accounts/settings/views.py:299
+msgid "Two-factor authentication disabled"
+msgstr "Zwei-Faktor-Authentifizierung deaktiviert"
+
+#: accounts/models.py:103 accounts/settings/views.py:96
+msgid "Journal cleared"
+msgstr "Journal gelöscht"
+
+#: accounts/settings/views.py:23
+msgid "Your password has been changed."
+msgstr "Dein Password wurde geändert."
+
+#: accounts/settings/views.py:24
+#: templates/accounts/settings/change_password.html:4
+#: templates/accounts/settings/change_password.html:18
+#: templates/accounts/settings/change_password.html:47
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: accounts/settings/views.py:29 accounts/settings/views.py:38
+msgid "Passwords can be changed for native accounts only."
+msgstr "Passwörter können nur für native Konten geändert werden."
+
+#: accounts/settings/views.py:30 accounts/settings/views.py:39
+msgid "Request Error"
+msgstr "Anfragefehler"
+
+#: accounts/settings/views.py:58 accounts/settings/views.py:307
+msgid "Enter your current password"
+msgstr "Aktuelles Passwort eingeben"
+
+#: accounts/settings/views.py:60 accounts/settings/views.py:309
+msgid "Incorrect password"
+msgstr "Falsches Passwort"
+
+#: accounts/settings/views.py:65
+msgid "Enter a new password"
+msgstr "Neues Passwort eingeben"
+
+#: accounts/settings/views.py:67
+msgid "The new password must have at least 6 characters"
+msgstr "Das neue Passwort muss mindestens 6 Zeichen lang sein"
+
+#: accounts/settings/views.py:69
+msgid "The new password must not match the current one"
+msgstr "Das neue Passwort darf nicht mit dem alten übereinstimmen"
+
+#: accounts/settings/views.py:74
+msgid "Repeat the new password"
+msgstr "Wiederhole das neue Passwort"
+
+#: accounts/settings/views.py:77
+msgid "The passwords don't match"
+msgstr "Die Passwörter stimmen nicht überein"
+
+#: accounts/settings/views.py:95
+msgid "The journal has been cleared."
+msgstr "Das Journal wurde gelöscht."
+
+#: accounts/settings/views.py:110 accounts/settings/views.py:116
+msgid "Account deletion"
+msgstr "Konto löschen"
+
+#: accounts/settings/views.py:115
+msgid "Your account including all associated data has been deleted."
+msgstr "Dein Benutzerkonto wurde mitsamt aller dazugehörigen Daten gelöscht."
+
+#: accounts/settings/views.py:135 domains/views.py:185
+msgid "You must check this box in order to proceed"
+msgstr "Du musst diese Box aktivieren, um fortzufahren"
+
+#: accounts/settings/views.py:175
+msgid "Your changes have been saved."
+msgstr "Deine Änderungen wurden gespeichert."
+
+#: accounts/settings/views.py:176 accounts/views.py:54 accounts/views.py:729
+#: accounts/views.py:850
+msgid "Success"
+msgstr "Erfolg"
+
+#: accounts/settings/views.py:184
+msgid "Invalid language chosen"
+msgstr "Ungültige Sprache ausgewählt"
+
+#: accounts/settings/views.py:281
+msgid ""
+"Two-factor authentication has been enabled, please follow the installation "
+"instructions to create the appropriate account on your phone."
+msgstr ""
+"Die Zwei-Faktor-Authentifikation wurde aktiviert. Bitte lese die "
+"Installationsanleitung, um dein Mobiltelefon dafür einzurichten."
+
+#: accounts/settings/views.py:298
+msgid "Two-factor authentication has been disabled for your account."
+msgstr "Zwei-Faktor-Authentifikation wurde für dein Konto deaktiviert."
+
+#: accounts/views.py:32
+msgid "Missing alias parameter"
+msgstr "Alias Parameter fehlt"
+
+#: accounts/views.py:32 accounts/views.py:34 accounts/views.py:39
+#: accounts/views.py:42
+msgid "Request error"
+msgstr "Anfragefehler"
+
+#: accounts/views.py:34
+msgid "Missing token parameter"
+msgstr "Token-Parameter fehlt"
+
+#: accounts/views.py:39
+msgid "Activation link is unknown or has expired."
+msgstr "Der Aktivierungslink ist falsch oder abgelaufen."
+
+#: accounts/views.py:42
+msgid "Your account is already activated"
+msgstr "Dein Konto ist bereits aktiviert"
+
+#: accounts/views.py:54
+msgid "Your account has been activated successfully."
+msgstr "Dein Konto wurde erfolgreich aktiviert."
+
+#: accounts/views.py:103 accounts/views.py:261 accounts/views.py:421
+#: accounts/views.py:945 templates/base.html:8 templates/home.html:8
+msgid "Welcome to YDNS"
+msgstr "﻿Willkommen bei YDNS"
+
+#: accounts/views.py:140 accounts/views.py:298 accounts/views.py:458
+msgid "Missing state property."
+msgstr "Eigenschaft fehlt: state"
+
+#: accounts/views.py:140 accounts/views.py:142 accounts/views.py:148
+#: accounts/views.py:161 accounts/views.py:170 accounts/views.py:180
+msgid "Facebook OAuth2 error"
+msgstr "Facebook OAuth2 Fehler"
+
+#: accounts/views.py:142 accounts/views.py:300 accounts/views.py:460
+msgid "Missing code property."
+msgstr "Eigenschaft fehlt: code"
+
+#: accounts/views.py:148 accounts/views.py:306 accounts/views.py:466
+msgid "Invalid state"
+msgstr "Ungültiger Zustand"
+
+#: accounts/views.py:159
+msgid ""
+"An error occurred while verifying Facebook's response. Please try again later"
+msgstr ""
+"Ein Fehler ist aufgetreten, während Facebook's Antwort überprüft wurde. "
+"Bitte versuche es später noch einmal."
+
+#: accounts/views.py:169
+msgid "Facebook's response has an invalid format."
+msgstr "Facebook's Antwort hat ein ungültiges Format."
+
+#: accounts/views.py:179 accounts/views.py:337 accounts/views.py:500
+msgid "No valid account-based email address found."
+msgstr "Keine gültige E-Mail Adresse gefunden."
+
+#: accounts/views.py:193 accounts/views.py:351 accounts/views.py:513
+msgid ""
+"There is already an account with the same Email address, but with a "
+"different account type."
+msgstr ""
+"Es existiert bereits ein Konto mit der gleichen E-Mail Adresse, aber einem "
+"anderen Kontotyp."
+
+#: accounts/views.py:195 accounts/views.py:353 accounts/views.py:515
+msgid "Login aborted"
+msgstr "Login abgebrochen"
+
+#: accounts/views.py:298 accounts/views.py:300 accounts/views.py:306
+#: accounts/views.py:319 accounts/views.py:328 accounts/views.py:338
+msgid "GitHub OAuth2 error"
+msgstr "GitHub OAuth2 Fehler"
+
+#: accounts/views.py:317
+msgid ""
+"An error occurred while verifying GitHub's response. Please try again later"
+msgstr ""
+"Ein Fehler ist aufgetreten, während GitHub's Antwort überprüft wurde. Bitte "
+"versuche es später noch einmal."
+
+#: accounts/views.py:327
+msgid "GitHub's response has an invalid format."
+msgstr "GitHub's Antwort hat ein ungültiges Format."
+
+#: accounts/views.py:458 accounts/views.py:460 accounts/views.py:466
+#: accounts/views.py:479 accounts/views.py:488 accounts/views.py:501
+msgid "Google OAuth2 error"
+msgstr "Google OAuth2 Fehler"
+
+#: accounts/views.py:477
+msgid ""
+"An error occurred while verifying Google's response. Please try again later"
+msgstr ""
+"Ein Fehler ist aufgetreten, während Google's Antwort überprüft wurde. Bitte "
+"versuche es später noch einmal."
+
+#: accounts/views.py:487
+msgid "Google's response has an invalid format."
+msgstr "Google's Antwort hat ein ungültiges Format."
+
+#: accounts/views.py:592
+msgid "Missing context"
+msgstr "Kontext fehlt"
+
+#: accounts/views.py:595
+msgid "Enter the code"
+msgstr "Code eingeben"
+
+#: accounts/views.py:600
+msgid "The code must be a number"
+msgstr "Der Code muss eine Zahl sein"
+
+#: accounts/views.py:605
+msgid "Invalid code"
+msgstr "Ungültiger Code"
+
+#: accounts/views.py:607
+msgid "Incorrect code"
+msgstr "Falscher Code"
+
+#: accounts/views.py:650
+msgid "Missing code"
+msgstr "Code fehlt"
+
+#: accounts/views.py:655 accounts/views.py:665 accounts/views.py:753
+#: accounts/views.py:857 accounts/views.py:861 accounts/views.py:987
+#: accounts/views.py:1002 accounts/views.py:1006
+msgid "Field missing"
+msgstr "Wert fehlt"
+
+#: accounts/views.py:660 accounts/views.py:758 accounts/views.py:992
+msgid "Invalid Email address"
+msgstr "Ungültige E-Mail Adresse"
+
+#: accounts/views.py:674
+msgid "Account is not activated"
+msgstr "﻿Konto ist nicht aktiviert"
+
+#: accounts/views.py:678
+msgid "Invalid Email and/or password"
+msgstr "﻿Ungültige E-Mail-Adresse und/oder ungültiges Passwort."
+
+#: accounts/views.py:721 templates/accounts/reset_password.html:13
+#: templates/accounts/reset_password.html:36
+#: templates/accounts/reset_password_update.html:13
+msgid "Reset password"
+msgstr "Passwort zurücksetzen"
+
+#: accounts/views.py:727
+msgid ""
+"We've sent instructions to your Email address on how to update your "
+"password.\n"
+"Please check your mail box in a few moments."
+msgstr ""
+"Wir haben Anweisungen, wie du dein Passwort ändern kannst an deine E-Mail "
+"Adresse verschickt.\n"
+"Bitte überprüfe deine E-Mails in einigen Minuten."
+
+#: accounts/views.py:763
+msgid "This Email address is not known in our system"
+msgstr "Diese E-Mail Adresse ist uns unbekannt"
+
+#: accounts/views.py:769
+msgid ""
+"There is already a password reset request made within the last 24 hours."
+msgstr ""
+"Es wurde bereits eine Anfrage hierfür innerhalb der letzten 24 Stunden "
+"gestellt."
+
+#: accounts/views.py:775 accounts/views.py:1017
+msgid "Missing challenge field value"
+msgstr "reCAPTCHA-Challenge-Wert fehlt"
+
+#: accounts/views.py:777 accounts/views.py:1019
+msgid "Missing answer"
+msgstr "﻿Fehlende Antwort"
+
+#: accounts/views.py:786 accounts/views.py:1028
+msgid "Incorrect captcha answer"
+msgstr "Falsche Captcha-Antwort"
+
+#: accounts/views.py:788 accounts/views.py:1030
+msgid "reCAPTCHA error"
+msgstr "reCAPTCHA Fehler"
+
+#: accounts/views.py:849
+msgid "Your account password has been updated."
+msgstr "Dein Passwort wurde aktualisiert."
+
+#: accounts/views.py:859 accounts/views.py:1004
+msgid "The password must contain at least 6 characters"
+msgstr "Das Passwort muss mindestens 6 Zeichen enthalten."
+
+#: accounts/views.py:865 accounts/views.py:1010
+msgid "The password don't match"
+msgstr "﻿Passwörter stimmen nicht überein"
+
+#: accounts/views.py:951
+msgid ""
+"We've sent activation instructions to your Email address.\n"
+"Please check your mail box in a few moments."
+msgstr ""
+"Wir haben Anweisungen, wie du dein Benutzerkonto aktivieren kannst an deine "
+"E-Mail Adresse geschickt.\n"
+"Bitte überprüfe deine E-Mails in einigen Minuten."
+
+#: accounts/views.py:953
+msgid "Sign up succeeded"
+msgstr "Anmeldung erfolgreich"
+
+#: accounts/views.py:999
+msgid "This Email address is already used"
+msgstr "﻿Diese E-Mail-Adresse wird bereits verwendet."
+
+#: accounts/views.py:1033
+msgid "You must read and accept our Terms to sign up"
+msgstr ""
+"Du musst unsere Nutzungsbedingungen lesen und akzeptieren, um dich anzumelden"
+
+#: accounts/views.py:1048
+msgid "Twitter sign in is currently not available"
+msgstr "Die Anmeldung via Twitter ist momentan nicht verfügbar"
+
+#: accounts/views.py:1049
+msgid "Login error"
+msgstr "Login-Fehler"
+
+#: domains/mq/views.py:50 domains/mq/views.py:115
+#, python-format
+msgid "The host <strong>%s</strong> was accepted and created."
+msgstr "Der Host <strong>%s</strong> wurde akzeptiert und erstellt."
+
+#: domains/mq/views.py:53 domains/mq/views.py:118
+#, python-format
+msgid "Host request accepted (%s)"
+msgstr "Kostanfrage akzeptiert (%s)"
+
+#: domains/mq/views.py:59
+msgid "Cannot create host, because the name is already used."
+msgstr "Host kann nicht erstellt werden, weil der Name bereits genutzt wird."
+
+#: domains/mq/views.py:62 domains/mq/views.py:127
+#, python-format
+msgid "Host request failed (%s)"
+msgstr "Hostanfrage fehlgeschlagen (%s)"
+
+#: domains/mq/views.py:68 domains/mq/views.py:133
+#, python-format
+msgid "Host request rejected (%s)"
+msgstr "Kostanfrage abgelehnt (%s)"
+
+#: domains/mq/views.py:74 domains/mq/views.py:139
+#, python-format
+msgid "The host <strong>%s</strong> was rejected."
+msgstr "Der Host <strong>%s</strong> wurde abgelehnt."
+
+#: domains/mq/views.py:124
+#, python-format
+msgid "Cannot create host, because the name is already used (%s)."
+msgstr ""
+"Host kann nicht erstellt werden, weil der Name bereits genutzt wird (%s)."
+
+#: domains/mq/views.py:161
+msgid "No choice made"
+msgstr "Keine Auswahl getroffen"
+
+#: domains/mq/views.py:163
+msgid "Invalid choice"
+msgstr "Ungültige Auswahl"
+
+#: domains/mq/views.py:170
+msgid "No host request selected"
+msgstr "Keine Hostanfrage ausgewählt"
+
+#: domains/views.py:61
+#, python-format
+msgid "The domain <strong>%(name)s</strong> has been created successfully."
+msgstr "Die Domain <strong>%(name)s</strong> wurde erfolgreich erstellt."
+
+#: domains/views.py:63 ydns/models.py:170
+msgid "Domain created"
+msgstr "Domain erstellt"
+
+#: domains/views.py:82
+msgid "Enter domain name"
+msgstr "Domain-Name eingeben"
+
+#: domains/views.py:88
+msgid "Name length exceeded"
+msgstr "Namenlänge überschritten"
+
+#: domains/views.py:95
+msgid "This domain is not available for use"
+msgstr "Diese Domain steht nicht zur Verfügung"
+
+#: domains/views.py:103
+msgid "This domain is already registered"
+msgstr "Diese Domain ist bereits registriert"
+
+#: domains/views.py:109
+msgid "This domain does not exist"
+msgstr "Diese Domain existiert nicht"
+
+#: domains/views.py:111
+msgid "No SOA record returned"
+msgstr "Kein SOA-Record gefunden"
+
+#: domains/views.py:117 domains/views.py:276 hosts/records/views.py:123
+msgid "No type chosen"
+msgstr "Kein Typ ausgewählt"
+
+#: domains/views.py:122 domains/views.py:281
+msgid "Invalid access type"
+msgstr "Ungültiger Zugangstyp"
+
+#: domains/views.py:151
+msgid "Domain deleted"
+msgstr "Domain gelöscht"
+
+#: domains/views.py:157
+#, python-format
+msgid ""
+"The domain <strong>%s</strong> including all hosts and records has been "
+"deleted."
+msgstr ""
+"Die Domain <strong>%s</strong> wurde inklusive aller Hosts und Einträge "
+"gelöscht."
+
+#: domains/views.py:266
+msgid "The changes have been saved."
+msgstr "Deine Änderungen wurden gespeichert."
+
+#: hosts/records/utils.py:7
+msgid "Stores a static IP address (IPv4)"
+msgstr "Speichert eine statische IP-Adresse (IPv4)"
+
+#: hosts/records/utils.py:8
+msgid "Stores a static IP address (IPv6)"
+msgstr "Speichert eine statische IP-Adresse (IPv6)"
+
+#: hosts/records/utils.py:9
+msgid "Canonical name to a host"
+msgstr "Kanonischer Name zu einem Host"
+
+#: hosts/records/utils.py:10
+msgid "Mail Exchanger"
+msgstr "Mail Exchanger"
+
+#: hosts/records/utils.py:11
+msgid "Hostname of authoriative nameserver"
+msgstr "Hostname eines authorativen Nameservers"
+
+#: hosts/records/utils.py:12
+msgid "Sender Policy Framework"
+msgstr "Sender Policy Framework"
+
+#: hosts/records/utils.py:13
+msgid "Service Provider"
+msgstr "Dienstanbieter"
+
+#: hosts/records/utils.py:14
+msgid "Fingerprint of SSH keys"
+msgstr "Fingerabdruck von SSH-Schlüsseln"
+
+#: hosts/records/utils.py:15
+msgid "Freely usable text field"
+msgstr "Frei nutzbares Textfeld"
+
+#: hosts/records/views.py:53
+msgid "The record has been enabled."
+msgstr "Der Eintrag wurde aktiviert."
+
+#: hosts/records/views.py:65
+msgid "The record has been disabled."
+msgstr "Der Eintrag wurde deaktiviert."
+
+#: hosts/records/views.py:97
+msgid "The record has been created."
+msgstr "Der Eintrag wurde erstellt."
+
+#: hosts/records/views.py:128
+msgid "Unsupported resource record type"
+msgstr "Nicht unterstützter Typ eines Ressourceneintrags"
+
+#: hosts/records/views.py:133 hosts/records/views.py:300
+msgid "Missing content"
+msgstr "Inhalt fehlt"
+
+#: hosts/records/views.py:142 hosts/records/views.py:152
+#: hosts/records/views.py:309 hosts/records/views.py:319
+msgid "Not a valid IP address"
+msgstr "Ungültige IP-Adresse"
+
+#: hosts/records/views.py:145 hosts/records/views.py:312
+msgid "Not an IPv4 address"
+msgstr "Keine IPv4-Adresse"
+
+#: hosts/records/views.py:155 hosts/records/views.py:322
+msgid "Not an IPv6 address"
+msgstr "Keine IPv6-Adresse"
+
+#: hosts/records/views.py:165 hosts/records/views.py:332
+msgid "Invalid value"
+msgstr "Ungültiger Wert"
+
+#: hosts/records/views.py:172 hosts/records/views.py:339
+msgid "Invalid value - not a valid hostname"
+msgstr "Ungültiger Wert - Kein gültiger Hostname"
+
+#: hosts/records/views.py:181 hosts/records/views.py:348
+#, python-format
+msgid "Host <strong>%s</strong> does not return a valid IP address"
+msgstr "Host <strong>%s</strong> lieft keine gültige IP-Adresse"
+
+#: hosts/records/views.py:189 hosts/records/views.py:356
+msgid "Missing TTL"
+msgstr "TTL fehlt"
+
+#: hosts/records/views.py:194 hosts/records/views.py:361
+msgid "TTL must be a numeric value"
+msgstr "TTL muss ein numerischer Wert sein"
+
+#: hosts/records/views.py:197 hosts/records/views.py:364
+msgid "TTL out of range (must be between 0 and 2^32)"
+msgstr "TTL außerhalb des gültigen Bereichs (muss zwischen 0 und 2^32 sein)"
+
+#: hosts/records/views.py:202 hosts/records/views.py:369
+msgid "Missing Priority"
+msgstr "Priorität fehlt"
+
+#: hosts/records/views.py:207 hosts/records/views.py:374
+msgid "Priority must be a numeric value"
+msgstr "Priorität muss ein numerischer Wert sein"
+
+#: hosts/records/views.py:210 hosts/records/views.py:377
+msgid "Priority out of range (must be between 1 and 2^32)"
+msgstr ""
+"Priorität außerhalb des gültigen Bereichs (muss zwischen 1 und 2^32 sein)"
+
+#: hosts/records/views.py:215 hosts/records/views.py:382
+msgid "Content is too long"
+msgstr "Inhalt ist zu lang"
+
+#: hosts/records/views.py:237
+msgid "The record has been deleted."
+msgstr "Der Eintrag wurde gelöscht."
+
+#: hosts/records/views.py:291
+msgid "The record has been updated."
+msgstr "Der Eintrag wurde aktualisiert."
+
+#: hosts/views.py:42
+#, python-format
+msgid "Host <strong>%s</strong> has been enabled."
+msgstr "Host <strong>%s</strong> wurde aktiviert."
+
+#: hosts/views.py:59
+#, python-format
+msgid "Host <strong>%s</strong> has been disabled."
+msgstr "Host <strong>%s</strong> wurde deaktiviert."
+
+#: hosts/views.py:94
+#, python-format
+msgid "Moderation request: %(name)s"
+msgstr "Moderationsanfrage: %(name)s"
+
+#: hosts/views.py:100
+msgid ""
+"Your host request requires moderation of the domain owner. You'll get "
+"notified once your request is accepted or rejected."
+msgstr ""
+"Deine Hostanfrage benötigt die Zustimmung des Domaininhabers. Du bekommst "
+"eine E-Mail, sobald deine Anfrage bearbeitet wurde. "
+
+#: hosts/views.py:115
+msgid "Your host was created successfully."
+msgstr "Dein Host wurde erfolgreich erstellt."
+
+#: hosts/views.py:158 hosts/views.py:294
+msgid "No domain chosen"
+msgstr "Keine Domain ausgewählt"
+
+#: hosts/views.py:163 hosts/views.py:299
+msgid "No such domain"
+msgstr "Unbekannte Domain"
+
+#: hosts/views.py:168
+msgid "You cannot create hosts with this domain"
+msgstr "Du kannst keine Hosts mit dieser Domain erstellen"
+
+#: hosts/views.py:174 hosts/views.py:313
+msgid "Missing name"
+msgstr "Name fehlt"
+
+#: hosts/views.py:181 hosts/views.py:320
+msgid "Invalid host name"
+msgstr "Ungültiger Hostname"
+
+#: hosts/views.py:188 hosts/views.py:327
+#, python-format
+msgid "<strong>%(host)s</strong> is already taken"
+msgstr "<strong>%(host)s</strong> ist bereits vergeben"
+
+#: hosts/views.py:276
+#, python-format
+msgid "<strong>%(full_name)s</strong> is available"
+msgstr "<strong>%(full_name)s</strong> ist verfügbar"
+
+#: hosts/views.py:279
+#, python-format
+msgid ""
+"<strong>%(full_name)s</strong> is available, but requires approval by the "
+"domain owner"
+msgstr ""
+"<strong>%(full_name)s</strong> ist verfügbar, benötigt aber die Zustimmung "
+"des Domaininhabers"
+
+#: hosts/views.py:306
+msgid "You have no access to this domain"
+msgstr "Du hast keinen Zugriff auf diese Domain"
+
+#: templates/accounts/login.html:4 templates/accounts/login_otp.html:4
+msgid "YDNS: Login"
+msgstr "YDNS: Login"
+
+#: templates/accounts/login.html:13 templates/accounts/reset_password.html:21
+#: templates/accounts/signup.html:27
+msgid "Email address"
+msgstr "E-Mail Adresse"
+
+#: templates/accounts/login.html:21 templates/accounts/signup.html:35
+#: templates/home.html:63 templates/home.html.py:64
+msgid "Password"
+msgstr "Passwort"
+
+#: templates/accounts/login.html:30 templates/accounts/login_otp.html:26
+msgid "Log in"
+msgstr "Einloggen"
+
+#: templates/accounts/login.html:31
+msgid "Forgot your password?"
+msgstr "Passwort vergessen?"
+
+#: templates/accounts/login.html:36 templates/home.html:72
+msgid "Sign up for free"
+msgstr "Kostenlos anmelden"
+
+#: templates/accounts/login_otp.html:17
+msgid "Code"
+msgstr "Code"
+
+#: templates/accounts/reset_password.html:4
+#: templates/accounts/reset_password_update.html:4
+msgid "YDNS: Reset password"
+msgstr "YDNS: Passwort zurücksetzen"
+
+#: templates/accounts/reset_password.mail:4
+#, python-format
+msgid ""
+"Hi!\n"
+"\n"
+"Please click the link below to change your account password:\n"
+"%(activation_url)s\n"
+"\n"
+"The link will expire in 24 hours.\n"
+"\n"
+"If you haven't requested this password reset, somebody might try to get "
+"access to your account.\n"
+"In such cases, please make sure that you always use a strong password and "
+"consider using two-factor authentication if you don't do so.\n"
+"\n"
+"In case you have any questions, please write to support@ydns.eu and we'll "
+"assist you as soon as possible."
+msgstr ""
+"Hi!\n"
+"\n"
+"Bitte rufe den folgenden Link auf, um dein Passwort zu ändern:\n"
+"%(activation_url)s\n"
+"\n"
+"Der Link ist 24 Stunden lang gültig.\n"
+"\n"
+"Wenn du diese Anfrage nicht gestellt hast, versucht möglicherweise jemand "
+"Zugriff auf dein Konto zu erlangen.\n"
+"In solchen Fällen solltest du sicherstellen, dass du starke Passwörter "
+"verwendest und überlege ob du die Zwei-Faktor-Authentifizierung benutzt, um "
+"dein Konto besser abzusichern.\n"
+"\n"
+"Wenn du Fragen hast, wende dich an support@ydns.eu und wir kümmern uns "
+"umliegend um dein Anliegen."
+
+#: templates/accounts/reset_password_update.html:18
+msgid "New Password"
+msgstr "Neues Passwort"
+
+#: templates/accounts/reset_password_update.html:20
+msgid "Choose a new password…"
+msgstr "Wähle ein neues Passwort…"
+
+#: templates/accounts/reset_password_update.html:26
+#: templates/accounts/settings/change_password.html:38
+#: templates/accounts/signup.html:43
+msgid "Repeat password"
+msgstr "Passwort wiederholen"
+
+#: templates/accounts/reset_password_update.html:28
+#: templates/accounts/settings/change_password.html:40
+msgid "Repeat the new password…"
+msgstr "Wiederhole das neue Passwort…"
+
+#: templates/accounts/reset_password_update.html:35
+msgid "Update password"
+msgstr "Passwort aktualisieren"
+
+#: templates/accounts/settings/change_password.html:8
+#: templates/accounts/settings/delete_account.html:8
+#: templates/accounts/settings/journal.html:8
+#: templates/accounts/settings/two_factor_auth.html:8
+#: templates/accounts/settings/two_factor_instructions.html:8
+#: templates/accounts/settings/two_factor_setup.html:8 templates/base.html:64
+#: templates/domains/settings.html:22 templates/domains/sidenav.html:8
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: templates/accounts/settings/change_password.html:22
+#: templates/accounts/settings/two_factor_setup.html:42
+msgid "Current password"
+msgstr "Aktuelles Passwort"
+
+#: templates/accounts/settings/change_password.html:24
+msgid "Your current password…"
+msgstr "Dein aktuelles Passwort…"
+
+#: templates/accounts/settings/change_password.html:30
+msgid "New password"
+msgstr "Neues Passwort"
+
+#: templates/accounts/settings/change_password.html:32
+msgid "A new password…"
+msgstr "Ein neues Passwort…"
+
+#: templates/accounts/settings/delete_account.html:4
+#: templates/accounts/settings/delete_account.html:18
+#: templates/accounts/settings/delete_account.html:33
+#: templates/accounts/settings/sidenav.html:5
+msgid "Delete Account"
+msgstr "Konto löschen"
+
+#: templates/accounts/settings/delete_account.html:21
+#: templates/domains/delete.html:24
+msgid "Danger"
+msgstr "Achtung"
+
+#: templates/accounts/settings/delete_account.html:22
+msgid ""
+"You are about to delete your user account. If you decide to proceed, your "
+"user account including all associated hosts and domains will be deleted."
+msgstr ""
+"Du bist dabei, dein Benutzerkonto zu löschen. Wenn du fortfährst, werden "
+"alle Daten, die mit deinem Konto zusammenhängen unwiderruflich gelöscht."
+
+#: templates/accounts/settings/delete_account.html:23
+#: templates/domains/delete.html:26 templates/hosts/delete.html:21
+msgid "Do you really want to proceed?"
+msgstr "Möchtest du wirklich fortfahren?"
+
+#: templates/accounts/settings/delete_account.html:30
+msgid "I understand the consequences of this and want to delete my account now"
+msgstr ""
+"Ich habe die Konsequenzen verstanden und möchte mein Konto jetzt löschen"
+
+#: templates/accounts/settings/delete_account.html:34
+#: templates/domains/delete.html:37 templates/hosts/delete.html:26
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: templates/accounts/settings/delete_account.mail:4
+msgid ""
+"Hi!\n"
+"\n"
+"This mail confirms that your YDNS user account has been completely removed."
+msgstr ""
+"Hi!\n"
+"\n"
+"Diese E-Mail bestätigt, dass dein YDNS-Benutzerkonto vollständig gelöscht "
+"wurde."
+
+#: templates/accounts/settings/home.html:4
+msgid "YDNS: Settings"
+msgstr "YDNS: Einstellungen"
+
+#: templates/accounts/settings/home.html:22
+#: templates/accounts/settings/sidenav.html:4
+msgid "Account"
+msgstr "Konto"
+
+#: templates/accounts/settings/home.html:26
+msgid "Email Address"
+msgstr "E-Mail Adresse"
+
+#: templates/accounts/settings/home.html:32
+msgid "Account Type"
+msgstr "Kontotyp"
+
+#: templates/accounts/settings/home.html:40
+msgid "Language"
+msgstr "Sprache"
+
+#: templates/accounts/settings/home.html:44
+msgid "Guess automatically"
+msgstr "Automatisch feststellen"
+
+#: templates/accounts/settings/home.html:51
+#: templates/accounts/settings/two_factor_setup.html:51
+#: templates/accounts/settings/two_factor_setup.html:56
+#: templates/domains/settings.html:45
+msgid "Apply changes"
+msgstr "Änderungen übernehmen"
+
+#: templates/accounts/settings/journal.html:4
+#: templates/accounts/settings/journal.html:19
+#: templates/accounts/settings/sidenav.html:9
+#: templates/domains/journal.html:18 templates/domains/sidenav.html:7
+#: templates/hosts/delete.html:4 templates/hosts/journal.html:4
+#: templates/hosts/journal.html.py:18 templates/hosts/sidenav.html:6
+msgid "Journal"
+msgstr "Journal"
+
+#: templates/accounts/settings/journal.html:21
+msgid "Clear Journal"
+msgstr "Journal löschen"
+
+#: templates/accounts/settings/journal.html:24
+msgid ""
+"The journal is used to track account-sensive information to provide a better "
+"security level."
+msgstr ""
+"Das Journal hilft Kontenrelevante Informationen zu sammeln, um so die "
+"Sicherheit zu erhöhen."
+
+#: templates/accounts/settings/journal.html:25
+msgid ""
+"<strong>Note:</strong> Clearing the journal will create a log entry for that "
+"action as well."
+msgstr ""
+"<strong>Note:</strong> Das Löschen des Journals wird einen Eintrag für das "
+"Löschen ebenfalls erstellen."
+
+#: templates/accounts/settings/journal.html:38
+msgid "Y/m/d H:i:s T"
+msgstr "d.m.Y H:i:s"
+
+#: templates/accounts/settings/journal.html:40
+#: templates/accounts/settings/journal.html:42
+msgid "not available"
+msgstr "nicht verfügbar"
+
+#: templates/accounts/settings/sidenav.html:3 templates/domains/sidenav.html:3
+#: templates/hosts/sidenav.html:3
+msgid "General"
+msgstr "Allgemein"
+
+#: templates/accounts/settings/sidenav.html:6
+msgid "Security"
+msgstr "Sicherheit"
+
+#: templates/accounts/settings/sidenav.html:7
+msgid "Change Password"
+msgstr "Passwort ändern"
+
+#: templates/accounts/settings/sidenav.html:8
+#: templates/accounts/settings/two_factor_auth.html:4
+msgid "Two-Factor Authentication"
+msgstr "Zwei-Faktor Authentifikation"
+
+#: templates/accounts/settings/two_factor_auth.html:18
+msgid "Two-factor authentication"
+msgstr "Zwei-Faktor Authentifikation"
+
+#: templates/accounts/settings/two_factor_auth.html:19
+msgid ""
+"Two-Factor Authentication adds an additional security layer to your user "
+"account. In case someone gets access to your account password, the two-"
+"factor authentication will require confirmation from a second source to "
+"confirm login requests."
+msgstr ""
+"Die Zwei-Faktor Authentifikation erhöht die Sicherheit deines Kontos durch "
+"eine zusätzliche Sicherheitsschicht. Sollte jemand Zugriff auf dein Passwort "
+"erlangen, hilft die Zwei-Faktor Authentifikation durch die Frage eines "
+"zusätzlichen Login-Codes die Unerlaubte Nutzung deines Kontos zu verhindern."
+
+#: templates/accounts/settings/two_factor_auth.html:20
+msgid ""
+"<strong>Please note:</strong> This additional security is not available for "
+"API requests. Use of this feature is only suggested if you're an advanced "
+"user."
+msgstr ""
+"<strong>Bitte beachte:</strong> Diese zusätzliche Sicherheit ist nicht für "
+"API-Anfragen verfügbar. Nutze dieses Feature nur, wenn du ein "
+"fortgeschrittener Nutzer bist."
+
+#: templates/accounts/settings/two_factor_auth.html:24
+#: templates/accounts/settings/two_factor_setup.html:24
+msgid "Two-factor authentication is active."
+msgstr "Zwei-Faktor Authentifikation ist aktiv."
+
+#: templates/accounts/settings/two_factor_auth.html:25
+msgid ""
+"Your account is protected by requiring an additional authentication token to "
+"authorize."
+msgstr "Dein Konto ist durch ein zusätzliches Sicherheitsmerkmal geschützt."
+
+#: templates/accounts/settings/two_factor_auth.html:29
+#: templates/accounts/settings/two_factor_setup.html:29
+msgid "Two-factor authentication is not active."
+msgstr "Zwei-Faktor Authentifikation ist nicht aktiv."
+
+#: templates/accounts/settings/two_factor_auth.html:30
+#: templates/accounts/settings/two_factor_setup.html:25
+#, python-format
+msgid "<a href=\"%(setup_url)s\">Setup</a> the two-factor authentication now."
+msgstr "Du kannst die<a href=\"%(setup_url)s\">Einrichtung</a> nun vornehmen."
+
+#: templates/accounts/settings/two_factor_auth.html:35
+msgid "Setup two-factor authentication"
+msgstr "Zwei-Faktor Authentifikation einrichten"
+
+#: templates/accounts/settings/two_factor_auth.html:36
+msgid "Installation instructions"
+msgstr "Installationsanweisungen"
+
+#: templates/accounts/settings/two_factor_auth.html:37
+msgid "Download recovery codes"
+msgstr "Wiederherstellungs-Codes herunterladen"
+
+#: templates/accounts/settings/two_factor_instructions.html:4
+msgid "Installation Instructions for two-factor authentication"
+msgstr "Installationsanweisungen für Zwei-Faktor Authentifikation"
+
+#: templates/accounts/settings/two_factor_instructions.html:18
+msgid "Installation instructions for two-factor authentication"
+msgstr "Installationsanweisungen für Zwei-Faktor Authentifikation"
+
+#: templates/accounts/settings/two_factor_instructions.html:19
+msgid ""
+"In order to use the two-factor authentication, you'll need a mobile phone "
+"that runs on Android or iOS (Apple)."
+msgstr ""
+"Um die Zwei-Faktor Authentifikation nutzen zu können, benötigst du ein "
+"Smartphones, welches mit Android oder iOS (Apple) läuft."
+
+#: templates/accounts/settings/two_factor_instructions.html:21
+msgid "Setup instructions"
+msgstr "Einrichtungsanweisungen"
+
+#: templates/accounts/settings/two_factor_instructions.html:24
+msgid "Download the <em>Google Authenticator</em> app from your app store."
+msgstr ""
+"Lade zunächst die <em>Google Authenticator</em> App aus deinem App-Store "
+"herunter."
+
+#: templates/accounts/settings/two_factor_instructions.html:25
+#, python-format
+msgid ""
+"<a href=\"https://play.google.com/store/apps/details?id=com.google.android."
+"apps.authenticator2&hl=%(lang_code|slice:\":2\")s\"><i class=\"fa fa-android "
+"fa-fw\"></i> Android</a> or <a href=\"https://itunes.apple.com/%(lang_code)s/"
+"app/google-authenticator/id388497605?mt=8\"><i class=\"fa fa-apple fa-fw\"></"
+"i>iOS</a>"
+msgstr ""
+"<a href=\"https://play.google.com/store/apps/details?id=com.google.android."
+"apps.authenticator2&hl=%(lang_code|slice:\":2\")s\"><i class=\"fa fa-android "
+"fa-fw\"></i> Android</a> oder <a href=\"https://itunes.apple.com/"
+"%(lang_code)s/app/google-authenticator/id388497605?mt=8\"><i class=\"fa fa-"
+"apple fa-fw\"></i>iOS</a>"
+
+#: templates/accounts/settings/two_factor_instructions.html:27
+msgid "Open the app and a new account."
+msgstr "Öffne die App und erstelle einen neuen Account."
+
+#: templates/accounts/settings/two_factor_instructions.html:28
+msgid "Choose to scan a barcode and scan the code image below."
+msgstr ""
+"Wähle Barcode scannen und fotografiere die Code-Grafik auf dieser Seite."
+
+#: templates/accounts/settings/two_factor_instructions.html:29
+msgid "Your account is now protected by two-factor authentication."
+msgstr "Dein Konto ist nun durch Zwei-Faktor Authentifikation geschützt."
+
+#: templates/accounts/settings/two_factor_setup.html:4
+#: templates/accounts/settings/two_factor_setup.html:18
+msgid "Setup Two-Factor Authentication"
+msgstr "Zwei-Faktor Authentifikation einrichten"
+
+#: templates/accounts/settings/two_factor_setup.html:37
+msgid "Use two-factor authentication for my account"
+msgstr "Zwei-Faktor Authentifikation für mein Konto benutzen"
+
+#: templates/accounts/settings/two_factor_setup.html:44
+msgid "Enter your account password…"
+msgstr "Gebe dein Passwort ein…"
+
+#: templates/accounts/signup.html:4
+msgid "YDNS: Sign up"
+msgstr "YDNS: Anmelden"
+
+#: templates/accounts/signup.html:17
+msgid "Sign up with your Google account"
+msgstr "Mit deinem Google-Konto anmelden"
+
+#: templates/accounts/signup.html:37
+msgid "Choose a password…"
+msgstr "Wähle ein Passwort…"
+
+#: templates/accounts/signup.html:45
+msgid "Repeat the password…"
+msgstr "Wiederhole das Passwort…"
+
+#: templates/accounts/signup.html:59 templates/home.html:69
+#, python-format
+msgid ""
+"I have read and accept the <a href=\"%(terms_url)s\" target=\"_blank\">Terms "
+"and Conditions</a>"
+msgstr ""
+"Ich habe die <a href=\"%(terms_url)s\" target=\"_blank"
+"\">Nutzungsbedingungen</a> gelesen und akzeptiere diese"
+
+#: templates/accounts/welcome.mail:4
+#, python-format
+msgid ""
+"Hi!\n"
+"\n"
+"Welcome to YDNS, the free DNS service provider. You're just one click ahead "
+"from using your account.\n"
+"\n"
+"Please click the link below to activate your account:\n"
+"%(activation_url)s\n"
+"\n"
+"In case you have any questions, please write to support@ydns.eu and we'll "
+"assist you as soon as possible."
+msgstr ""
+"Hi!\n"
+"\n"
+"Willkommen bei YDNS, dem kostenlosen DNS-Anbieter. Du bist nur einen Klick "
+"davon entfernt, deinen Account nutzen zu können.\n"
+"\n"
+"Bitte rufe den untenstehenden Link auf, um dein Konto zu aktivieren:\n"
+"%(activation_url)s\n"
+"\n"
+"Solltest du Fragen haben, wende dich bitte per E-Mail an support@ydns.eu und "
+"wir werden dir so bald wie möglich helfen."
+
+#: templates/accounts/welcome_facebook.mail:4
+msgid ""
+"Hi!\n"
+"\n"
+"Welcome to YDNS.\n"
+"\n"
+"You have used the Facebook login for the first time, which created a new "
+"account on YDNS.\n"
+"No further action is needed - your account is already activated and you can "
+"using it.\n"
+"\n"
+"In case you have any questions, please write to support@ydns.eu and we'll "
+"assist you as soon as possible."
+msgstr ""
+"Hi!\n"
+"\n"
+"Willkommen bei YDNS.\n"
+"\n"
+"Du hast den Facebook-Login zum ersten Mal benutzt und dich damit bei YDNS "
+"angemeldet.\n"
+"Keine Sorge - du musst nichts weiter tun. Dein Konto ist bereites aktiviert "
+"und du kannst sofort loslegen.\n"
+"\n"
+"Solltest du Fragen haben, schreibe eine E-Mail an support@ydns.eu und wir "
+"werden dir so schnell wie möglich helfen."
+
+#: templates/accounts/welcome_github.mail:4
+msgid ""
+"Hi!\n"
+"\n"
+"Welcome to YDNS.\n"
+"\n"
+"You have used the GitHub login for the first time, which created a new "
+"account on YDNS.\n"
+"No further action is needed - your account is already activated and you can "
+"using it.\n"
+"\n"
+"In case you have any questions, please write to support@ydns.eu and we'll "
+"assist you as soon as possible."
+msgstr ""
+"Hi!\n"
+"\n"
+"Willkommen bei YDNS.\n"
+"\n"
+"Du hast den GitHub-Login zum ersten Mal benutzt und dich damit bei YDNS "
+"angemeldet.\n"
+"Keine Sorge - du musst nichts weiter tun. Dein Konto ist bereites aktiviert "
+"und du kannst sofort loslegen.\n"
+"\n"
+"Solltest du Fragen haben, schreibe eine E-Mail an support@ydns.eu und wir "
+"werden dir so schnell wie möglich helfen."
+
+#: templates/accounts/welcome_google.mail:4
+msgid ""
+"Hi!\n"
+"\n"
+"Welcome to YDNS.\n"
+"\n"
+"You have used the Google login for the first time, which created a new "
+"account on YDNS.\n"
+"No further action is needed - your account is already activated and you can "
+"using it.\n"
+"\n"
+"In case you have any questions, please write to support@ydns.eu and we'll "
+"assist you as soon as possible."
+msgstr ""
+"Hi!\n"
+"\n"
+"Willkommen bei YDNS.\n"
+"\n"
+"Du hast den Google-Login zum ersten Mal benutzt und dich damit bei YDNS "
+"angemeldet.\n"
+"Keine Sorge - du musst nichts weiter tun. Dein Konto ist bereites aktiviert "
+"und du kannst sofort loslegen.\n"
+"\n"
+"Solltest du Fragen haben, schreibe eine E-Mail an support@ydns.eu und wir "
+"werden dir so schnell wie möglich helfen."
+
+#: templates/base.html:20 templates/home.html:19
+msgid "Toggle navigation"
+msgstr "Navigation umschalten"
+
+#: templates/base.html:31 templates/domains/home.html:4
+#: templates/domains/home.html.py:8
+msgid "Domains"
+msgstr "Domains"
+
+#: templates/base.html:32 templates/dashboard.html:25
+#: templates/hosts/home.html:4 templates/hosts/home.html.py:8
+msgid "My Hosts"
+msgstr "Meine Hosts"
+
+#: templates/base.html:35
+msgid "Create"
+msgstr "Erstellen"
+
+#: templates/base.html:38
+msgid "New Host"
+msgstr "Neuer Host"
+
+#: templates/base.html:39
+msgid "New Domain"
+msgstr "Neue Domain"
+
+#: templates/base.html:65
+msgid "Logout"
+msgstr "Abmelden"
+
+#: templates/base.html:71
+msgid "Search…"
+msgstr "Suche…"
+
+#: templates/base.html:78
+msgid "Close"
+msgstr "Schließen"
+
+#: templates/base.html:94 templates/home.html:80
+msgid "Blog"
+msgstr "Blog"
+
+#: templates/base.html:95 templates/home.html:81
+msgid "API"
+msgstr "API"
+
+#: templates/base.html:96 templates/home.html:82
+msgid "Support"
+msgstr "Support"
+
+#: templates/base.html:97 templates/home.html:83
+msgid "Terms and Conditions"
+msgstr "Nutzungsbedingungen"
+
+#: templates/base.html:98 templates/home.html:84 templates/imprint.html:9
+msgid "Imprint"
+msgstr "Impressum"
+
+#: templates/base.html:100 templates/home.html:86
+msgid ""
+"Copyright &copy; 2015 TFMT UG (haftungsbeschränkt) &sdot; All rights "
+"reserved."
+msgstr ""
+"Copyright &copy; 2015 TFMT UG (haftungsbeschränkt) &sdot; Alle Rechte "
+"vorbehalten."
+
+#: templates/base.mail:2
+msgid ""
+"--\n"
+"YDNS - Free DNS Services\n"
+"https://ydns.eu\n"
+"\n"
+"For support requests, please write to support@ydns.eu\n"
+"\n"
+"TFMT UG (haftungsbeschränkt)\n"
+"Wettersteinstrasse 30\n"
+"82467 Garmisch-Partenkirchen\n"
+"Germany\n"
+"\n"
+"CEO: Florian Hibler, Christian Jurk\n"
+"Amtsgericht München, HRB 203313\n"
+"\n"
+"Residence of the company: Garmisch-Partenkirchen, Germany"
+msgstr ""
+"--\n"
+"YDNS - Kostenlose DNS-Dienste\n"
+"https://ydns.eu\n"
+"\n"
+"Für Support-Anfrage bitte an support@ydns.eu wenden\n"
+"\n"
+"TFMT UG (haftungsbeschränkt)\n"
+"Wettersteinstrasse 30\n"
+"82467 Garmisch-Partenkirchen\n"
+"Deutschland\n"
+"\n"
+"Geschäftsführer: Florian Hibler, Christian Jurk\n"
+"Amtsgericht München, HRB 203313\n"
+"\n"
+"Firmensitz: Garmisch-Partenkirchen, Germany"
+
+#: templates/dashboard.html:4
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: templates/dashboard.html:11
+msgid "Recent Activity"
+msgstr "Meine Aktivität"
+
+#: templates/dashboard.html:13
+msgid "No log messages found."
+msgstr "Keine Logeinträge gefunden."
+
+#: templates/dashboard.html:14
+msgid "Looks like you're new on board - welcome! :-)"
+msgstr "Scheint so, als wärst du neu an Bord - Willkommen! :-)"
+
+#: templates/dashboard.html:16
+#, python-format
+msgid "%(since)s ago"
+msgstr "vor %(since)s"
+
+#: templates/dashboard.html:27
+msgid "You have no hosts on YDNS."
+msgstr "Du hast keine Host bei YDNS."
+
+#: templates/dashboard.html:28
+msgid "Create a Host"
+msgstr "Erstelle einen Host"
+
+#: templates/dashboard.html:40 templates/hosts/home_list.html:25
+msgid "No records"
+msgstr "Keine Einträge"
+
+#: templates/dashboard.html:42 templates/hosts/home_list.html:16
+#, python-format
+msgid "Record type: %(rr_type)s"
+msgstr "Typ des Eintrags: %(rr_type)s"
+
+#: templates/dashboard.html:55
+msgid "My Domains"
+msgstr "Meine Domains"
+
+#: templates/dashboard.html:57
+msgid "You have no domains on YDNS."
+msgstr "Du hast keine Domains bei YDNS."
+
+#: templates/dashboard.html:58
+msgid "Create a Domain"
+msgstr "Erstelle eine Domain"
+
+#: templates/domains/create.html:4 templates/domains/create.html.py:17
+#: templates/domains/create.html:45 templates/domains/home.html:10
+msgid "Create Domain"
+msgstr "Domain erstellen"
+
+#: templates/domains/create.html:25 templates/domains/home.html:16
+msgid "Domain name"
+msgstr "Domain Name"
+
+#: templates/domains/create.html:27
+msgid "Enter your domain name…"
+msgstr "Gebe deinen Domainnamen ein…"
+
+#: templates/domains/create.html:33 templates/domains/settings.html:27
+msgid "Type"
+msgstr "Typ"
+
+#: templates/domains/create.html:36 templates/domains/settings.html:30
+#: ydns/models.py:51
+msgid "Public"
+msgstr "Öffentlich"
+
+#: templates/domains/create.html:37 templates/domains/settings.html:31
+#: ydns/models.py:53
+msgid "Private"
+msgstr "Privat"
+
+#: templates/domains/create.html:38 templates/domains/settings.html:32
+#: ydns/models.py:55
+msgid "Moderated"
+msgstr "Moderiert"
+
+#: templates/domains/create.html:58 templates/hosts/create.html:67
+#: templates/hosts/records/create.html:25
+msgid "Help"
+msgstr "Hilfe"
+
+#: templates/domains/delete.html:4 templates/domains/delete.html.py:8
+#, python-format
+msgid "Delete %(domain_name)s"
+msgstr "%(domain_name)s löschen"
+
+#: templates/domains/delete.html:18 templates/domains/delete.html.py:36
+#: templates/domains/sidenav.html:9
+msgid "Delete Domain"
+msgstr "Domain löschen"
+
+#: templates/domains/delete.html:25
+msgid ""
+"You are about to delete this domain. If you decide to proceed, all hosts and "
+"records that belong to that domain will be deleted."
+msgstr ""
+"Du bist dabei diese Domain zu löschen. Wenn du fortfährst, wird die Domain "
+"inklusiver aller Hosts und Einträgen unwiderruflich gelöscht."
+
+#: templates/domains/delete.html:33
+msgid "I understand the consequences of this and want to delete the domain now"
+msgstr ""
+"Ich habe die Konsequenzen verstanden und möchte meine Domain jetzt löschen"
+
+#: templates/domains/delete_domain.mail:4
+#, python-format
+msgid ""
+"Hi!\n"
+"\n"
+"This mail confirms that your domain \"%(domain_name)s\" has been completely "
+"removed."
+msgstr ""
+"Hi!\n"
+"\n"
+"Diese E-Mail bestätigt, dass deine Domain \"%(domain_name)s\" vollständig "
+"gelöscht wurde."
+
+#: templates/domains/detail.html:18 templates/domains/sidenav.html:4
+msgid "Domain Details"
+msgstr "Domaindetails"
+
+#: templates/domains/detail.html:21
+msgid "Official YDNS Domain"
+msgstr "Offizielle YDNS-Domain"
+
+#: templates/domains/detail.html:22
+msgid ""
+"This domain is provided by the YDNS project and provides a guaranteed "
+"availability."
+msgstr ""
+"Diese Domain wird vom YDNS-Projekt bereitgestellt und garantiert eine "
+"langfristige Verfügbarkeit."
+
+#: templates/domains/detail.html:22 templates/domains/detail.html.py:52
+msgid "What does that mean?"
+msgstr "Was heißt das?"
+
+#: templates/domains/detail.html:26 templates/domains/home.html:19
+#: templates/hosts/detail.html:20
+msgid "Creation Date"
+msgstr "Erstellungsdatum"
+
+#: templates/domains/detail.html:27 templates/domains/home.html:38
+#: templates/domains/hosts/home.html:44 templates/domains/journal.html:33
+#: templates/domains/mq/home.html:44 templates/hosts/detail.html:21
+#: templates/hosts/home_list.html:23 templates/hosts/journal.html:33
+#: templates/hosts/records/home.html:59
+msgid "Y/m/d H:i T"
+msgstr "d.m.Y H:i T"
+
+#: templates/domains/detail.html:28
+msgid "Access Type"
+msgstr "Zugriffstyp"
+
+#: templates/domains/detail.html:30 templates/domains/home.html:17
+#: templates/hosts/detail.html:22 templates/hosts/records/home.html:35
+msgid "Status"
+msgstr "Status"
+
+#: templates/domains/detail.html:32 templates/domains/home.html:18
+msgid "Owner"
+msgstr "Eigentümer"
+
+#: templates/domains/detail.html:35 templates/domains/home.html:31
+msgid "Not disclosed"
+msgstr "Nicht veröffentlicht"
+
+#: templates/domains/home.html:27
+msgid "Official YDNS domain"
+msgstr "Offizielle YDNS-Domain"
+
+#: templates/domains/hosts/home.html:23 templates/domains/mq/home.html:23
+#: templates/domains/sidenav.html:6
+msgid "Moderation Queue"
+msgstr "Moderations-Anfragen"
+
+#: templates/domains/hosts/home.html:27 templates/domains/mq/home.html:27
+msgid "No pending host requests found."
+msgstr "Keine laufenden Moderationsanfragen"
+
+#: templates/domains/hosts/home.html:35 templates/domains/mq/home.html:35
+msgid "Host Name"
+msgstr "Hostname"
+
+#: templates/domains/hosts/home.html:36 templates/domains/mq/home.html:36
+msgid "Request Date"
+msgstr "Datum der Anfrage"
+
+#: templates/domains/hosts/home.html:37 templates/domains/mq/home.html:37
+msgid "Action"
+msgstr "Aktion"
+
+#: templates/domains/hosts/home.html:46 templates/domains/hosts/home.html:54
+#: templates/domains/mq/home.html:46 templates/domains/mq/home.html.py:54
+msgid "Accept"
+msgstr "Akzeptieren"
+
+#: templates/domains/hosts/home.html:47 templates/domains/hosts/home.html:55
+#: templates/domains/mq/home.html:47 templates/domains/mq/home.html.py:55
+msgid "Reject"
+msgstr "Ablehnen"
+
+#: templates/domains/hosts/home.html:52 templates/domains/mq/home.html:52
+msgid "Selected…"
+msgstr "Ausgewählte…"
+
+#: templates/domains/journal.html:21 templates/hosts/journal.html:21
+msgid "The Journal is empty."
+msgstr "Das Journal ist leer."
+
+#: templates/domains/journal.html:26 templates/hosts/journal.html:26
+msgid "Date"
+msgstr "Datum"
+
+#: templates/domains/journal.html:27 templates/hosts/journal.html:27
+msgid "Message"
+msgstr "Nachricht"
+
+#: templates/domains/journal.html:28 templates/hosts/journal.html:28
+msgid "User"
+msgstr "Benutzer"
+
+#: templates/domains/journal.html:35 templates/hosts/journal.html:35
+msgid "Not available"
+msgstr "Nicht verfügbar"
+
+#: templates/domains/mq/host_accepted.mail:4
+#, python-format
+msgid ""
+"Hi!\n"
+"\n"
+"Your request for host \"%(name)s\" has been accepted by it's domain owner.\n"
+"\n"
+"The host has been created and you can start using it now.\n"
+"\n"
+"In case you have any questions, please write to support@ydns.eu and we'll "
+"assist you as soon as possible."
+msgstr ""
+"Hi!\n"
+"\n"
+"Deine Anfrage für den Host \"%(name)s\" wurde von dessen Domaininhaber "
+"akzeptiert.\n"
+"\n"
+"Der Host wurde erstellt und du kannst ihn ab sofort nutzen.\n"
+"\n"
+"Wenn du Fragen hast, wende dich per E-Mail an support@ydns.eu und wir werden "
+"dir umgehend helfen."
+
+#: templates/domains/mq/host_failed.mail:4
+#, python-format
+msgid ""
+"Hi!\n"
+"\n"
+"Your request for host \"%(name)s\" has been accepted by it's domain owner, "
+"but unfortunately the name is already used by someone else."
+msgstr ""
+"Hi!\n"
+"\n"
+"Deine Anfrage für den Host \"%(name)s\" wurde vom Domaininhaber akzeptiert, "
+"jedoch wird der Name mittlerweile von jemand anderen genutzt."
+
+#: templates/domains/mq/host_rejected.mail:4
+#, python-format
+msgid ""
+"Hi!\n"
+"\n"
+"Your request for host \"%(name)s\" has been rejected by it's domain owner.\n"
+"\n"
+"In case you have any questions, please write to support@ydns.eu and we'll "
+"assist you as soon as possible."
+msgstr ""
+"Hi!\n"
+"\n"
+"Deine Anfrage für den Host \"%(name)s\" wurde vom Domaininhaber abgelehnt.\n"
+"\n"
+"Wenn du Fragen hast, wende dich per E-Mail an support@ydns.eu und wir werden "
+"dir umgehend helfen."
+
+#: templates/domains/settings.html:40
+msgid "Publish my contact details as owner for this domain"
+msgstr "Veröffentliche meine Kontaktdaten als Eigentümer dieser Domain"
+
+#: templates/domains/sidenav.html:5
+msgid "Hosts"
+msgstr "Hosts"
+
+#: templates/home.html:49
+msgid "Free DNS Services"
+msgstr "Kostenlose DNS Dienste"
+
+#: templates/home.html:51
+msgid "Simple"
+msgstr "Einfach"
+
+#: templates/home.html:52
+msgid "IPv6 enabled"
+msgstr "IPv6-fähig"
+
+#: templates/home.html:53
+msgid "Unlimited hosts"
+msgstr "Unbegrenzte Hosts"
+
+#: templates/home.html:54
+msgid "Dynamic DNS"
+msgstr "Dynamic DNS"
+
+#: templates/home.html:59 templates/home.html.py:60
+msgid "Email"
+msgstr "E-Mail"
+
+#: templates/hosts/create.html:4 templates/hosts/create.html.py:17
+#: templates/hosts/create.html:54
+msgid "Create Host"
+msgstr "Host erstellen"
+
+#: templates/hosts/create.html:25
+msgid "Domain"
+msgstr "Domain"
+
+#: templates/hosts/create.html:27
+msgid "Choose…"
+msgstr "Wähle…"
+
+#: templates/hosts/create.html:29
+msgid "Official YDNS domains"
+msgstr "Offizielle YDNS-Domains"
+
+#: templates/hosts/create.html:32
+msgid "User-shared domains"
+msgstr "Von Nutzern geteilte Domains"
+
+#: templates/hosts/create.html:40
+msgid "Host name"
+msgstr "Hostname"
+
+#: templates/hosts/create.html:42
+msgid "Enter a host name…"
+msgstr "Hostnamen eingeben…"
+
+#: templates/hosts/delete.html:18 templates/hosts/sidenav.html:8
+msgid "Delete Host"
+msgstr "Host löschen"
+
+#: templates/hosts/delete.html:20
+msgid ""
+"You are about to delete this host. If you proceed, all underlying records "
+"are deleted."
+msgstr ""
+"Du bist dabei diesen Host zu löschen. Wenn du fortfährst, werden alle "
+"dazugehörigen Einträge ebenfalls gelöscht."
+
+#: templates/hosts/delete.html:25
+msgid "Delete this host"
+msgstr "Diesen Host löschen"
+
+#: templates/hosts/detail.html:18 templates/hosts/sidenav.html:4
+msgid "Host Details"
+msgstr "Hostdetails"
+
+#: templates/hosts/detail.html:25
+msgid "Active"
+msgstr "Aktiv"
+
+#: templates/hosts/detail.html:27 ydns/models.py:329
+msgid "Disabled"
+msgstr "Deaktiviert"
+
+#: templates/hosts/detail.html:33
+msgid ""
+"<strong>Warning:</strong> All records of this host are disabled. This means "
+"that no queries to this host are answered."
+msgstr ""
+"<strong>Warnung:</strong> Alle Einträge dieses Hosts sind deaktiviert. Das "
+"heißt, dass keine Anfragen für diesen Host beantwortet werden."
+
+#: templates/hosts/detail.html:37
+msgid "Disable this host"
+msgstr "Diesen Host deaktivieren"
+
+#: templates/hosts/detail.html:39
+msgid "Enable this host"
+msgstr "Diesen Host aktivieren"
+
+#: templates/hosts/home.html:24
+msgid "No hosts have been found."
+msgstr "Keine Hosts wurden gefunden."
+
+#: templates/hosts/home.html:25
+msgid ""
+"You may create a host by using the Create button on the top of the page."
+msgstr ""
+"Du kannst einen Host erstellen, indem du den Erstellen-Button oben auf der "
+"Seite nutzt."
+
+#: templates/hosts/home_cols.html:10
+msgid "Content of most recent updated record"
+msgstr "Inhalt des zuletzt geänderten Eintrags"
+
+#: templates/hosts/home_cols.html:11 templates/hosts/home_list.html:8
+#: templates/hosts/records/home.html:36
+msgid "Last updated"
+msgstr "Zuletzt geändert"
+
+#: templates/hosts/home_cols.html:11
+#, python-format
+msgid "%(last_mod)s ago"
+msgstr "vor %(last_mod)s"
+
+#: templates/hosts/home_cols.html:13
+msgid "No records found"
+msgstr "Keine Einträge gefunden"
+
+#: templates/hosts/home_cols.html:14
+msgid "Never updated yet"
+msgstr "Noch nie aktualisiert"
+
+#: templates/hosts/home_list.html:5
+msgid "Hostname"
+msgstr "Hostname"
+
+#: templates/hosts/home_list.html:6 templates/hosts/records/create.html:42
+#: templates/hosts/records/edit.html:23 templates/hosts/records/home.html:32
+msgid "Content"
+msgstr "Inhalt"
+
+#: templates/hosts/home_list.html:7
+msgid "State"
+msgstr "Status"
+
+#: templates/hosts/home_list.html:23
+msgid "Never updated"
+msgstr "Nie aktualisiert"
+
+#: templates/hosts/moderation_request.mail:4
+#, python-format
+msgid ""
+"Hi,\n"
+"\n"
+"A new moderation request for a host of your domain %(domain_name)s is "
+"waiting for you.\n"
+"\n"
+"To accept the host, click the link below:\n"
+"    %(accept_url)s\n"
+"\n"
+"To reject the host, click the link below:\n"
+"    %(reject_url)s\n"
+"\n"
+"In case you have any questions, please write to support@ydns.eu and we'll "
+"assist you as soon as possible."
+msgstr ""
+"Hi,\n"
+"\n"
+"Eine neue Moderationsanfrage für einen Host deiner Domain %(domain_name)s "
+"wartet auf Dich.\n"
+"\n"
+"Um den Host zu akzeptieren, klicke den untenstehenden Link:\n"
+"    %(accept_url)s\n"
+"\n"
+"Um den Host abzulehnen, klicke den untenstehenden Link:\n"
+"    %(reject_url)s\n"
+"\n"
+"Wenn du Fragen hast, wende dich per E-Mail an support@ydns.eu und wir werden "
+"dir umgehend helfen."
+
+#: templates/hosts/records/create.html:4
+#: templates/hosts/records/create.html:23
+#: templates/hosts/records/create.html:73 templates/hosts/records/home.html:21
+msgid "Create Record"
+msgstr "Eintrag erstellen"
+
+#: templates/hosts/records/create.html:32
+msgid "Record Type"
+msgstr "Typ des Eintrags"
+
+#: templates/hosts/records/create.html:34
+msgid "Choose a type…"
+msgstr "Wähle einen Typ…"
+
+#: templates/hosts/records/create.html:50 templates/hosts/records/edit.html:31
+msgid "Time to live, in seconds"
+msgstr "Time to Live, in Sekunden"
+
+#: templates/hosts/records/create.html:50 templates/hosts/records/edit.html:31
+#: templates/hosts/records/home.html:33
+msgid "TTL"
+msgstr "TTL"
+
+#: templates/hosts/records/create.html:58 templates/hosts/records/edit.html:39
+#: templates/hosts/records/home.html:34
+msgid "Priority"
+msgstr "Priorität"
+
+#: templates/hosts/records/create.html:68 templates/hosts/records/edit.html:49
+msgid "Strict validation of my input (recommended)"
+msgstr "Strikte Prüfung meiner Eingaben (empfohlen)"
+
+#: templates/hosts/records/edit.html:4 templates/hosts/records/edit.html:18
+msgid "Edit Record"
+msgstr "Eintrag bearbeiten"
+
+#: templates/hosts/records/edit.html:54
+msgid "Update Record"
+msgstr "Eintrag aktualisieren"
+
+#: templates/hosts/records/home.html:4 templates/hosts/records/home.html:19
+#: templates/hosts/sidenav.html:5
+msgid "Records"
+msgstr "Einträge"
+
+#: templates/hosts/records/home.html:26
+msgid "No records found."
+msgstr "Keine Einträge gefunden."
+
+#: templates/hosts/records/home.html:31
+msgid "Record type"
+msgstr "Typ des Eintrags"
+
+#: templates/hosts/records/home.html:46
+#, python-format
+msgid "One second"
+msgid_plural "%(counter)s seconds"
+msgstr[0] "Eine Sekunde"
+msgstr[1] "%(counter)s Sekunden"
+
+#: templates/hosts/records/home.html:48 templates/hosts/records/home.html:55
+msgid "N/A"
+msgstr "N/A"
+
+#: templates/hosts/records/home.html:67
+msgid "Enable"
+msgstr "Aktivieren"
+
+#: templates/hosts/records/home.html:69
+msgid "Disable"
+msgstr "Deaktivieren"
+
+#: templates/hosts/records/home.html:72
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: templates/hosts/records/home.html:73
+msgid "Delete"
+msgstr "Löschen"
+
+#: templates/hosts/sidenav.html:7
+msgid "Danger Zone"
+msgstr "Gefährliche Zone"
+
+#: templates/imprint.html:4
+msgid "YDNS: Imprint"
+msgstr "YDNS: Impressum"
+
+#: templates/imprint.html:11
+msgid ""
+"<strong>TFMT UG (haftungsbeschränkt)</strong><br>\n"
+"\t\t\t\tWettersteinstrasse 30<br>\n"
+"\t\t\t\t82467 Garmisch-Partenkirchen<br>\n"
+"\t\t\t\tGermany<br>\n"
+"\t\t\t\t<br>\n"
+"\t\t\t\tChief Executive Officer: Florian Hibler, Christian Jurk<br>\n"
+"\t\t\t\tAmtsgericht München HRB 203313<br>\n"
+"\t\t\t\tEU VAT ID: DE287847488<br>\n"
+"\t\t\t\tHeadquarters: Garmisch-Partenkirchen, Germany<br>\n"
+"\t\t\t\t<br>\n"
+"\t\t\t\t<a href=\"http://www.tfmt.de\" target=\"_blank\">http://www.tfmt.de</"
+"a><br>\n"
+"\t\t\t\tPhone: +49 8821 6869039 <sup>1</sup><br>\n"
+"\t\t\t\tFax: +49 8821 6869039 <sup>1</sup><br>\n"
+"\t\t\t\tEmail: <a href=\"mailto:support@ydns.eu\">support@ydns.eu</a> or use "
+"our <a href=\"#\">Support page</a> to contact us.<br>\n"
+"\t\t\t\t<br>\n"
+"\t\t\t\t<small><i><sup>1</sup> landline tolls may apply.</i></small>"
+msgstr ""
+"<strong>TFMT UG (haftungsbeschränkt)</strong><br>\n"
+"\t\t\t\tWettersteinstrasse 30<br>\n"
+"\t\t\t\t82467 Garmisch-Partenkirchen<br>\n"
+"\t\t\t\tDeutschland<br>\n"
+"\t\t\t\t<br>\n"
+"\t\t\t\tGeschäftsführer: Florian Hibler, Christian Jurk<br>\n"
+"\t\t\t\tAmtsgericht München HRB 203313<br>\n"
+"\t\t\t\tUSt.-Identifikationsnummer: DE287847488<br>\n"
+"\t\t\t\tHauptsitz: Garmisch-Partenkirchen, Germany<br>\n"
+"\t\t\t\t<br>\n"
+"\t\t\t\t<a href=\"http://www.tfmt.de\" target=\"_blank\">http://www.tfmt.de</"
+"a><br>\n"
+"\t\t\t\tTel: +49 8821 6869039 <sup>1</sup><br>\n"
+"\t\t\t\tFax: +49 8821 6869039 <sup>1</sup><br>\n"
+"\t\t\t\tE-Mail: <a href=\"mailto:support@ydns.eu\">support@ydns.eu</a> oder "
+"nutze unsere <a href=\"#\">Support-Seite</a> um uns zu kontaktieren.<br>\n"
+"\t\t\t\t<br>\n"
+"\t\t\t\t<small><i><sup>1</sup> reguläre Anrufgebühren aus dem deutschen "
+"Festnetz.</i></small>"
+
+#: ydns/local_settings.py:15
+msgid "English"
+msgstr "Englisch"
+
+#: ydns/local_settings.py:16
+msgid "German"
+msgstr "Deutsch"
+
+#: ydns/models.py:122 ydns/models.py:223 ydns/models.py:327
+msgid "Good"
+msgstr "Gut"
+
+#: ydns/models.py:125 ydns/models.py:225
+msgid "Bad"
+msgstr "Schlecht"
+
+#: ydns/models.py:172
+msgid "Owner contact details are now public"
+msgstr "Kontaktinformationen des Eigentümers sind nun öffentlich"
+
+#: ydns/models.py:174
+msgid "Owner contact details are now private"
+msgstr "Kontaktinformationen des Eigentümers sind nun privat"
+
+#: ydns/models.py:177
+#, python-format
+msgid "Access type changed to \"%(access_type)s\""
+msgstr "Zugangstyp wurde auf \"%(access_type)s\" geändert"
+
+#: ydns/models.py:273
+msgid "Host request"
+msgstr "Hostanfrage"
+
+#: ydns/models.py:275
+msgid "Host created"
+msgstr "Host erstellt"
+
+#: ydns/models.py:277
+msgid "Host enabled"
+msgstr "Host aktiviert"
+
+#: ydns/models.py:279
+msgid "Host disabled"
+msgstr "Host deaktiviert"
+
+#: ydns/models.py:281
+#, python-format
+msgid "Record created (%s)"
+msgstr "Eintrag erstellt (%s)"
+
+#: ydns/models.py:283
+msgid "Record deleted"
+msgstr "Eintrag gelöscht"
+
+#: ydns/models.py:285
+msgid "Record updated"
+msgstr "Eintrag aktualisiert"
+
+#: ydns/models.py:287
+msgid "Record enabled"
+msgstr "Eintrag aktiviert"
+
+#: ydns/models.py:289
+msgid "Record disabled"
+msgstr "Eintrag deaktiviert"
+
+#~ msgid "German (Deutsch)"
+#~ msgstr "Deutsch (German)"

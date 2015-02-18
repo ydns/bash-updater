@@ -1,0 +1,15 @@
+{% load i18n %}
+<ul class="nav nav-list">
+	<li class="nav-header">{% blocktrans with uid=u.id|stringformat:'04d' %}User account #{{ uid }}{% endblocktrans %}</li>
+	<li data-nav-id="cp-users-overview"><a href="{% url 'cp:users:detail' u.id %}">{% trans "Account Overview" %}</a></li>
+	<li data-nav-id="cp-users-domains"><a href="{% url 'cp:users:domains' u.id %}">{% trans "Domains" %} <span class="badge{% if u.domains.count == 0 %} badge-subtle{% endif %}">{{ u.domains.count }}</span></a></li>
+    <li data-nav-id="cp-users-hosts"><a href="{% url 'cp:users:hosts' u.id %}">{% trans "Hosts" %} <span class="badge{% if u.hosts.count == 0 %} badge-subtle{% endif %}">{{ u.hosts.count }}</span></a></li>
+	<li data-nav-id="cp-users-journal"><a href="{% url 'cp:users:journal' u.id %}">{% trans "Journal" %} <span class="badge{% if u.get_log_messages.count == 0 %} badge-subtle{% endif %}">{{ u.get_log_messages.count }}</span></a></li>
+	<li class="nav-header">{% trans "Danger Zone" %}</li>
+    {% if not u.get_ban %}
+        <li data-nav-id="cp-users-ban"><a href="{% url 'cp:users:ban' u.id %}">{% trans "Ban Account" %}</a></li>
+    {% else %}
+        <li data-nav-id="cp-users-unban"><a href="{% url 'cp:users:unban' u.id %}">{% trans "Remove Ban" %}</a></li>
+    {% endif %}
+    <li data-nav-id="cp-users-delete"><a href="{% url 'cp:users:delete' u.id %}">{% trans "Delete Account" %}</a></li>
+</ul>

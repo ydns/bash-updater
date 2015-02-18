@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "API" %} &mdash; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-3">
+            {% include "api/sidenav.html" %}
+		</div>
+	    <div class="col-lg-9">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "YDNS API" %}</h3>
+			    <p>{% trans "Welcome to the YDNS API Documentation." %}</p>
+			    <p>{% trans "These APIs allow third-party programs to manipulate YDNS records, most notably for dynamic DNS purposes. We have two API versions available:" %}</p>
+			    <ul>
+			    	<li><a href="{% url 'api:v1:home' %}">{% trans "API v1" %}</a> &mdash; {% trans "The legacy API, which is compatible with most devices and updaters out there." %}</li>
+			    	<li><a href="#">{% trans "REST API v2" %}</a> &mdash; {% trans "The new, JSON-based REST API." %}</li>
+			    </ul>
+			    <p>{% trans "For new implementations, please use the REST API v2 whenever possible." %}</p>
+	        </section>
+	    </div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="api-intro"]').addClass('active');
+		});
+	</script>
+{% endblock %}

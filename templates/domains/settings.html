@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ domain }} &mdash; YDNS{% endblock %}
+
+{% block header %}
+	<link rel="stylesheet" type="text/css" href="{% static "css/select2.css" %}">
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-3">
+            {% include "domains/sidenav.html" %}
+		</div>
+	    <div class="col-lg-9">
+			<section class="section">
+				<h3 class="section-header page-header">{% trans "Settings" %}</h3>
+			    <form class="settings-form form-horizontal" id="settings-form" method="post" action="{% url 'domains:settings' domain.name %}">
+			    	{% csrf_token %}
+			    	<div class="form-group{% if errors.type %} has-error{% endif %}">
+			    		<label for="id_type" class="col-lg-2 col-md-2 control-label">{% trans "Type" %}</label>
+			    		<div class="col-lg-3 col-md-5">
+			    			<select name="type" id="id_type" class="form-control" style="width:100%">
+			    				<option value="public"{% if domain.get_access_type|stringformat:'s' == _('Public') %} selected{% endif %}>{% trans "Public" %}</option>
+			    				<option value="private"{% if domain.get_access_type|stringformat:'s' == _('Private') %} selected{% endif %}>{% trans "Private" %}</option>
+			    				<option value="moderated"{% if domain.get_access_type|stringformat:'s' == _('Moderated') %} selected{% endif %}>{% trans "Moderated" %}</option>
+			    			</select>
+			    			{% if errors.type %}<p class="help-block">{{ errors.type }}</p>{% endif %}
+			    		</div>
+			    	</div>
+			    	<div class="checkbox">
+			    		<label class="col-lg-offset-2">
+			    			<input type="checkbox" name="public_owner" value="yes"{% if domain.public_owner %} checked{% endif %}>
+			    			{% trans "Publish my contact details as owner for this domain" %}
+			    		</label>
+			    	</div>
+			    	<div class="form-group margin-top-20">
+			    		<div class="col-lg-offset-2 col-lg-10">
+			    			<button type="submit" class="btn btn-primary">{% trans "Apply changes" %}</button>
+			    		</div>
+			    	</div>
+			    </form>
+	        </section>
+	    </div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript" src="{% static "js/select2.min.js" %}"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('select.form-control').select2();
+			$('[data-nav-id="domains"],[data-nav-id="domain-settings"]').addClass('active');
+		});
+	</script>
+{% endblock %}

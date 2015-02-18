@@ -1,0 +1,1013 @@
+/* AUI components */
+.aui-button,
+a.aui-button,
+.aui-button:visited {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  color: #333;
+  cursor: pointer;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 14px;
+  font-variant: normal;
+  font-weight: normal;
+  height: 2.12285714em;
+  line-height: 1.42857143;
+  margin: 0;
+  padding: 4px 10px;
+  text-decoration: none;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.aui-button.aui-button-light,
+a.aui-button.aui-button-light,
+.aui-button:visited.aui-button-light {
+  background: #fff;
+}
+
+.aui-button ~ .aui-button {
+  margin-left: 10px;
+}
+
+a.aui-button:hover,
+a.aui-button:active,
+a.aui-button:hover {
+  text-decoration: none;
+}
+
+form.aui .button:focus,
+form.aui .cancel:focus,
+.aui-button:focus {
+  outline: 1px dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: 1px;
+}
+
+.aui-button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+.aui-button:focus,
+.aui-button:hover,
+.aui-button-subtle.aui-button:focus,
+.aui-button-subtle.aui-button:hover {
+  background: #e9e9e9;
+  border-color: #999;
+  color: #000;
+  text-decoration: none;
+}
+
+.aui-button.aui-button-subtle:active,
+.aui-button.aui-button-subtle.active {
+  border-color: #999999;
+}
+.aui-button:active,
+.aui-button.active,
+.aui-header .aui-button-split-more.active,
+.aui-button-subtle.aui-button:active,
+.aui-button-subtle.aui-button.active {
+  box-shadow: inset 0 3px 6px 0 rgba(0, 0, 0, 0.1);
+  background-image: none;
+  background: #f5f5f5;
+  text-decoration: none;
+}
+.aui-buttons .aui-button.aui-button-split-main:not(:active) {
+  border-right-color: transparent;
+}
+.aui-buttons .aui-button.aui-button-split-main:not(.aui-button-primary):hover + .aui-button-split-more:before,
+.aui-buttons .aui-button.aui-button-split-main:not(.aui-button-primary):active + .aui-button-split-more:before,
+.aui-buttons .aui-button.aui-button-split-main:not(.aui-button-primary):focus + .aui-button-split-more:before {
+  visibility: hidden;
+}
+.aui-buttons .aui-button.aui-button-split-main:not(.aui-button-primary) + .aui-button-split-more:hover:before,
+.aui-buttons .aui-button.aui-button-split-main:not(.aui-button-primary) + .aui-button-split-more:active:before,
+.aui-buttons .aui-button.aui-button-split-main:not(.aui-button-primary) + .aui-button-split-more:focus:before {
+  visibility: hidden;
+}
+.aui-buttons .aui-button.aui-button-split-main:not(.aui-button-primary):hover + .aui-button-split-more {
+  border-left: 1px solid #999999;
+  margin-left: -2px;
+}
+.aui-buttons .aui-button.aui-button-split-main + .aui-button-split-more {
+  margin-left: -1px;
+}
+.aui-buttons .aui-button.aui-button-split-main + .aui-button-split-more:focus,
+.aui-buttons .aui-button.aui-button-split-main + .aui-button-split-more:hover {
+  margin-left: -2px;
+}
+.aui-buttons .aui-button.aui-button-split-main + .aui-button-split-more.aui-dropdown2-trigger:before {
+  content: '';
+  border-left: 1px solid #cccccc;
+  bottom: 4px;
+  display: block;
+  left: -1px;
+  position: absolute;
+  top: 4px;
+}
+.aui-buttons .aui-button.aui-button-split-main + .aui-button-split-more.aui-dropdown2-trigger.aui-button-primary:before {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+/* Primary Buttons */
+.aui-button.aui-button-primary,
+.aui-button.aui-button-primary:visited {
+  background: #3572b0;
+  border-color: transparent;
+  color: #ffffff;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  /* for chrome on mac */
+}
+.callout-danger .aui-button.aui-button-primary {
+  background: #ce4844;
+}
+
+.aui-button.aui-button-primary:hover,
+.aui-button.aui-button-primary:focus {
+  background: #2a67a5;
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.callout-danger .aui-button.aui-button-primary:hover,
+.callout-danger .aui-button.aui-button-primary:focus {
+  background: #e3403b;
+}
+.aui-button.aui-button-primary:active {
+  box-shadow: inset 0 3px 6px 0 rgba(0, 0, 0, 0.1);
+  background-image: none;
+  background: #3572b0;
+  text-decoration: none;
+}
+/* Link style buttons - used for destructive/cancel actions ONLY */
+.aui-button.aui-button-link,
+.aui-button.aui-button-link:visited,
+.aui-button.aui-button-text,
+.aui-button.aui-button-text:visited {
+  background: transparent;
+  border-color: transparent;
+  color: #3572b0;
+  padding: 4px 0;
+  text-decoration: none;
+  box-shadow: none;
+}
+.aui-button.aui-button-link:focus,
+.aui-button.aui-button-link:hover,
+.aui-button.aui-button-link:active,
+.aui-buttons .aui-button.aui-button-link:focus,
+.aui-buttons .aui-button.aui-button-link:hover,
+.aui-buttons .aui-button.aui-button-link:active,
+.aui-buttons .aui-button.aui-button-link[aria-pressed="true"],
+.aui-button.aui-button-text:focus,
+.aui-button.aui-button-text:hover,
+.aui-button.aui-button-text:active,
+.aui-buttons .aui-button.aui-button-text:focus,
+.aui-buttons .aui-button.aui-button-text:hover,
+.aui-buttons .aui-button.aui-button-text:active,
+.aui-buttons .aui-button.aui-button-text[aria-pressed="true"] {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  text-decoration: underline;
+}
+.aui-button.aui-button-text,
+.aui-button.aui-button-text:visited {
+  border: none;
+  font-size: inherit;
+  height: inherit;
+  line-height: normal;
+  padding: 0;
+}
+/* Subtle/hybrid/entity action/mugger buttons */
+.aui-button.aui-button-subtle {
+  background: transparent;
+  border-color: transparent;
+  color: #707070;
+}
+.aui-buttons .aui-button.aui-button-subtle {
+  border-radius: 3.01px;
+}
+.aui-button.aui-button-subtle .aui-icon {
+  margin-right: 1px;
+}
+/* when a button label is present next to an aui-icon (eg sidebar config) */
+.aui-button > .aui-icon + .aui-button-label {
+  margin-left: 4px;
+}
+/* Compact Buttons */
+.aui-button.aui-button-compact {
+  font-size: 12px;
+  height: 2.16666666666667em;
+  /* 26px with 12px font-size */
+  padding: 2px 8px;
+  line-height: 1.66666666666667;
+}
+/* End Compact Buttons */
+/* aui-buttons groups buttons together into one button lozenge. */
+.aui-buttons {
+  display: inline-block;
+  font-size: 0;
+}
+.aui-buttons:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+.aui-buttons .aui-button {
+  border-radius: 0;
+  margin: 0;
+}
+.aui-buttons .aui-button:first-child {
+  border-top-left-radius: 3.01px;
+  border-bottom-left-radius: 3.01px;
+}
+.aui-buttons .aui-button:last-child {
+  border-top-right-radius: 3.01px;
+  border-bottom-right-radius: 3.01px;
+}
+.aui-buttons + .aui-buttons {
+  margin-left: 10px;
+}
+/* Grouped buttons go into toolbar style */
+.aui-buttons .aui-button:not(.aui-button-primary):focus,
+.aui-buttons .aui-button:not(.aui-button-primary):hover,
+.aui-buttons .aui-button:not(.aui-button-primary):active {
+  border-color: #999999;
+}
+.aui-buttons .aui-button[disabled],
+.aui-buttons .aui-button[disabled]:hover,
+.aui-buttons .aui-button[disabled]:focus,
+.aui-buttons .aui-button[disabled]:active,
+.aui-buttons .aui-button[aria-disabled="true"],
+.aui-buttons .aui-button[aria-disabled="true"]:hover,
+.aui-buttons .aui-button[aria-disabled="true"]:focus,
+.aui-buttons .aui-button[aria-disabled="true"]:active {
+  border-color: #dddddd;
+}
+/* Grouped Primary Buttons */
+.aui-buttons .aui-button ~ .aui-button {
+  border-left-width: 0;
+  padding-left: 11px;
+}
+.aui-buttons .aui-button ~ .aui-button:hover,
+.aui-buttons .aui-button ~ .aui-button:focus,
+.aui-buttons .aui-button ~ .aui-button:active {
+  border-width: 1px;
+  margin-left: -1px;
+  position: relative;
+}
+/* Selected buttons - NOT supported for free-standing primary buttons
+ARIA usage from http://www.paciellogroup.com/blog/misc/ARIA/togglebutton.html */
+.aui-button[aria-pressed="true"],
+.aui-buttons .aui-button[aria-pressed="true"],
+.aui-buttons .aui-button[aria-pressed="true"].aui-button-primary,
+.aui-buttons .aui-button[aria-pressed="true"].aui-button-subtle {
+  background: #cccccc;
+}
+.aui-button[aria-pressed="true"].aui-button-subtle,
+.aui-buttons .aui-button[aria-pressed="true"].aui-button-subtle {
+  color: #333333;
+  border-color: #cccccc;
+}
+.aui-buttons .aui-button[aria-pressed="true"]:active {
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.1);
+  background: #f5f5f5;
+}
+/* Disabled states (keep last to avoid excessive selector weight)
+---------------------------------------------------------------------- */
+.aui-button[disabled],
+.aui-button[disabled]:hover,
+.aui-button[disabled]:focus,
+.aui-button[disabled]:active,
+.aui-button[aria-disabled="true"],
+.aui-button[aria-disabled="true"]:hover,
+.aui-button[aria-disabled="true"]:focus,
+.aui-button[aria-disabled="true"]:active,
+.aui-button[aria-disabled="true"][aria-pressed] {
+  background: #f5f5f5;
+  border-color: #dddddd;
+  box-shadow: none;
+  color: #999999;
+  cursor: default;
+}
+/* Subtle buttons have their own disabled state*/
+.aui-button.aui-button-subtle[disabled],
+.aui-button.aui-button-subtle[aria-disabled="true"] {
+  border: 0;
+  background: none;
+}
+.aui-button.aui-button-primary[disabled],
+.aui-button.aui-button-primary[disabled]:hover,
+.aui-button.aui-button-primary[disabled]:focus,
+.aui-button.aui-button-primary[disabled]:active,
+.aui-button.aui-button-primary[aria-disabled="true"],
+.aui-button.aui-button-primary[aria-disabled="true"]:hover,
+.aui-button.aui-button-primary[aria-disabled="true"]:focus,
+.aui-button.aui-button-primary[aria-disabled="true"]:active {
+  background: #9cbad9;
+  border-color: transparent;
+  box-shadow: none;
+  color: #ffffff;
+}
+.aui-button.aui-button-link[disabled],
+.aui-button.aui-button-link[disabled]:hover,
+.aui-button.aui-button-link[disabled]:focus,
+.aui-button.aui-button-link[disabled]:active,
+.aui-button.aui-button-link[aria-disabled="true"],
+.aui-button.aui-button-link[aria-disabled="true"]:hover,
+.aui-button.aui-button-link[aria-disabled="true"]:focus,
+.aui-button.aui-button-link[aria-disabled="true"]:active,
+.aui-button.aui-button-text[disabled],
+.aui-button.aui-button-text[disabled]:hover,
+.aui-button.aui-button-text[disabled]:focus,
+.aui-button.aui-button-text[disabled]:active,
+.aui-button.aui-button-text[aria-disabled="true"],
+.aui-button.aui-button-text[aria-disabled="true"]:hover,
+.aui-button.aui-button-text[aria-disabled="true"]:focus,
+.aui-button.aui-button-text[aria-disabled="true"]:active {
+  background: transparent;
+  border-color: transparent;
+  color: #999999;
+  text-decoration: none;
+}
+/* Cross-component integration
+---------------------------------------------------------------------- */
+/* Icons Integration
+--------------------- */
+.aui-button.aui-button-compact .aui-icon {
+  margin-top: -1px;
+  /* icon is 1px off, adjust it so it is centered */
+}
+/* Icon Colours
+---------- */
+.aui-button.aui-button-primary .aui-icon {
+  color: #ffffff;
+}
+.aui-button .aui-icon {
+  color: #707070;
+}
+.aui-button[disabled] .aui-icon {
+  color: #cccccc;
+}
+.aui-button[disabled].aui-button-primary .aui-icon {
+  color: #ffffff;
+}
+
+form.aui {
+  margin: 20px 0 0 0;
+  position: relative;
+}
+form.aui:first-child {
+  margin-top: 0;
+}
+/* Field styles */
+form.aui .text,
+form.aui .password,
+form.aui .upfile,
+form.aui .textarea,
+form.aui .select,
+form.aui .multi-select,
+form.aui .aui-select2-container {
+  background: #ffffff;
+  color: #333333;
+  font-family: inherit;
+  font-size: 14px;
+}
+form.aui .text,
+form.aui .password,
+form.aui .textarea,
+form.aui .select,
+form.aui .multi-select,
+form.aui .aui-select2-container .select2-choices {
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: inherit;
+  margin: 0;
+  vertical-align: baseline;
+  width: 100%;
+}
+form.aui .text,
+form.aui .password,
+form.aui .select,
+form.aui .aui-select2-container .select2-choices {
+  height: 2.14285714em;
+  line-height: 1.4285714285714;
+  padding: 4px 5px;
+}
+form.aui .select {
+  padding: 6px 5px 5px 5px;
+  /* Firefox doesn't allow line-height to be adjusted and selects break horribly when the font-family is changed. Using padding instead */
+  vertical-align: top;
+}
+form.aui .textarea,
+form.aui .select[size],
+form.aui .multi-select {
+  height: auto;
+  line-height: 1.4285714285714;
+  margin: 0;
+  padding: 4px 5px;
+}
+form.aui .textarea {
+  overflow-y: auto;
+}
+/* Ensure AUI Select2's do not show as regular text fields */
+form.aui .aui-select2-container {
+  border: 0;
+  height: auto;
+  max-width: 250px;
+  padding: 0;
+  vertical-align: baseline;
+  width: 100%;
+}
+form.aui .aui-select2-container .select2-choices {
+  height: auto;
+  max-width: none;
+}
+/* Do not give file inputs a height or width because they break horribly in certain browsers. */
+form.aui .upfile {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 5px 0;
+  padding: 0;
+}
+form.aui optgroup {
+  background-color: #f5f5f5;
+  color: #707070;
+  font-style: normal;
+  font-weight: normal;
+}
+form.aui option,
+form.aui optgroup option {
+  background-color: #ffffff;
+  color: #333333;
+}
+/* Disabled form element styles */
+form.aui .text[disabled],
+form.aui .password[disabled],
+form.aui .textarea[disabled],
+form.aui .select[disabled],
+form.aui .multi-select[disabled],
+form.aui .select[disabled] option,
+form.aui .select[disabled] optgroup,
+form.aui .multi-select[disabled] option,
+form.aui .multi-select[disabled] optgroup {
+  background-color: #f5f5f5;
+  color: #999999;
+}
+form.aui .text[disabled],
+form.aui .password[disabled],
+form.aui .textarea[disabled],
+form.aui .select[disabled],
+form.aui .multi-select[disabled] {
+  color: #999999;
+}
+form.aui .text[disabled],
+form.aui .password[disabled],
+form.aui .textarea[disabled],
+form.aui .select[disabled],
+form.aui .multi-select[disabled],
+form.aui .radio[disabled],
+form.aui .checkbox[disabled] {
+  cursor: not-allowed;
+}
+form.aui .text::-webkit-input-placeholder,
+form.aui .password::-webkit-input-placeholder,
+form.aui .textarea::-webkit-input-placeholder {
+  color: #999999;
+  opacity: 1;
+}
+form.aui .text::-moz-placeholder,
+form.aui .password::-moz-placeholder,
+form.aui .textarea::-moz-placeholder {
+  color: #999999;
+}
+form.aui .text.aui-placeholder-shown,
+form.aui .password.aui-placeholder-shown,
+form.aui .textarea.aui-placeholder-shown,
+form.aui .text.placeholder-shown,
+form.aui .password.placeholder-shown,
+form.aui .textarea.placeholder-shown {
+  color: #999999;
+}
+/* Field widths
+ * - don't add widths to file inputs - they break horribly
+ */
+form.aui .short-field {
+  max-width: 75px;
+}
+form.aui .medium-field {
+  max-width: 165px;
+}
+form.aui .medium-long-field {
+  max-width: 350px;
+}
+form.aui .long-field {
+  max-width: 500px;
+}
+form.aui .full-width-field {
+  max-width: none;
+}
+/* Structural elements */
+form.aui fieldset {
+  border: 0;
+  clear: both;
+  display: block;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+form.aui legend,
+form.aui label {
+  color: #707070;
+}
+form.aui .icon-required {
+  left: 100%;
+  position: absolute;
+  top: 5px;
+}
+form.aui div.description {
+  color: #707070;
+  font-size: 12px;
+  line-height: 1.66666666666667;
+  margin: 5px 0 0 0;
+}
+form.aui div.description:first-child {
+  margin-top: 0;
+}
+form.aui .field-value {
+  display: inline-block;
+  font-weight: bold;
+  padding-top: 5px;
+}
+/* TODO: don't support this in AUI Forms 2 */
+form.aui legend {
+  display: none;
+}
+form.aui .field-group,
+form.aui .group,
+form.aui .date-select {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  clear: both;
+  padding: 4px 0 4px 145px;
+  position: relative;
+  margin: 1px 0;
+  width: 100%;
+}
+form.aui .group {
+  padding-top: 0;
+}
+form.aui .field-group:before,
+form.aui .field-group:after,
+form.aui .group:before,
+form.aui .group:after,
+form.aui .date-select:before,
+form.aui .date-select:after {
+  content: " ";
+  display: table;
+}
+form.aui .field-group:after,
+form.aui .group:after,
+form.aui .date-select:after {
+  clear: both;
+}
+form.aui legend,
+form.aui .field-group > label {
+  float: left;
+  margin-left: -145px;
+  padding: 5px 0 0 0;
+  position: relative;
+  text-align: right;
+  width: 130px;
+  word-wrap: break-word;
+}
+form.aui .checkbox > label,
+form.aui .radio > label {
+  color: #333333;
+}
+form.aui div.checkbox > .checkbox[disabled] + label,
+form.aui div.radio > .radio[disabled] + label {
+  color: #999999;
+  cursor: not-allowed;
+}
+form.aui .field-group .error,
+form.aui .group .error,
+form.aui .checkbox .error,
+form.aui .radio .error {
+  clear: both;
+  color: #d04437;
+  display: block;
+  margin: 5px 0 0 0;
+}
+form.aui .field-group .error:first-child,
+form.aui .checkbox .error:first-child,
+form.aui .radio .error:first-child {
+  margin-top: 0;
+}
+form.aui .group legend,
+form.aui .date-select legend {
+  display: block;
+}
+form.aui .group .field-group,
+form.aui .date-select .field-group {
+  clear: none;
+  padding-left: 0;
+  padding-top: 0;
+}
+form.aui .date-select .field-group label {
+  display: none;
+}
+form.aui div.checkbox,
+form.aui div.radio {
+  padding: 0 0 0 10px;
+  position: relative;
+}
+form.aui legend + .field-group,
+form.aui legend + .checkbox,
+form.aui legend + .radio {
+  margin-top: 0;
+  padding-top: 5px;
+}
+form.aui div.checkbox:first-child,
+form.aui div.radio:first-child {
+  margin-top: 0;
+}
+form.aui .matrix {
+  padding-top: 5px;
+}
+form.aui div.radio input.radio,
+form.aui div.checkbox input.checkbox {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 14px;
+  height: 1.4285714285714em;
+  left: 0;
+  margin: 0;
+  padding: 2px;
+  position: absolute;
+  vertical-align: baseline;
+}
+/* Buttons */
+form.aui .buttons-container {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  clear: both;
+  margin: 1px 0 0 0;
+  padding: 4px 0 4px 145px;
+  position: relative;
+  width: 100%;
+}
+/* Long Labels
+ * add long-label class to form eg: <form class="aui long-label">
+ */
+form.aui.long-label .field-group,
+form.aui.long-label .group,
+form.aui.long-label .date-select,
+form.aui.long-label .buttons-container {
+  padding-left: 250px;
+}
+form.aui.long-label .field-group > label,
+form.aui.long-label .group > legend {
+  margin-left: -250px;
+  width: 235px;
+}
+form.aui.long-label .group .field-group,
+form.aui.long-label .date-select .field-group {
+  padding-left: 0;
+}
+/* End Long Labels */
+/* Top Labels
+ * add top-label class to form eg: <form class="aui top-label">
+ * display all forms with top-labels for screen sizes < 768px
+ */
+form.aui.top-label .field-group {
+  padding-left: 0;
+}
+form.aui.top-label .field-group > label {
+  display: block;
+  float: none;
+  margin: 0 0 5px 0;
+  padding: 0;
+  text-align: left;
+  width: auto;
+}
+form.aui.top-label .icon-required {
+  left: 0;
+  position: static;
+  top: 0;
+}
+form.aui.top-label .group,
+form.aui.top-label .date-select {
+  padding-left: 0;
+}
+form.aui.top-label .group legend,
+form.aui.top-label .date-select legend {
+  float: none;
+  margin: 0;
+  text-align: left;
+  width: auto;
+}
+form.aui.top-label .date-select label {
+  display: none;
+}
+form.aui.top-label .buttons-container {
+  padding-left: 0;
+}
+/* End Top Labels */
+/* Deprecated button styling - use the new aui-button component */
+/* Basic Button Style */
+form.aui .button {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #f5f5f5;
+  border: 1px solid #cccccc;
+  border-radius: 3.01px;
+  color: #333333;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-variant: normal;
+  font-weight: normal;
+  height: 2.14285714em;
+  line-height: 1.4285714285714;
+  margin: 0;
+  padding: 4px 10px;
+  text-decoration: none;
+  text-shadow: 0 1px 0 white;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+form.aui .cancel {
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-block;
+  padding: 5px 10px;
+  vertical-align: baseline;
+}
+/* Create 10px effective gap; backwards compat for old and new buttons */
+/* zero font size hack to stop 4px magic number problems. */
+form.aui .buttons-container > .buttons {
+  font-size: 0;
+}
+/* ensure zero font size hack doesn't kill other elements. */
+form.aui .buttons-container > .buttons > * {
+  font-size: 14px;
+}
+form.aui .buttons-container .button + .button,
+form.aui .buttons-container .button + .aui-button,
+form.aui .buttons-container .aui-button + .button,
+form.aui .buttons-container .aui-button + .aui-button {
+  margin-left: 10px;
+}
+form.aui .buttons-container .aui-button + .aui-button-link {
+  margin-left: 9px;
+  /* 1px diff due to border */
+}
+/* Control button height in Firefox. See http://www.experimentgarden.com/2010/11/firefox-buttontext-height-and-padding.html */
+form.aui .button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+form.aui .button:focus,
+form.aui .button:hover {
+  background-color: #f5f5f5;
+  border-color: #999999;
+  color: #000000;
+  text-decoration: none;
+}
+form.aui .button:active,
+form.aui .button.active {
+  background-image: none;
+  background-color: #f5f5f5;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+  text-shadow: none;
+  text-decoration: none;
+}
+form.aui .button[disabled],
+form.aui .button[disabled]:hover,
+form.aui .button[disabled]:focus,
+form.aui .button[disabled]:active {
+  background-color: #f5f5f5;
+  border-color: #dddddd;
+  box-shadow: none;
+  color: #999999;
+  cursor: default;
+  text-shadow: none;
+}
+/* Message Interops */
+form.aui .aui-message + .field-group,
+form.aui .aui-message + .group,
+form.aui .aui-message + .date-select {
+  margin-top: 10px;
+}
+/* Deprecated */
+form.aui span.content {
+  left: -9999px;
+  position: absolute;
+  top: -9999px;
+}
+form.aui pre.aui-form {
+  background-color: #f5f5f5;
+  border: 1px solid #cccccc;
+  font-family: monospace;
+  font-size: 12px;
+  line-height: 1.66666666666667;
+  /* 20px */
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 15px;
+}
+
+form.aui .form-group.has-error .text,
+form.aui .form-group.has-error .password {
+  background-color: #fce3e6;
+  color: #a94442;
+}
+
+form.aui .form-group.has-success .text,
+form.aui .form-group.has-success .password {
+  background-color: #e3f5d3;
+  color: #3c763d;
+}
+
+/* Bootstrap navbar adjustments to fit AUI style */
+.navbar a.aui-button {
+  line-height: 1.42857142857143;
+}
+.navbar .aui-button.aui-button-primary {
+  background: #3572b0;
+  color: #fff;
+  border: 0;
+  margin: 10px 10px 0 10px;
+  padding: 4px 10px;
+  /* Make sure the correct padding applies (overrides the above padding: 13px 10px; for .aui-header a if ordering is missed up*/
+}
+.navbar .aui-button.aui-button-primary.active {
+  padding-bottom: 4px;
+  /* header doesn't need the button/dropdown integration padding change because it has no border */
+}
+.navbar .aui-button.aui-button-primary:focus,
+.navbar .aui-button.aui-button-primary:hover {
+  background: #2a67a5;
+}
+.navbar .aui-button.aui-button-primary:active {
+  background: #3572b0;
+}
+
+.aui-page-header:first-child {
+  margin-top: -20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.aui-page-header > h3 {
+  margin: 0;
+  padding: 0;
+}
+
+.aui-page-header {
+  padding: 20px;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/*! AUI Lozenge */
+.aui-lozenge {
+  background: #cccccc;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  color: #333333;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 99%;
+  /* cross-browser compromise to make the line-height match the font-size */
+  margin: 0;
+  padding: 2px 5px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.aui-lozenge.aui-lozenge-subtle {
+  background-color: #ffffff;
+  border-color: #cccccc;
+  color: #333333;
+}
+.aui-lozenge-success {
+  background-color: #14892c;
+  border-color: #14892c;
+  color: #ffffff;
+}
+.aui-lozenge-success.aui-lozenge-subtle {
+  background-color: #ffffff;
+  border-color: #60b070;
+  color: #14892c;
+}
+.aui-lozenge-error {
+  background-color: #d04437;
+  border-color: #d04437;
+  color: #ffffff;
+}
+.aui-lozenge-error.aui-lozenge-subtle {
+  background-color: #ffffff;
+  border-color: #e8a29b;
+  color: #d04437;
+}
+.aui-lozenge-current {
+  background-color: #f6c342;
+  border-color: #f6c342;
+  color: #594300;
+}
+.aui-lozenge-current.aui-lozenge-subtle {
+  background-color: #ffffff;
+  border-color: #ffe9a8;
+  color: #594300;
+}
+.aui-lozenge-complete {
+  background-color: #4a6785;
+  border-color: #4a6785;
+  color: #ffffff;
+}
+.aui-lozenge-complete.aui-lozenge-subtle {
+  background-color: #ffffff;
+  border-color: #a5b3c2;
+  color: #4a6785;
+}
+.aui-lozenge-moved {
+  background-color: #815b3a;
+  border-color: #815b3a;
+  color: #ffffff;
+}
+.aui-lozenge-moved.aui-lozenge-subtle {
+  background-color: #ffffff;
+  border-color: #c0ad9d;
+  color: #815b3a;
+}
+
+.navbar .aui-quicksearch {
+  position: relative;
+  padding: 0 10px;
+}
+.navbar .aui-quicksearch input {
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+  color: #222;
+  border: none;
+  border-radius: 3px;
+  box-shadow: none;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #f5f5f5;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  height: 1.71428571428571em;
+  /* 24px effective - need height in ems so that user-specified font-sizes apply */
+  line-height: 1.42857142857143;
+  /* 20px effective */
+  margin: 5px 0;
+  padding: 4px 5px;
+  vertical-align: baseline;
+  width: 170px;
+}
+.navbar .aui-quicksearch input[type='text'][type='text']:focus {
+  background: #fff;
+  outline: 0;
+  color: #222;
+}
+.navbar .aui-quicksearch input[type='text']::-webkit-input-placeholder {
+  color: rgba(0,0,0,0.6);
+}
+.navbar .aui-quicksearch input[type='text']::-moz-placeholder {
+  color: rgba(0,0,0,0.6);
+}
+.navbar .aui-quicksearch input[type='text']:-ms-input-placeholder {
+  color: rgba(0,0,0,0.6);
+}
+.navbar .aui-quicksearch input[type='text']:focus::-webkit-input-placeholder {
+  color: rgba(0,0,0,0.3);
+}
+.navbar .aui-quicksearch input[type='text']:focus::-moz-placeholder {
+  color: rgba(0,0,0,0.3);
+}
+.navbar .aui-quicksearch input[type='text']:focus:-ms-input-placeholder {
+  color: rgba(0,0,0,0.3);
+}
+.navbar .aui-quicksearch:after {
+  color: rgba(0,0,0,0.6);
+  content: "\f002";
+  font-family: FontAwesome;
+  height: 16px;
+  margin-top: 7px;
+  position: absolute;
+  right: 16px;
+  top: 0;
+  width: 16px
+}
