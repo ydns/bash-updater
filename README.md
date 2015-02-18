@@ -1,33 +1,26 @@
-# yDNS - Simple updater script
+# YDNS Core
 
-The full yDNS API documentation can be found at:
-https://ydns.eu/api/
-
-This is a simple bash script that can update the IP address at yDNS
-by simply cURL'ing the API update resource.
+This repository contains the backend and front-end code for the development release of YDNS.
 
 ## Requirements
 
-* bash
-* [cURL](http://curl.haxx.se)
+* Python 3.4+
+* Django 1.7+
+* dnspython3
+* netaddr
+* googler
 
 ## Installation
 
-Copy the script to a desired location. To configure the script, you can either edit it by editing `YDNS_USER`, `YDNS_PASSWD` and `YDNS_HOST` within, or you can use the `-u`, `-p` and `-H` command line options respectively. For example:
+1. Check out the source code
+2. Create a virtual environment and install all the dependencies using `pip install -r requirements.txt`
+3. Rename `ydns/local_settins.example.py` to `ydns/local_settings.py` and adjust the configuration. If you'd like to use the OAuth2 login features, you may have to obtain approprite API credentials
+4. Setup a database and add the configuration to your local_settings.py
+5. Apply database migrations by using `./manage.py migrate` inside your YDNS folder
+6. Launch the local server by using `./manage.py runserver`
 
-```
-$ ./updater.sh -u myuser -p password -H myhost.ydns.eu
-```
+In production environments, you might like to setup YDNS/Django as application server to serve a WSGI instance. A WSGI-capable web server can be used to distribute requests to the application server then (eg. uWSGI).
 
-## How to use
+## Further notes
 
-Simply run the script with - or without command line options, depending on whether you'd like to specify the configuration as command line arguments. You can use the `-V` option to enable verbose output (useful for debugging). The script will exit with code 0 on success, with code 1 on input errors and 90 or 91 on other issues.
-
-You can list all available command line options using the `-h` option.
-
-## Changelog
-
-### 20140824.1
-
-- Added support for command line arguments.
-- Added support for detecting IP address changes. The IP address is only updated when it has changed. A temporary file (default `/tmp/ydns_last_ip`) is used to store the "last known" IP address to decide whether it has been changed since last usage.
+The code is licensed under the MIT license.
