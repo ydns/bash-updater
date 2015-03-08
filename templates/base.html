@@ -71,7 +71,7 @@
                         </ul>
                     </li>
                     <li><a href="{% url 'accounts:login' %}">{% trans "Login" %}</a></li>
-                    <li><a href="{% url 'accounts:signup' %}" class="btn btn-primary">{% trans "Sign up" %}</a></li>
+                    <li><a href="{% url 'accounts:signup' %}"><strong>{% trans "Sign up" %}</strong></a></li>
                     {% else %}
                     <li class="dropdown">
                         <button type="button" class="btn btn-link dropdown-toggle gravatar-28" data-toggle="dropdown" role="button" aria-expanded="false">
