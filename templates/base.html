@@ -1,4 +1,4 @@
-{% load i18n static gravatar %}
+{% load static gravatar %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -6,72 +6,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>{% block title %}YDNS{% endblock %}</title>
-	<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}">
+	<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/font-awesome.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "css/select2.css" %}">
 	<link rel="stylesheet" type="text/css" href="{% static "css/ydns.css" %}">
 	{% block header %}{% endblock %}
 </head>
 <body>
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
+        <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                    <span class="sr-only">{% trans "Toggle navigation" %}</span>
+                    <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'home' %}"></a>
+                <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'img/logo_fff.png' %}"></a>
             </div>
 
             <!-- Navigation links and content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-collapse">
 			    {% if user.is_authenticated %}<ul class="nav navbar-nav navbar-left">
-				    <li data-nav-id="domains"><a href="{% url 'domains:home' %}">{% trans "Domains" %}</a></li>
-					<li data-nav-id="hosts"><a href="{% url 'hosts:home' %}">{% trans "My Hosts" %}</a></li>
+				    <li data-nav-id="domains"><a href="{% url 'domains:home' %}">Domains</a></li>
+					<li data-nav-id="hosts"><a href="{% url 'hosts:home' %}">My Hosts</a></li>
 					{% if user.is_admin %}<li data-nav-id="cp" class="dropdown">
 					    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-							{% trans "Control Panel" %}
+							Control Panel
 							<i class="fa fa-angle-down"></i>
 						</a>
 					    <ul class="dropdown-menu" role="menu">
-							<li><a href="{% url 'cp:home' %}">{% trans "Overview" %}</a></li>
+							<li><a href="{% url 'cp:home' %}">Overview</a></li>
 							<li class="divider"></li>
-							<li><a href="{% url 'cp:users:home' %}">{% trans "User Accounts" %}</a></li>
-							<li><a href="{% url 'cp:dbl:home' %}">{% trans "Domain Blacklist" %}</a></li>
-							<li><a href="{% url 'cp:ebl:home' %}">{% trans "Email Blacklist" %}</a></li>
-							<li><a href="{% url 'cp:hbl:home' %}">{% trans "Host Blacklist" %}</a></li>
+							<li><a href="{% url 'cp:users:home' %}">User Accounts</a></li>
+							<li><a href="{% url 'cp:dbl:home' %}">Domain Blacklist</a></li>
+							<li><a href="{% url 'cp:ebl:home' %}">Email Blacklist</a></li>
+							<li><a href="{% url 'cp:hbl:home' %}">Host Blacklist</a></li>
 							<li class="divider"></li>
-							<li><a href="{% url 'cp:mail:create' %}">{% trans "Send mail" %}</a></li>
-							<li><a href="{% url 'cp:mail:broadcast' %}">{% trans "Send broadcast" %}</a></li>
+							<li><a href="{% url 'cp:mail:create' %}">Send mail</a></li>
+							<li><a href="{% url 'cp:mail:broadcast' %}">Send broadcast</a></li>
 						</ul>
 					</li>{% endif %}
-					<li data-nav-id="donate"><a href="{% url 'donate' %}">{% trans "Donate" %}</a></li>
+					<li data-nav-id="donate"><a href="{% url 'donate' %}">Donate</a></li>
 				    <li class="dropdown">
 						<button type="button" class="btn navbar-btn btn-primary dropdown-toggle" data-toggle="dropdown" role="button">
-							{% trans "Create" %}
+							Create
 						</button>
 						<ul class="dropdown-menu" role="menu">
-							<li><a href="{% url 'hosts:create' %}">{% trans "New Host" %}</a></li>
-							<li><a href="{% url 'domains:create' %}">{% trans "New Domain" %}</a></li>
+							<li><a href="{% url 'hosts:create' %}">New Host</a></li>
+							<li><a href="{% url 'domains:create' %}">New Domain</a></li>
 						</ul>
 					</li>
 			    </ul>{% endif %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if not user.is_authenticated %}
-                    <li class="dropdown">
-                        <button type="button" class="btn btn-link navbar-btn dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            {% get_current_language as LANGUAGE_CODE %}{% get_language_info for LANGUAGE_CODE as lang %}{{ lang.name_local }}
-                            <i class="fa fa-angle-down"></i>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            {% get_available_languages as LANGUAGES %}
-                            {% for lang_code, name in LANGUAGES %}<li{% if lang_code == LANGUAGE_CODE %} class="active"{% endif %}><a href="{% url 'accounts:set_language' lang_code %}">{% get_language_info for lang_code as lci %}{{ lci.name }} ({{ lci.name_local }})</a></li>{% endfor %}
-                        </ul>
-                    </li>
-                    <li><a href="{% url 'accounts:login' %}">{% trans "Login" %}</a></li>
-                    <li><a href="{% url 'accounts:signup' %}"><strong>{% trans "Sign up" %}</strong></a></li>
+                    <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                    <li><a href="{% url 'accounts:signup' %}"><strong>Sign up</strong></a></li>
                     {% else %}
                     <li class="dropdown">
                         <button type="button" class="btn btn-link dropdown-toggle gravatar-28" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -79,8 +68,8 @@
 							<i class="fa fa-angle-down"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right" role="menu">
-							<li><a href="{% url 'accounts:settings:home' %}">{% trans "Settings" %}</a></li>
-                            <li><a href="{% url 'accounts:logout' %}">{% trans "Logout" %}</a></li>
+							<li><a href="{% url 'accounts:settings:home' %}">Settings</a></li>
+                            <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
                         </ul>
                     </li>
                     {% endif %}
@@ -90,39 +79,40 @@
     </nav>
 	{% if sys_messages %}
 		{% for message in sys_messages %}<div class="alert alert-{{ message.level }} alert-dismissible sys-alert" role="alert">
-		    <button type="button" class="close" data-dismiss="alert" aria-label="{% trans "Close" %}"><span aria-hidden="true">&times;</span></button>
+		    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	        {% if message.level == 'danger' %}<i class="fa fa-exclamation-triangle fa-fw"></i> {% elif message.level == 'success' %} <i class="fa fa-check fa-fw"></i> {% endif %}{{ message.message|safe }}
 	    {% endfor %}
 	</div>{% endif %}
 
 	<section id="content" role="main">
-	    {% block pre_content %}{% endblock %}
-    	<div class="container-fluid">
-            {% block content %}{% endblock %}
-        </div>
+		<div class="segment white">
+	    	{% block pre_content %}{% endblock %}
+    		<div class="container">
+            	{% block content %}{% endblock %}
+        	</div>
+		</div>
 	</section>
 
-	<footer id="footer" role="contentinfo">
-        <section class="footer-body">
-			<a href="http://www.tfmt.de" target="_blank"><img src="{% static "img/tfmt-inv.png" %}" class="footer-logo"></a>
-			<ul>
-				<li><a href="{% url 'blog' %}" target="_blank">{% trans "Blog" %}</a></li>
-				<li><a href="{% url 'api:home' %}">{% trans "API" %}</a></li>
-				<li><a href="#">{% trans "Support" %}</a></li>
-				<li><a href="{% url 'terms' %}">{% trans "Terms and Conditions" %}</a></li>
-				<li><a href="{% url 'imprint' %}">{% trans "Imprint" %}</a></li>
+	<footer class="footer" role="contentinfo">
+		<div class="container text-center">
+			<p>&copy; 2015 The YDNS Project. All rights reserved.</p>
+			<ul class="list-inline">
+				<li><a href="https://blog.ydns.io">Blog</a></li>
+				<li><a href="{% url 'api:home' %}">API</a></li>
+				<li><a href="#">Support</a></li>
+				<li><a href="{% url 'terms' %}">Terms and Conditions</a></li>
+				<li><a href="{% url 'imprint' %}">Imprint</a></li>
 			</ul>
-			<div>{% blocktrans %}Copyright &copy; 2015 TFMT UG (haftungsbeschränkt) &sdot; All rights reserved.{% endblocktrans %}</div>
-		    <p class="social-icons">
-				<a href="//www.facebook.com/ydns.io" target="_blank" title="{% trans "Visit us on Facebook" %}"><i class="fa fa-facebook-square fa-2x"></i></a>
-				<a href="//twitter.com/tfmtde" target="_blank" title="{% trans "Visit us on Twitter" %}"><i class="fa fa-twitter-square fa-2x"></i></a>
+			<p>
+				<a href="//www.facebook.com/ydns.io" target="_blank" class="social" title="Visit us on Facebook"><i class="fa fa-facebook-square fa-2x"></i></a>
+				&nbsp;
+				<a href="//twitter.com/tfmtde" target="_blank" class="social" title="Visit us on Twitter"><i class="fa fa-twitter-square fa-2x"></i></a>
 			</p>
-		</section>
+		</div>
     </footer>
 
 	<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
 	<script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
-	<script type="text/javascript" src="{% static "js/select2.js" %}"></script>
 	<script type="text/javascript" src="{% static "js/ydns.js" %}"></script>
     {% block js %}{% endblock %}
 </body>

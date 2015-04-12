@@ -25,53 +25,87 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _
 from django.views import generic
 from ydns.utils import messages
 from ydns.utils.http import absolute_url
 from .models import Domain, DomainLogMessage, Host
 
-class PermissionMixin(object):
-    requires_login = True
-    requires_admin = True
+
+class _BaseMixin(generic.View):
+    """
+    Base mixin for class-based views (CBV).
+
+    This takes care of required attributes, such as login and/or admin privileges.
+    For security reasons, by default this class will require both admin and login
+    status.
+    """
+    require_login = True
+    require_admin = True
 
     def dispatch(self, request, *args, **kwargs):
+        """
+        Request dispatch method.
+
+        This method is invoked when HTTP request for a view is received,
+        regardless which method has been used.
+
+        :param request: HttpRequest
+        :param args: Arguments
+        :param kwargs: Keyword arguments
+        :return: HttpResponse
+        """
         if not request.user.is_authenticated():
-            if self.requires_login or self.requires_admin:
-                return self.redirect_login(request)
-        else:
-            if self.requires_admin and not request.user.is_admin:
-                return self.redirect_login(request)
+            if self.require_login or self.require_admin:
+                return self.redirect_insufficient_privileges(request)
+        elif self.require_admin and not request.user.is_admin:
+            return self.redirect_insufficient_privileges(request)
 
-        return super(PermissionMixin, self).dispatch(request, *args, **kwargs)
+        return super(_BaseMixin, self).dispatch(request, *args, **kwargs)
 
-    def redirect(self, url, suffix=None, *args, **kwargs):
-        if not url.startswith('/') and not url.startswith('http'):
+    @staticmethod
+    def redirect(url, suffix=None, *args, **kwargs):
+        """
+        Redirection response.
+
+        :param url: URL
+        :param suffix: URL suffix (optional)
+        :param args: Arguments to be passed to url resolver
+        :param kwargs: Keyword arguments to be passed to url resolver
+        :return: HttpResponseRedirect
+        """
+        if not url.startswith('/') and not url.startswith('http://') and not url.startswith('https://'):
             url = reverse(url, *args, **kwargs)
         if suffix:
             url += suffix
         return HttpResponseRedirect(url)
 
-    def redirect_login(self, request):
-        messages.info(request, _("Insufficient privileges"))
-        return self.redirect('accounts:login', suffix='?next={path}'.format(path=request.path))
+    @classmethod
+    def redirect_insufficient_privileges(cls, request):
+        """
+        Redirect to login site and display an alert message.
 
-class View(PermissionMixin, generic.View):
+        :param request: HttpRequest
+        :return: HttpResponseRedirect
+        """
+        messages.error(request, 'You have insufficient privileges to access this page.')
+        return cls.redirect('login', suffix='?next={}'.format(request.path))
+
+
+class View(_BaseMixin):
     pass
 
-class TemplateView(PermissionMixin, generic.TemplateView):
+
+class FormView(_BaseMixin, generic.FormView):
     pass
 
-class BlogView(View):
-    requires_login = False
-    requires_admin = False
 
-    def get(self, request, *args, **kwargs):
-        return self.redirect('http://blog.ydns.eu')
+class TemplateView(_BaseMixin, generic.TemplateView):
+    pass
+
 
 class DashboardView(TemplateView):
-    requires_admin = False
-    requires_login = True
+    require_admin = False
+    require_login = True
     template_name = 'dashboard.html'
 
     def get_context_data(self, **kwargs):
@@ -107,14 +141,16 @@ class DashboardView(TemplateView):
 
         return recent_messages[:10]
 
+
 class DonateView(TemplateView):
-    requires_admin = False
-    requires_login = False
+    require_admin = False
+    require_login = False
     template_name = 'donate.html'
 
+
 class HomeView(TemplateView):
-    requires_login = False
-    requires_admin = False
+    require_login = False
+    require_admin = False
     template_name = 'home.html'
 
     def get(self, request, *args, **kwargs):
@@ -122,12 +158,20 @@ class HomeView(TemplateView):
             return self.redirect('dashboard')
         return super(HomeView, self).get(request, *args, **kwargs)
 
+
+class GetStartedView(TemplateView):
+    require_admin = False
+    require_login = False
+    template_name = 'get_started.html'
+
+
 class ImprintView(TemplateView):
-    requires_admin = False
-    requires_login = False
+    require_admin = False
+    require_login = False
     template_name = 'imprint.html'
 
+
 class TermsView(TemplateView):
-    requires_admin = False
-    requires_login = False
+    require_admin = False
+    require_login = False
     template_name = 'terms.html'

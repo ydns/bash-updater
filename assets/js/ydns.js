@@ -7,13 +7,10 @@
 
 "use strict";
 
-var YDNS = function() {
-
-};
+var YDNS = function() {};
 
 YDNS.init = function() {
 	$('[data-toggle="tooltip"]').tooltip();
-	$('select.form-control').select2();
 };
 
 YDNS.focusNextError = function(selector) {

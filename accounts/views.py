@@ -23,7 +23,7 @@
 ##
 
 from accounts.oauth import facebook, github, google
-from accounts.models import ActivationRequest, ResetPasswordRequest, User, UserType, BetaInvitation
+from accounts.models import ActivationRequest, ResetPasswordRequest, User
 from accounts.utils import otp
 from accounts.utils.common import is_blacklisted_email
 from dateutil.relativedelta import relativedelta
@@ -41,7 +41,9 @@ from googler.recaptcha import captcha
 from ydns.utils import messages
 from ydns.utils.http import absolute_url
 from ydns.utils.mail import EmailMessage
-from ydns.views import TemplateView, View
+from ydns.views import FormView, TemplateView, View
+from .enum import UserType
+from . import forms
 
 import json
 
@@ -694,86 +696,49 @@ class LoginOtpView(TemplateView):
 
         return errors, cleaned_data
 
-class LoginView(TemplateView):
-    requires_admin = False
-    requires_login = False
+
+class LoginView(FormView):
+    require_admin = False
+    require_login = False
+    form_class = forms.LoginForm
     template_name = 'accounts/login.html'
 
-    def do_login(self, request, user, next=None):
+    @classmethod
+    def login(cls, request, user, redirect=None):
         if user.otp_active:
             request.session['otp_uid'] = user.id
             request.session.modified = True
 
-            suffix = '?next={path}'.format(path=next) if next else None
-            return self.redirect('accounts:login_otp', suffix=suffix)
+            suffix = '?next={}'.format(redirect) if redirect else None
+            return cls.redirect('accounts:login_otp', suffix=suffix)
         else:
             LoginOtpView.login(request, user)
-            return self.redirect(next or 'dashboard')
+            return cls.redirect(next or 'dashboard')
 
     def get_context_data(self, **kwargs):
         context = super(LoginView, self).get_context_data(**kwargs)
         context['next'] = self.request.GET.get('next', self.request.POST.get('next'))
         return context
 
-    def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        errors, cleaned_data = self.validate(request)
+    def form_valid(self, form):
+        user = authenticate(email=form.cleaned_data['email'],
+                            password=form.cleaned_data['password'])
 
-        if not errors:
-            return self.do_login(request, cleaned_data['user'], context['next'])
+        if user is not None:
+            if not user.is_active:
+                form.add_error('email', 'Account is disabled')
+            else:
+                if user.banned:
+                    form.add_error('email', 'Account is banned')
         else:
-            if 'require_otp' in errors:
-                self.template_name = 'accounts/login_otp.html'
-            else:
-                context.update(errors=errors, post=request.POST)
+            form.add_error('email', 'Invalid Email and/or password')
 
-        return self.render_to_response(context)
+        if not form.is_valid():
+            return self.form_invalid(form)
 
-    def validate(self, request):
-        errors = {}
-        cleaned_data = {}
+        # TODO: check if OTP is required
+        return self.login(self.request, user)
 
-        if request.POST.get('type') == 'otp':
-            if not request.POST.get('code'):
-                errors['code'] = _('Missing code')
-            else:
-                errors['code'] = "Unable to verify right now"
-        else:
-            if not request.POST.get('email'):
-                errors['email'] = _('Field missing')
-            else:
-                try:
-                    validate_email(request.POST['email'])
-                except ValidationError:
-                    errors['email'] = _('Invalid Email address')
-                else:
-                    cleaned_data['email'] = request.POST['email']
-
-            if not request.POST.get('password'):
-                errors['password'] = _('Field missing')
-            else:
-                cleaned_data['password'] = request.POST['password']
-
-            if not errors:
-                user = authenticate(email=cleaned_data['email'], password=cleaned_data['password'])
-
-                if user is not None:
-                    if not user.is_active:
-                        errors['email'] = _('Account is not activated')
-                    else:
-                        ban = user.get_ban()
-
-                        if ban:
-                            errors['email'] = _('Your account is banned: %s') % ban.reason
-                        else:
-                            cleaned_data['user'] = user
-                else:
-                    errors['email'] = _('Invalid Email and/or password')
-
-        if errors:
-            cleaned_data = {}
-
-        return errors, cleaned_data
 
 class LogoutView(View):
     """

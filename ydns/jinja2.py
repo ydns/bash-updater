@@ -22,22 +22,21 @@
 # SOFTWARE.
 ##
 
-from accounts import views as accounts_views
-from django.conf.urls import include, url
-from . import views
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.core.urlresolvers import reverse
 
-urlpatterns = (
-    url(r'^$', views.HomeView.as_view(), name='home'),
-    url(r'^accounts/', include('accounts.urls', namespace='accounts')),
-    url(r'^api/', include('api.urls', namespace='api')),
-    #url(r'^cp/', include('cp.urls', namespace='cp')),
-    url(r'^dashboard$', views.DashboardView.as_view(), name='dashboard'),
-    #url(r'^domains/', include('domains.urls', namespace='domains')),
-    url(r'^donate$', views.DonateView.as_view(), name='donate'),
-    url(r'^get-started$', views.GetStartedView.as_view(), name='get_started'),
-    #url(r'^hosts/', include('hosts.urls', namespace='hosts')),
-    url(r'^imprint$', views.ImprintView.as_view(), name='imprint'),
-    url(r'^terms-and-conditions$', views.TermsView.as_view(), name='terms'),
-    url(r'^login$', accounts_views.LoginView.as_view(), name='login'),
-    url(r'^signup$', accounts_views.SignupView.as_view(), name='signup'),
-)
+from jinja2 import Environment
+
+
+def environment(**options):
+    """
+    Set up Jinja2 template environment to work with Django.
+
+    :param options: Options (dict)
+    :return: Environment
+    """
+    env = Environment(**options)
+    env.globals.update({
+        'static': staticfiles_storage.url,
+        'url': reverse})
+    return env

@@ -27,7 +27,6 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from enum import Enum, IntEnum
-from jsonfield import JSONField
 
 class BlacklistedDomain(models.Model):
     """
@@ -296,7 +295,7 @@ class DomainLogMessage(models.Model):
     user = models.ForeignKey('accounts.User', null=True)
     date_created = models.DateTimeField(default=timezone.now)
     ip = models.GenericIPAddressField(unpack_ipv4=True, null=True)
-    meta = JSONField()
+    meta = models.TextField()
 
     class Meta:
         db_table = 'domains_log'
@@ -474,7 +473,7 @@ class HostLogMessage(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     ip = models.GenericIPAddressField(unpack_ipv4=True, null=True)
     tag = models.CharField(max_length=255)
-    meta = JSONField()
+    meta = models.TextField()
 
     class Meta:
         db_table = 'hosts_log'
@@ -532,6 +531,17 @@ class HostRequest(models.Model):
         """
         decoded_name = self.name.encode('ascii').decode('idna')
         return decoded_name + '.' + str(self.domain)
+
+
+class Message(models.Model):
+    class Meta:
+        db_table = 'messages'
+        ordering = ('date_created',)
+
+    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='ref+')
+    date_created = models.DateTimeField(default=timezone.now)
+    message = models.TextField()
+
 
 class Record(models.Model):
     """

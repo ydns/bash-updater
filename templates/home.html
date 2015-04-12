@@ -1,92 +1,66 @@
-{% load i18n static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>{% trans "YDNS" %}</title>
+	<title>YDNS</title>
 	<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/font-awesome.min.css" %}">
 	<link rel="stylesheet" type="text/css" href="{% static "css/ydns.css" %}">
 </head>
-<body id="page-home">
-	<nav class="navbar navbar-default navbar-home navbar-fixed-top" role="navigation">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                    <span class="sr-only">{% trans "Toggle navigation" %}</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{% url 'home' %}"></a>
-            </div>
-
-            <!-- Navigation links and content for toggling -->
-            <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <button type="button" class="btn btn-link navbar-btn dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            {% get_current_language as LANGUAGE_CODE %}{% get_language_info for LANGUAGE_CODE as lang %}{{ lang.name_local }}
-                            <i class="fa fa-angle-down"></i>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            {% get_available_languages as LANGUAGES %}
-                            {% for lang_code, name in LANGUAGES %}<li{% if lang_code == LANGUAGE_CODE %} class="active"{% endif %}><a href="{% url 'accounts:set_language' lang_code %}">{% get_language_info for lang_code as lci %}{{ lci.name }} ({{ lci.name_local }})</a></li>{% endfor %}
-                        </ul>
-                    </li>
-				    <li data-nav-id="donate"><a href="#">{% trans "Donate" %}</a></li>
-                    <li><a href="{% url 'accounts:login' %}">{% trans "Login" %}</a></li>
-                    <li><a href="{% url 'accounts:signup' %}" class="btn-bold">{% trans "Sign up" %}</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-	<section id="content" role="main">
-        {% include "alerts.html" %}
-		<h2>{% trans "Free DNS Services" %}</h2>
-		<ul class="feature-list">
-			<li>{% trans "Simple" %}</li>
-			<li>{% trans "IPv6 enabled" %}</li>
-			<li>{% trans "Unlimited hosts" %}</li>
-			<li>{% trans "Dynamic DNS" %}</li>
-		</ul>
-		<form class="signup-form" method="post" action="{% url 'accounts:signup' %}?from=homepage">
-			{% csrf_token %}
-            <div class="form-group">
-                <label for="id_email" class="sr-only">{% trans "Email" %}</label>
-                <input type="email" class="form-control input-lg" id="id_email" name="email" placeholder="{% trans 'Email' %}" maxlength="255" required>
-            </div>
-            <div class="form-group">
-				<label for="id_password" class="sr-only">{% trans "Password" %}</label>
-				<input type="password" class="form-control input-lg" id="id_password" name="password" placeholder="{% trans 'Password' %}" required>
-            </div>
-			<div class="checkbox">
-                <label>
-					<input type="checkbox" name="terms">
-                    {% url 'terms' as terms_url %}{% blocktrans with terms_url=terms_url %}I have read and accept the <a href="{{ terms_url }}" target="_blank">Terms and Conditions</a>{% endblocktrans %}
-                </label>
+<body id="landing-page">
+	<div class="container top">
+		<a href="{% url 'home' %}"><img src="{% static 'img/logo_fff.png' %}" alt="YDNS"></a>
+		<div class="pull-right">
+			<a href="{% url 'login' %}" class="btn btn-link btn-custom">Login</a>
+			<a href="{% url 'signup' %}" class="btn btn-link btn-custom btn-bold">Sign up</a>
+		</div>
+		<h1 class="text-center">YDNS</h1>
+		<h3 class="text-center">Powerful DNS Services. <strong>Free.</strong></h3>
+		<p class="text-center">
+			<a href="{% url 'get_started' %}" class="waves-effect waves-light button-start">Get started</a>
+		</p>
+	</div>
+	<div class="segment one">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4 col-md-4 text-center">
+					<i class="fa fa-home fa-fw fa-3x"></i>
+					<h3 class="feature">Dynamic DNS</h3>
+					<p>Make your home network world-wide reachable</p>
+				</div>
+				<div class="col-lg-4 col-md-4 text-center">
+					<i class="fa fa-child fa-fw fa-3x"></i>
+					<h3 class="feature">Made for humans</h3>
+					<p>Simple to use and yet powerful</p>
+				</div>
+				<div class="col-lg-4 col-md-4 text-center">
+					<i class="fa fa-group fa-fw fa-3x"></i>
+					<h3 class="feature">Open and Free</h3>
+					<p>Backed by open source software and free to use</p>
+				</div>
 			</div>
-			<button class="btn btn-primary">{% trans "Sign up for free" %}</button>
-		</form>
-	</section>
-
-	<footer id="footer" role="contentinfo">
-        <section class="footer-body">
-			<a href="http://www.tfmt.de" target="_blank"><img src="{% static "img/tfmt-inv.png" %}" class="footer-logo"></a>
-			<ul>
-				<li><a href="{% url 'blog' %}" target="_blank">{% trans "Blog" %}</a></li>
-				<li><a href="{% url 'api:home' %}">{% trans "API" %}</a></li>
-				<li><a href="#">{% trans "Support" %}</a></li>
-				<li><a href="{% url 'terms' %}">{% trans "Terms and Conditions" %}</a></li>
-				<li><a href="{% url 'imprint' %}">{% trans "Imprint" %}</a></li>
+		</div>
+	</div>
+	<footer class="footer" role="contentinfo">
+		<div class="container text-center">
+			<p>&copy; 2015 The YDNS Project. All rights reserved.</p>
+			<ul class="list-inline">
+				<li><a href="https://blog.ydns.io">Blog</a></li>
+				<li><a href="{% url 'api:home' %}">API</a></li>
+				<li><a href="#">Support</a></li>
+				<li><a href="{% url 'terms' %}">Terms and Conditions</a></li>
+				<li><a href="{% url 'imprint' %}">Imprint</a></li>
 			</ul>
-			<div>{% blocktrans %}Copyright &copy; 2015 TFMT UG (haftungsbeschränkt) &sdot; All rights reserved.{% endblocktrans %}</div>
-		</section>
-	</footer>
-
+			<p>
+				<a href="//www.facebook.com/ydns.io" target="_blank" class="social" title="Visit us on Facebook"><i class="fa fa-facebook-square fa-2x"></i></a>
+				&nbsp;
+				<a href="//twitter.com/tfmtde" target="_blank" class="social" title="Visit us on Twitter"><i class="fa fa-twitter-square fa-2x"></i></a>
+			</p>
+		</div>
+    </footer>
 	<script type="text/javascript" src="{% static "js/jquery.min.js" %}"></script>
 	<script type="text/javascript" src="{% static "js/bootstrap.min.js" %}"></script>
 </body>

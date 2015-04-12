@@ -1,72 +1,53 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Login" %} &mdash; YDNS{% endblock %}
+{% block title %}Login &lsaquo; YDNS{% endblock %}
 
 {% block content %}
 	<div class="row">
 	    <div class="col-lg-offset-3 col-lg-6">
-			<section class="section">
-			    <h3 class="section-header page-header">{% trans "Login" %}</h3>
+			<section class="card-panel">
+			    <h3 class="page-header">Login</h3>
 			    <form class="login-form form-horizontal" id="login-form" method="post" action="{% url 'accounts:login' %}">
 			    	{% csrf_token %}
-			        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-			    	<div class="form-group{% if errors.email %} has-error has-feedback{% elif post.email %} has-success has-feedback{% endif %}">
-			    		<label for="id_email" class="col-lg-3 control-label">{% trans "Email address" %}</label>
-			    		<div class="col-lg-9">
-			    			<input type="email" class="form-control" id="id_email" name="email"{% if not post.email %} autofocus{% endif %} required{% if post.email %} value="{{ post.email }}"{% endif %}>
-                        	{% if errors.email or post.email %}<i class="fa {{ errors.email|yesno:'fa-exclamation-triangle,fa-check-circle' }} feedback" aria-hidden="true"></i>{% endif %}
-                        	{% if errors.email %}<p class="help-block">{{ errors.email }}</p>{% endif %}
-			    		</div>
-			    	</div>
-			    	<div class="form-group{% if errors.password %} has-error has-feedback{% endif %}">
-			    		<label for="id_password" class="col-lg-3 control-label">{% trans "Password" %}</label>
-			    		<div class="col-lg-9">
-			    			<input type="password" class="form-control" id="id_password" name="password" required>
-                        	{% if errors.password %}<i class="fa fa-exclamation-triangle feedback" aria-hidden="true"></i>{% endif %}
-                            {% if errors.password %}<p class="help-block">{{ errors.password }}</p>{% endif %}
-			    		</div>
-			    	</div>
+					{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+					{{ form }}
 			    	<div class="form-group">
-			    		<div class="col-lg-offset-3 col-lg-9">
-			    			<button type="submit" class="btn btn-primary">{% trans "Log in" %}</button>
-			    			<a href="{% url 'accounts:reset_password' %}" class="forgot-password">{% trans "Forgot your password?" %}</a>
-			    		</div>
-			    	</div>
-			    	<div class="form-group">
-			    		<div class="col-lg-offset-3 col-lg-9 sign-up">
-			    			<a href="{% url 'accounts:signup' %}">{% trans "Sign up for free" %}</a>
+			    		<div class="col-lg-offset-3 col-md-offset-3 col-lg-9 col-md-9">
+			    			<button type="submit" class="waves-effect waves-light btn btn-primary btn-material">Log in</button>
+			    			<a href="{% url 'accounts:reset_password' %}" class="btn btn-link btn-material">Forgot your password?</a>
 			    		</div>
 			    	</div>
 			    </form>
+
+				<hr>
 
 			    <div class="row horizontal" id="social-login-forms">
 					<div class="col-lg-3">
                         <form class="connect-button" method="post" action="{% url 'accounts:google_sign_in' %}">
 			    			{% csrf_token %}
 			    			{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-			    			<button type="submit" class="btn btn-default btn-block btn-lg" title="{% trans "Login using Google" %}" data-toggle="tooltip"><i class="fa fa-google fa-2x"></i></button>
+			    			<button type="submit" class="btn btn-default btn-block btn-lg" title="Login using Google" data-toggle="tooltip"><i class="fa fa-google fa-2x"></i></button>
 			    		</form>
 					</div>
 				    <div class="col-lg-3">
 			    		<form class="connect-button" method="post" action="{% url 'accounts:facebook_sign_in' %}">
 			    			{% csrf_token %}
 			    			{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-			    			<button type="submit" class="btn btn-default btn-block btn-lg" title="{% trans "Login using Facebook" %}" data-toggle="tooltip"><i class="fa fa-facebook fa-2x"></i></button>
+			    			<button type="submit" class="btn btn-default btn-block btn-lg" title="Login using Facebook" data-toggle="tooltip"><i class="fa fa-facebook fa-2x"></i></button>
 			    		</form>
 					</div>
 				    <div class="col-lg-3">
 			    		<form class="connect-button" method="post" action="{% url 'accounts:twitter_sign_in' %}">
 			    			{% csrf_token %}
 			    			{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-			    			<button type="submit" class="btn btn-default btn-block btn-lg" title="{% trans "Login using Twitter" %}" data-toggle="tooltip"><i class="fa fa-twitter fa-2x"></i></button>
+			    			<button type="submit" class="btn btn-default btn-block btn-lg" title="Login using Twitter" data-toggle="tooltip"><i class="fa fa-twitter fa-2x"></i></button>
 			    		</form>
 					</div>
 				    <div class="col-lg-3">
 			    		<form class="connect-button" method="post" action="{% url 'accounts:github_sign_in' %}">
 			    			{% csrf_token %}
 			    			{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-			    			<button type="submit" class="btn btn-default btn-block btn-lg" title="{% trans "Login using GitHub" %}" data-toggle="tooltip"><i class="fa fa-github fa-2x"></i></button>
+			    			<button type="submit" class="btn btn-default btn-block btn-lg" title="Login using GitHub" data-toggle="tooltip"><i class="fa fa-github fa-2x"></i></button>
 			    		</form>
 					</div>
 				</div>
@@ -78,7 +59,7 @@
 {% block js %}
 	<script type="text/javascript">
 		$(function() {
-			YDNS_focusNextError("form#login-form");
+			$('#id_email').focus();
 		});
 	</script>
 {% endblock %}
