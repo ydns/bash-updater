@@ -13,21 +13,7 @@
 			    	<form id="signup-form" class="form-horizontal" method="post" action="{% url 'signup' %}">
 						{% csrf_token %}
 						{{ form }}
-						<div class="form-group">
-							<div class="col-lg-offset-3 col-lg-9">
-								<div class="g-recaptcha" data-sitekey="6LeicQETAAAAAHR1EtQX1ZXE-X1IMv-VCTGuI-7s"></div>
-							</div>
-						</div>
-						<div class="checkbox">
-							<div class="col-lg-offset-3 col-ld-9">
-								<label style="padding-left:30px">
-									<input type="checkbox" name="terms" id="id_terms">
-									I have read and accept the <a href="{% url 'terms' %}">Terms and Conditions</a>.
-								</label>
-							</div>
-						</div>
-						<br>
-						<div class="form-group">
+						<div class="form-group margin">
 							<div class="col-lg-offset-3 col-lg-9">
 								<button type="submit" class="btn btn-primary btn-material" disabled>Sign up</button>
 							</div>
@@ -43,14 +29,17 @@
 	<script type="text/javascript">
 		$(function() {
 			$('#id_email').focus();
-			$('#id_terms').on('change', function() {
-				if ($(this).get(0).checked) {
-					$('button.btn-primary[disabled]').removeAttr('disabled');
-				} else {
-					$('button.btn-primary').attr('disabled', true);
-				}
-			});
+			$('#id_terms').on('change', checkTerms);
 			YDNS.safeForm('#signup-form');
+			checkTerms();
 		});
+
+		function checkTerms() {
+			if ($('#id_terms').get(0).checked) {
+				$('button.btn-primary[disabled]').removeAttr('disabled');
+			} else {
+				$('button.btn-primary').attr('disabled', true);
+			}
+		}
 	</script>
 {% endblock %}

@@ -22,10 +22,10 @@
 # SOFTWARE.
 ##
 
-from django.conf.urls import patterns, include, url
-from .views import HomeView
+from django.conf.urls import include, url
+from . import views
 
-urlpatterns = patterns('',
-    url(r'^$', HomeView.as_view(), name='home'),
+urlpatterns = (
+    url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^v1/', include('api.v1.urls', namespace='v1')),
 )

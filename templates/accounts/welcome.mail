@@ -1,13 +1,16 @@
 {% extends "base.mail" %}
-{% load i18n %}
 
-{% block content %}{% blocktrans with activation_url=activation_url|safe %}Hi!
+{% block content %}Welcome to YDNS.
 
-Welcome to YDNS, the free DNS service provider. You're just one click ahead from using your account.
+You're just one click ahead from using your account.
 
 Please click the link below to activate your account:
-{{ activation_url }}
+{{ url }}
 
-In case you have any questions, please write to support@ydns.eu and we'll assist you as soon as possible.{% endblocktrans %}
+The link is valid for 24 hours.
+
+Once activated, you can log in using your chosen password.
+
+In case you have any questions, please write to support@ydns.io and we'll assist you as soon as possible.
 
 {% endblock %}

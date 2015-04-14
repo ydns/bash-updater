@@ -11,6 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="{% static "css/ydns.css" %}">
 </head>
 <body id="landing-page">
+	{% include "alerts.html" %}
 	<div class="container top">
 		<a href="{% url 'home' %}"><img src="{% static 'img/logo_fff.png' %}" alt="YDNS"></a>
 		<div class="pull-right">

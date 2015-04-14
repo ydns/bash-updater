@@ -24,9 +24,10 @@
 
 from django import forms
 from django.forms import widgets
+from .widgets import RecaptchaInput
 
 __all__ = ['BooleanField', 'CharField', 'DateField', 'DecimalField', 'EmailField', 'FileField', 'IntegerField',
-           'PasswordField', 'TextField']
+           'PasswordField', 'RecaptchaField', 'TextField']
 
 
 class BooleanField(forms.BooleanField):
@@ -94,6 +95,10 @@ class IntegerField(forms.IntegerField, InputMixin):
 
 class PasswordField(CharField):
     widget = widgets.PasswordInput
+
+
+class RecaptchaField(forms.CharField):
+    widget = RecaptchaInput
 
 
 class TextField(forms.CharField, InputMixin):

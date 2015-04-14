@@ -305,6 +305,13 @@ footer.footer p:last-child {
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
 }
+.form-group.margin:last-child {
+  margin-top: 1em;
+}
+.checkbox label,
+.radio label {
+  padding-left: 28px;
+}
 
 /* Cards */
 .card {
@@ -411,4 +418,46 @@ footer.footer p:last-child {
 }
 .callout-info h4 {
   color: #1b809e;
+}
+
+/* Alerts */
+.alert-material {
+  border-radius: 0;
+  margin-bottom: 0;
+  padding: 5px 10px;
+  border-top: 0;
+}
+.alert-material.alert-dismissible .close {
+  top: 0;
+  right: 0;
+}
+.alert-material.alert-info {
+  background-color: #e0f7fa;
+  border-color: #b2ebf2;
+}
+.alert-material.alert-danger {
+  background-color: #ffebee;
+  color: #c62828;
+}
+.alert-material.alert-warning {
+  background-color: #fffde7;
+  color: #f9a825;
+}
+.alert-material.alert-success {
+  background-color: #f1f8e9;
+  color: #689f38;
+}
+
+/* Tables */
+.table-sm {
+  font-size: 12px;
+}
+.table-no-border>thead>tr>th,
+.table-no-border>tbody>tr>td {
+  border: none;
+}
+
+/* Text overrides */
+.text-warning {
+  color: #f9a825;
 }

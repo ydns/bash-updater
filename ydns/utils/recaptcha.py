@@ -22,21 +22,41 @@
 # SOFTWARE.
 ##
 
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.core.urlresolvers import reverse
+from django.conf import settings
+from requests.exceptions import RequestException
 
-from jinja2 import Environment
+import requests
 
 
-def environment(**options):
+# Verification URL
+_url_verify = 'https://www.google.com/recaptcha/api/siteverify'
+
+
+class RecaptchaError(ValueError):
+    pass
+
+
+def verify(response, remote_ip=None):
     """
-    Set up Jinja2 template environment to work with Django.
+    Verify user response.
 
-    :param options: Options (dict)
-    :return: Environment
+    Raises RecaptchaError in case the response cannot be verified or is invalid.
+
+    :param response: User response (str)
+    :param remote_ip: Remote IP (optional)
     """
-    env = Environment(**options)
-    env.globals.update({
-        'static': staticfiles_storage.url,
-        'url': reverse})
-    return env
+    data = {'secret': settings.RECAPTCHA_PRIVATE_KEY,
+            'response': response}
+
+    if remote_ip:
+        data['remoteip'] = remote_ip
+
+    try:
+        r = requests.post(_url_verify, data=data)
+    except RequestException as exc:
+        raise RecaptchaError(str(exc))
+    else:
+        reply = r.json()
+
+        if not reply['success']:
+            raise RecaptchaError(', '.join(reply['error-codes']))

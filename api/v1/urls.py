@@ -22,13 +22,13 @@
 # SOFTWARE.
 ##
 
-from django.conf.urls import patterns, url
-from .views import CurrentIpAddressView, CurrentIpAddressJsonView, DocumentationPdfView, HomeView, UpdateView
+from django.conf.urls import url
+from . import views
 
-urlpatterns = patterns('',
-    url(r'^$', HomeView.as_view(), name='home'),
-    url(r'^documentation\.pdf$', DocumentationPdfView.as_view(), name='documentation_pdf'),
-    url(r'^ip$', CurrentIpAddressView.as_view(), name='ip'),
-    url(r'^ip\.json$', CurrentIpAddressJsonView.as_view(), name='ip_json'),
-    url(r'^update/$', UpdateView.as_view(), name='update'),
+urlpatterns = (
+    url(r'^$', views.HomeView.as_view(), name='home'),
+    url(r'^documentation\.pdf$', views.DocumentationPdfView.as_view(), name='documentation_pdf'),
+    url(r'^ip$', views.CurrentIpAddressView.as_view(), name='ip'),
+    url(r'^ip\.json$', views.CurrentIpAddressJsonView.as_view(), name='ip_json'),
+    url(r'^update/$', views.UpdateView.as_view(), name='update'),
 )

@@ -28,9 +28,44 @@ from ydns import forms
 class LoginForm(forms.HorizontalForm):
     email = forms.EmailField(label='Email address')
     password = forms.PasswordField()
+
+    field_css = 'col-lg-9 col-md-9'
+
+
+class ResetPasswordForm(forms.HorizontalForm):
+    email = forms.EmailField(label='Email address')
+    recaptcha = forms.RecaptchaField(label=' ')
+
+    field_css = 'col-lg-9 col-md-9'
+
+
+class SetPasswordForm(forms.HorizontalForm):
+    new = forms.PasswordField(label='New password',
+                              placeholder='Enter a new password…',
+                              min_length=6)
+    repeat = forms.PasswordField(label='New password',
+                                 placeholder='Repeat the new password…',
+                                 min_length=6)
+
     field_css = 'col-lg-9 col-md-9'
 
 
 class SignupForm(forms.HorizontalForm):
-    email = forms.EmailField(label='Email address')
+    email = forms.EmailField(label='Email address',
+                             placeholder='Your email address…')
+    password = forms.PasswordField(label='Password',
+                                   placeholder='Enter a password…',
+                                   min_length=6)
+    repeat = forms.PasswordField(label='Password',
+                                 placeholder='Repeat the password…',
+                                 min_length=6)
+    recaptcha = forms.RecaptchaField(label=' ')
+    terms = forms.BooleanField(label='I have read and accept the {terms_url}')
+
     field_css = 'col-lg-9 col-md-9'
+
+    def __init__(self, terms_url, **kwargs):
+        super(SignupForm, self).__init__(**kwargs)
+
+        terms_url_html = '<a href="{}">Terms and Conditions</a>'.format(terms_url)
+        self.fields['terms'].label = self.fields['terms'].label.format(terms_url=terms_url_html)

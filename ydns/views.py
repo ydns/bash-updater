@@ -22,11 +22,11 @@
 # SOFTWARE.
 ##
 
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
 from django.views import generic
-from ydns.utils import messages
 from ydns.utils.http import absolute_url
 from .models import Domain, DomainLogMessage, Host
 
@@ -147,54 +147,22 @@ class FormView(TemplateView):
         return self.post(request, *args, **kwargs)
 
 
+class _AnonymousView(TemplateView):
+    require_admin = False
+    require_login = False
+
+
 class DashboardView(TemplateView):
     require_admin = False
     require_login = True
     template_name = 'dashboard.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
-        context['recent_activity'] = self.get_recent_activity()
-        context['hosts'] = Host.objects.filter(user=self.request.user)
-        context['domains'] = Domain.objects.filter(owner=self.request.user)
-        return context
 
-    def get_recent_activity(self):
-        from .models import HostLogMessage
-        recent_messages = []
-
-        for i in HostLogMessage.objects.filter(host__user=self.request.user):
-            message = '<a href="%s">%s</a> &mdash; %s' % (absolute_url(self.request,
-                                                                'hosts:detail',
-                                                                args=(i.host.name,)),
-                                                   str(i.host),
-                                                   i.message)
-            recent_messages.append({'date_created': i.date_created,
-                                    'message': mark_safe(message)})
-
-        for i in DomainLogMessage.objects.filter(domain__owner=self.request.user):
-            message = '<a href="%s">%s</a> &mdash; %s' % (absolute_url(self.request,
-                                                                'domains:detail',
-                                                                args=(i.domain.name,)),
-                                                   str(i.domain),
-                                                   i.message)
-            recent_messages.append({'date_created': i.date_created,
-                                    'message': mark_safe(message)})
-
-        recent_messages = list(sorted(recent_messages, key=lambda x: x['date_created'], reverse=True))
-
-        return recent_messages[:10]
-
-
-class DonateView(TemplateView):
-    require_admin = False
-    require_login = False
+class DonateView(_AnonymousView):
     template_name = 'donate.html'
 
 
-class HomeView(TemplateView):
-    require_login = False
-    require_admin = False
+class HomeView(_AnonymousView):
     template_name = 'home.html'
 
     def get(self, request, *args, **kwargs):
@@ -203,19 +171,13 @@ class HomeView(TemplateView):
         return super(HomeView, self).get(request, *args, **kwargs)
 
 
-class GetStartedView(TemplateView):
-    require_admin = False
-    require_login = False
+class GetStartedView(_AnonymousView):
     template_name = 'get_started.html'
 
 
-class ImprintView(TemplateView):
-    require_admin = False
-    require_login = False
+class ImprintView(_AnonymousView):
     template_name = 'imprint.html'
 
 
-class TermsView(TemplateView):
-    require_admin = False
-    require_login = False
+class TermsView(_AnonymousView):
     template_name = 'terms.html'

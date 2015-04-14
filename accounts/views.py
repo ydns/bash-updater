@@ -26,14 +26,11 @@ from accounts.oauth import facebook, github, google
 from accounts.models import ActivationRequest, PasswordRequest, User
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.core.validators import validate_email, ValidationError
-from django.http import HttpResponseNotFound, Http404
+from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from django.utils.safestring import mark_safe
-from requests.exceptions import RequestException
-from ydns.utils import messages
 from ydns.utils.http import absolute_url
 from ydns.utils.mail import EmailMessage
 from ydns.views import FormView, TemplateView, View
@@ -41,7 +38,6 @@ from .enum import UserType
 from . import forms
 
 import json
-import requests
 
 
 class _AnonymousView(TemplateView):
@@ -56,40 +52,29 @@ class ActivationView(_AnonymousView):
     """
     Account activation.
     """
+    def get_context_data(self, **kwargs):
+        context = super(ActivationView, self).get_context_data(**kwargs)
+        context['activation_request'] = get_object_or_404(ActivationRequest,
+                                                          user__alias=self.kwargs['alias'],
+                                                          token=self.kwargs['token'],
+                                                          date_created__gte=timezone.now() - relativedelta(hours=24))
+        return context
+
     def get(self, request, *args, **kwargs):
-        alias = request.GET.get('u')
-        token = request.GET.get('token')
+        context = self.get_context_data(**kwargs)
+        activation_request = context.pop('activation_request')
 
-        if not alias:
-            return self.response_error(request, _("Missing alias parameter"), _("Request error"))
-        elif not token:
-            return self.response_error(request, _("Missing token parameter"), _("Request error"))
+        # Activate user account
+        activation_request.user.is_active = True
+        activation_request.user.save()
+        activation_request.user.add_to_log('Activation')
 
-        try:
-            activation = ActivationRequest.objects.get(user__alias=alias, token=token)
-        except ActivationRequest.DoesNotExist:
-            return self.response_error(request, _("Activation link is unknown or has expired."), _("Request error"))
-        else:
-            if activation.user.is_active:
-                return self.response_error(request, _("Your account is already activated"), _("Request error"))
-            else:
-                activation.user.is_active = True
-                activation.user.save()
+        # Delete activation request object
+        activation_request.delete()
 
-                activation.user.add_message(request.META['REMOTE_ADDR'],
-                                            tag='activate',
-                                            user_agent=request.META.get('HTTP_USER_AGENT'))
+        messages.success(request, 'Your account has been activated successfully.')
+        return self.redirect('login')
 
-                # Delete the activation request
-                activation.delete()
-
-                messages.success(request, _("Your account has been activated successfully."), _("Success"))
-
-                return self.redirect('accounts:login')
-
-    def response_error(self, request, message, title):
-        messages.error(request, message, title)
-        return self.redirect('accounts:login')
 
 class FacebookSignInView(View):
     """
@@ -662,191 +647,105 @@ class LogoutView(_AnonymousView):
     Perform account logout.
     """
     def dispatch(self, request, *args, **kwargs):
-        logout(request)
+        if request.user.is_authenticated():
+            logout(request)
+            messages.info(request, 'You have been logged out.')
         return self.redirect('home')
 
 
-class ResetPasswordView(_AnonymousView):
+class ResetPasswordView(_AnonymousView, FormView):
+    """
+    Reset password view.
+    """
+    form_class = forms.ResetPasswordForm
     template_name = 'accounts/reset_password.html'
 
-    def create_token(self, request, user):
+    @classmethod
+    def create_token(cls, request, user):
         """
-        Create password change request.
+        Create password reset request.
 
         :param request: HttpRequest
         :param user: User
-        :return:
+        :return: HttpResponse
         """
         token = User.objects.make_random_password(64)
-        rp = ResetPasswordRequest.objects.create(user=user, token=token)
+        rp = PasswordRequest.objects.create(user=user, token=token)
+        user.add_to_log('Password reset request')
 
-        user.add_message(self.request.META['REMOTE_ADDR'],
-                         tag='reset_password',
-                         token=token,
-                         user_agent=request.META.get('HTTP_USER_AGENT'))
-
-        # Send welcome Email
-        suffix = '?u=' + user.alias + '&token=' + token
-        activation_url = absolute_url(self.request, 'accounts:reset_password_update', suffix=suffix)
-        context = {'user': user, 'token': token, 'activation_url': activation_url}
-        msg = EmailMessage(_('Reset password'),
+        # Send email
+        url = absolute_url(request, 'accounts:set_password', args=(user.alias, token))
+        context = {'user': user, 'token': token, 'url': url}
+        msg = EmailMessage('Password reset',
                            tpl='accounts/reset_password.mail',
                            context=context)
         msg.send(to=[user.email])
 
-        messages.success(self.request,
-                         _("We've sent instructions to your Email address on how to update your password.\n"
-                                     "Please check your mail box in a few moments."),
-                         _("Success"))
+        messages.success(request, 'Instructions on how to reset your password has been sent via email. '
+                                  'Please check your mail box in a few moments.')
 
-    def get_context_data(self, **kwargs):
-        context = super(ResetPasswordView, self).get_context_data(**kwargs)
-        context['recaptcha_html'] = captcha.get_html(settings.RECAPTCHA['public_key'])
-        return context
+        return cls.redirect('login')
 
-    def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        errors, cleaned_data = self.validate(request)
+    def form_valid(self, form):
+        """
+        Validate form and processing of it.
 
-        if not errors:
-            self.create_token(request, cleaned_data['user'])
-            return self.redirect('accounts:login')
+        :param form: Bound form
+        :return: HttpResponse
+        """
+        try:
+            user = User.objects.get(email__iexact=form.cleaned_data['email'])
+        except User.DoesNotExist:
+            form.add_error('email', 'This email address is not known to us')
         else:
-            context.update(errors=errors, post=request.POST)
+            delta = timezone.now() - relativedelta(hours=24)
+            qs = PasswordRequest.objects.filter(user=user, date_created__gte=delta)
 
-        return self.render_to_response(context)
-
-    def validate(self, request):
-        errors = {}
-        cleaned_data = {}
-
-        if not request.POST.get('email'):
-            errors['email'] = _('Field missing')
-        else:
-            try:
-                validate_email(request.POST['email'])
-            except ValidationError:
-                errors['email'] = _('Invalid Email address')
+            if qs.count() > 0:
+                form.add_error('email', 'You have already requested a password reset within the last 24 hours.')
             else:
-                try:
-                    user = User.objects.get(email__iexact=request.POST['email'])
-                except User.DoesNotExist:
-                    errors['email'] = _('This Email address is not known in our system')
-                else:
-                    ban = user.get_ban()
+                return self.create_token(self.request, user)
 
-                    if ban or user.type != UserType.native:
-                        errors['email'] = _("Password resets are not available for this account")
-                    else:
-                        delta = timezone.now() - relativedelta(hours=24)
-                        qs = ResetPasswordRequest.objects.filter(user=user, date_created__gte=delta)
+        return self.form_invalid(form)
 
-                        if qs.count() > 0:
-                            errors['email'] = _("There is already a password reset request made within "
-                                                "the last 24 hours.")
-                        else:
-                            cleaned_data['user'] = user
 
-        # reCAPTCHA
-        if not request.POST.get('recaptcha_challenge_field'):
-            errors['recaptcha'] = _('Missing challenge field value')
-        if not request.POST.get('recaptcha_response_field'):
-            errors['recaptcha'] = _('Missing answer')
+class SetPasswordView(_AnonymousView, FormView):
+    """
+    Set a new password based on a password reset request.
+    """
+    form_class = forms.SetPasswordForm
+    template_name = 'accounts/set_password.html'
 
-        if not errors:
-            try:
-                captcha.verify(request.POST['recaptcha_challenge_field'],
-                               request.POST['recaptcha_response_field'],
-                               settings.RECAPTCHA['private_key'],
-                               request.META['REMOTE_ADDR'])
-            except captcha.IncorrectRecaptchaSolution:
-                errors['recaptcha'] = _('Incorrect captcha answer')
-            except captcha.RecaptchaError:
-                errors['recaptcha'] = _('reCAPTCHA error')
+    def form_valid(self, form):
+        context = self.get_context_data(**self.kwargs)
+        password_request = context.pop('password_request')
 
-        if errors:
-            cleaned_data = {}
+        if form.cleaned_data['new'] != form.cleaned_data['repeat']:
+            for k in ('new', 'repeat'):
+                form.add_error(k, 'The passwords do not match.')
 
-        return errors, cleaned_data
+        if not form.is_valid():
+            return self.form_invalid(form)
 
-class ResetPasswordUpdateView(TemplateView):
-    requires_admin = False
-    requires_login = False
-    template_name = 'accounts/reset_password_update.html'
+        user = password_request.user
+        user.set_password(form.cleaned_data['new'])
+        user.save()
+        user.add_to_log('Password changed')
+
+        password_request.delete()
+        messages.info(self.request, 'Your password has been changed.')
+
+        return self.redirect('login')
 
     def get_context_data(self, **kwargs):
-        context = super(ResetPasswordUpdateView, self).get_context_data(**kwargs)
-
-        if not self.request.GET.get('u'):
-            return HttpResponseNotFound()
-        if not self.request.GET.get('token'):
-            return HttpResponseNotFound()
+        context = super(SetPasswordView, self).get_context_data(**kwargs)
 
         delta = timezone.now() - relativedelta(hours=24)
-        context['reset_password_request'] = get_object_or_404(ResetPasswordRequest,
-                                                              user__alias=self.request.GET['u'],
-                                                              token=self.request.GET['token'],
-                                                              date_created__gte=delta)
+        context['password_request'] = get_object_or_404(PasswordRequest,
+                                                        user__alias=self.kwargs['alias'],
+                                                        token=self.kwargs['token'],
+                                                        date_created__gte=delta)
         return context
-
-    def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        errors, cleaned_data = self.validate(request)
-
-        if not errors:
-            self.update_password(request, context['reset_password_request'], cleaned_data['password'])
-            return self.redirect('accounts:login')
-        else:
-            context.update(errors=errors, post=request.POST)
-
-        return self.render_to_response(context)
-
-    def update_password(self, request, reset_password_request, password):
-        """
-        Update the user account password.
-
-        :param request: HttpRequest
-        :param reset_password_request: ResetPasswordRequest
-        :param password: str
-        :return:
-        """
-        user = reset_password_request.user
-        user.set_password(password)
-        user.save()
-
-        user.add_message(request.META['REMOTE_ADDR'],
-                         tag='update_password',
-                         token=reset_password_request.token,
-                         user_agent=request.META.get('HTTP_USER_AGENT'))
-
-        # Delete password reset request
-        reset_password_request.delete()
-
-        messages.success(request,
-                         _("Your account password has been updated."),
-                         _("Success"))
-
-    def validate(self, request):
-        errors = {}
-        cleaned_data = {}
-
-        if not request.POST.get('password'):
-            errors['password'] = _('Field missing')
-        elif len(request.POST['password']) < 6:
-            errors['password'] = _("The password must contain at least 6 characters")
-        if not request.POST.get('password_rpt'):
-            errors['password_rpt'] = _('Field missing')
-
-        if not errors and request.POST['password'] != request.POST['password_rpt']:
-            for k in ('password', 'password_rpt'):
-                errors[k] = _("The password don't match")
-
-        if not errors:
-            cleaned_data['password'] = request.POST['password']
-        else:
-            cleaned_data = {}
-
-        return errors, cleaned_data
 
 
 class SignupView(_AnonymousView, FormView):
@@ -856,25 +755,24 @@ class SignupView(_AnonymousView, FormView):
     form_class = forms.SignupForm
     template_name = 'accounts/signup.html'
 
-    def create_user(self, email):
+    def create_user(self, email, password):
         """
         Create user account.
 
         :param email: Email address
+        :param password: Password
         :return: HttpResponse
         """
-        password = User.objects.make_random_password(10)
         user = User.objects.create_user(email, password)
         user.add_to_log('User account created')
 
         # Create activation request
         token = User.objects.make_random_password(64)
-        acr = ActivationRequest.objects.create(user=user, token=token)
+        ActivationRequest.objects.create(user=user, token=token)
 
-        # Send welcome mail
-        suffix = '?u=' + user.alias + '&token=' + token
-        activation_url = absolute_url(self.request, 'accounts:activate', suffix=suffix)
-        context = {'user': user, 'token': token, 'activation_url': activation_url}
+        # Send email
+        url = absolute_url(self.request, 'accounts:activate', args=(user.alias, token))
+        context = {'user': user, 'token': token, 'url': url}
         msg = EmailMessage('Welcome to YDNS',
                            tpl='accounts/welcome.mail',
                            context=context)
@@ -885,25 +783,16 @@ class SignupView(_AnonymousView, FormView):
         return self.redirect('login')
 
     def form_valid(self, form):
-        if not self.request.POST.get('terms'):
-            messages.error(self.request, 'You must read and accept our Terms and Conditions in order to sign up.')
+        """
+        Additional form validation and processing.
+
+        :param form: Bound form
+        :return: HttpResponse
+        """
+        if form.cleaned_data['password'] != form.cleaned_data['repeat']:
+            for k in ('password', 'repeat'):
+                form.add_error(k, 'The passwords do not match.')
             return self.form_invalid(form)
-
-        # Verify reCAPTCHA
-        data = {'secret': settings.RECAPTCHA['SECRET_KEY'],
-                'response': self.request.POST.get('g-recaptcha-response', '')}
-
-        try:
-            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-        except RequestException:
-            messages.error(self.request, 'Unable to verify reCAPTCHA. Please try again later.')
-            return self.form_invalid(form)
-        else:
-            result = r.json()
-
-            if not result['status']:
-                messages.error(self.request, 'The reCAPTCHA result is incorrect.')
-                return self.form_invalid(form)
 
         try:
             User.objects.get(email__iexact=form.cleaned_data['email'])
@@ -915,4 +804,9 @@ class SignupView(_AnonymousView, FormView):
         if not form.is_valid():
             return self.form_invalid(form)
 
-        return self.create_user(form.cleaned_data['email'])
+        return self.create_user(form.cleaned_data['email'], form.cleaned_data['password'])
+
+    def get_form_kwargs(self):
+        kwargs = super(SignupView, self).get_form_kwargs()
+        kwargs['terms_url'] = reverse('terms')
+        return kwargs

@@ -22,17 +22,30 @@
 # SOFTWARE.
 ##
 
-from django.db.models.signals import pre_delete
-from django.dispatch import receiver
-from .models import User
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.forms import widgets
+from django.forms.utils import format_html
+from ydns.utils import recaptcha
+from ydns.utils.recaptcha import RecaptchaError
 
-@receiver(pre_delete, sender=User)
-def _handle_user_deletion(sender, instance, **kwargs):
-    """
-    User instance deletion signal handler.
 
-    :param sender: Model
-    :param instance: Instance
-    :param kwargs: Keyword arguments
+class RecaptchaInput(widgets.Widget):
     """
-    instance.journal.all().delete()
+    reCAPTCHA Input widget.
+    """
+    def clean(self, value):
+        super(RecaptchaInput, self).clean(value)
+
+        try:
+            recaptcha.verify(value)
+        except RecaptchaError as exc:
+            raise ValidationError(str(exc))
+
+        return value
+
+    def render(self, name, value, attrs=None):
+        return format_html('<div class="g-recaptcha" data-sitekey="{}"></div>'.format(settings.RECAPTCHA_PUBLIC_KEY))
+
+    def value_from_datadict(self, data, files, name):
+        return data.get('g-recaptcha-response', None)

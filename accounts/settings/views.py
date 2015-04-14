@@ -24,11 +24,12 @@
 
 from accounts.enum import UserType
 from accounts.models import User
+from django.contrib import messages
 from django.http import HttpResponseNotFound
-from ydns.utils import messages
 from ydns.utils.mail import EmailMessage
 from ydns.views import FormView, TemplateView
 from . import forms
+
 
 class _BaseView(TemplateView):
     """
@@ -93,44 +94,10 @@ class DeleteAccountView(_BaseView):
     """
     template_name = 'accounts/settings/delete_account.html'
 
-    def delete_account(self, request):
-        email = request.user.email
-
-        request.user.delete()
-
-        msg = EmailMessage(_('Account deletion'),
-                           tpl='accounts/settings/delete_account.mail')
-        msg.send(to=[email])
-
-        messages.info(request,
-                      _("Your account including all associated data has been deleted."),
-                      _("Account deletion"))
-
     def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        errors, cleaned_data = self.validate(request)
-
-        if not errors:
-            self.delete_account(request)
-            return self.redirect('home')
-        else:
-            context.update(errors=errors, post=request.POST)
-
-        return self.render_to_response(context)
-
-    def validate(self, request):
-        errors = {}
-        cleaned_data = {}
-
-        if not request.POST.get('delete'):
-            errors['delete'] = _("You must check this box in order to proceed")
-        else:
-            cleaned_data['delete'] = True
-
-        if errors:
-            cleaned_data.clear()
-
-        return errors, cleaned_data
+        request.user.delete()
+        messages.info(request, 'Your account has been deleted.')
+        return self.redirect('home')
 
 
 class HomeView(_BaseView):

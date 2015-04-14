@@ -1,6 +1,15 @@
-{% if sys_messages %}
-    {% for message in sys_messages %}<div class="callout callout-{{ message.level }}">
-        <h4>{{ message.title }}</h4>
-        <p>{{ message.message|linebreaksbr }}</p>
-    </div>{% endfor %}
+{% if messages %}
+	{% for message in messages %}
+		<div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible alert-material" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			{% if message.tags == 'error' or message.tags == 'warning'%}
+				<i class="fa fa-exclamation-triangle fa-fw"></i>
+			{% elif message.tags == 'success' %}
+				<i class="fa fa-check fa-fw"></i>
+			{% elif message.tags == 'info' %}
+				<i class="fa fa-info-circle fa-fw"></i>
+			{% endif %}
+			{{ message|linebreaksbr }}
+		</div>
+	{% endfor %}
 {% endif %}
