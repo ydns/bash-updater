@@ -1,9 +1,0 @@
-{% load i18n %}
-<ul class="nav nav-list">
-	<li class="nav-header">{% trans "General" %}</li>
-	<li data-nav-id="host-detail"><a href="{% url 'hosts:detail' host.name %}">{% trans "Host Details" %}</a></li>
-	<li data-nav-id="host-records"><a href="{% url 'hosts:records:home' host.name %}">{% trans "Records" %} <span class="badge{% if host.records.count == 0 %} badge-subtle {% endif %}">{{ host.records.count }}</span></a></li>
-	<li data-nav-id="host-journal"><a href="{% url 'hosts:journal' host.name %}">{% trans "Journal" %} <span class="badge{% if host.journal.count == 0 %} badge-subtle {% endif %}">{{ host.journal.count }}</span></a></li>
-	<li class="nav-header">{% trans "Danger Zone" %}</li>
-	<li data-nav-id="host-delete"><a href="{% url 'hosts:delete' host.name %}">{% trans "Delete Host" %}</a></li>
-</ul>

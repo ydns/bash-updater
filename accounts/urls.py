@@ -22,23 +22,16 @@
 # SOFTWARE.
 ##
 
-from django.conf.urls import patterns, include, url
-from .views import (ActivationView, FacebookSignInView, GithubSignInView, GoogleSignInView, LoginView, LoginOtpView,
-                    LogoutView, ResetPasswordView, ResetPasswordUpdateView, SetLanguageView, SignupView,
-                    TwitterSignInView)
+from django.conf.urls import include, url
+from . import views
 
-urlpatterns = patterns('',
-    url(r'^activate$', ActivationView.as_view(), name='activate'),
-    url(r'^signup$', SignupView.as_view(), name='signup'),
-    url(r'^login/otp$', LoginOtpView.as_view(), name='login_otp'),
-    url(r'^login$', LoginView.as_view(), name='login'),
-    url(r'^logout$', LogoutView.as_view(), name='logout'),
-    url(r'^oauth/facebook$', FacebookSignInView.as_view(), name='facebook_sign_in'),
-    url(r'^oauth/github$', GithubSignInView.as_view(), name='github_sign_in'),
-    url(r'^oauth/google$', GoogleSignInView.as_view(), name='google_sign_in'),
-    url(r'^oauth/twitter$', TwitterSignInView.as_view(), name='twitter_sign_in'),
-    url(r'^reset-password/update$', ResetPasswordUpdateView.as_view(), name='reset_password_update'),
-    url(r'^reset-password$', ResetPasswordView.as_view(), name='reset_password'),
-    url(r'^set-language/(?P<lc>[\w-]{2,5})$', SetLanguageView.as_view(), name='set_language'),
+urlpatterns = (
+    url(r'^activate$', views.ActivationView.as_view(), name='activate'),
+    url(r'^logout$', views.LogoutView.as_view(), name='logout'),
+    url(r'^oauth/facebook$', views.FacebookSignInView.as_view(), name='facebook_sign_in'),
+    url(r'^oauth/github$', views.GithubSignInView.as_view(), name='github_sign_in'),
+    url(r'^oauth/google$', views.GoogleSignInView.as_view(), name='google_sign_in'),
+    url(r'^reset-password/update$', views.ResetPasswordUpdateView.as_view(), name='reset_password_update'),
+    url(r'^reset-password$', views.ResetPasswordView.as_view(), name='reset_password'),
     url(r'^settings/', include('accounts.settings.urls', namespace='settings')),
 )

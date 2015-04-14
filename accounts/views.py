@@ -23,21 +23,16 @@
 ##
 
 from accounts.oauth import facebook, github, google
-from accounts.models import ActivationRequest, ResetPasswordRequest, User
-from accounts.utils import otp
-from accounts.utils.common import is_blacklisted_email
+from accounts.models import ActivationRequest, PasswordRequest, User
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
-from django.core.urlresolvers import reverse
 from django.core.validators import validate_email, ValidationError
-from django.http import HttpResponseRedirect, HttpResponseNotFound, Http404
+from django.http import HttpResponseNotFound, Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from django.utils.http import is_safe_url
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _, check_for_language, LANGUAGE_SESSION_KEY
-from googler.recaptcha import captcha
+from requests.exceptions import RequestException
 from ydns.utils import messages
 from ydns.utils.http import absolute_url
 from ydns.utils.mail import EmailMessage
@@ -46,11 +41,21 @@ from .enum import UserType
 from . import forms
 
 import json
+import requests
 
-class ActivationView(View):
-    requires_admin = False
-    requires_login = False
 
+class _AnonymousView(TemplateView):
+    """
+    Anonymous base view.
+    """
+    require_login = False
+    require_admin = False
+
+
+class ActivationView(_AnonymousView):
+    """
+    Account activation.
+    """
     def get(self, request, *args, **kwargs):
         alias = request.GET.get('u')
         token = request.GET.get('token')
@@ -442,7 +447,7 @@ class GithubSignInView(View):
         messages.error(request, message, title)
         return self.redirect('accounts:login')
 
-class GoogleSignInView(TemplateView):
+class GoogleSignInView(_AnonymousView):
     """
     OAuth2 based login via Google.
 
@@ -451,9 +456,6 @@ class GoogleSignInView(TemplateView):
     to maintain a local user account associated with
     that email address.
     """
-    requires_admin = False
-    requires_login = False
-
     URL_GET_TOKEN = 'https://accounts.google.com/o/oauth2/token'
     URL_PLUS_API_PEOPLE_GET = 'https://www.googleapis.com/plus/v1/people/me'
 
@@ -464,29 +466,15 @@ class GoogleSignInView(TemplateView):
         :param email: Email address
         :return:
         """
-        alias = None
-
-        while True:
-            alias = User.objects.make_random_password(16)
-
-            try:
-                User.objects.get(alias=alias)
-            except User.DoesNotExist:
-                break
-
         user = User.objects.create_user(email,
-                                        type=UserType.google,
-                                        alias=alias,
-                                        is_active=True)
+                                        type=UserType.GOOGLE,
+                                        active=True)
 
-        user.add_message(self.request.META['REMOTE_ADDR'],
-                         tag='signup',
-                         type='google',
-                         user_agent=self.request.META.get('HTTP_USER_AGENT'))
+        user.add_to_log('User account created via Google OAuth2 login')
 
         # Send welcome Email
         context = {'user': user}
-        msg = EmailMessage(_('Welcome to YDNS'),
+        msg = EmailMessage('Welcome to YDNS',
                            tpl='accounts/welcome_google.mail',
                            context=context)
         msg.send(to=[user.email])
@@ -624,96 +612,28 @@ class GoogleSignInView(TemplateView):
 
     def response_error(self, request, message, title):
         messages.error(request, message, title)
-        return self.redirect('accounts:login')
-
-class LoginOtpView(TemplateView):
-    requires_admin = False
-    requires_login = False
-    template_name = 'accounts/login_otp.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(LoginOtpView, self).get_context_data(**kwargs)
-
-        if not self.request.session.get('otp_uid'):
-            raise Http404
-
-        context['next'] = self.request.GET.get('next', self.request.POST.get('next'))
-
-        return context
-
-    @staticmethod
-    def login(request, user):
-        if not hasattr(user, 'backend'):
-            user.backend = settings.AUTHENTICATION_BACKENDS[0]
-
-        login(request, user)
-
-        if user.language and check_for_language(user.language):
-            request.session[LANGUAGE_SESSION_KEY] = user.language
-            request.session.modified = True
-
-    def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        errors, cleaned_data = self.validate(request)
-
-        if not errors:
-            user = cleaned_data['user']
-            LoginOtpView.login(request, user)
-            return self.redirect(context['next'] or 'home')
-        else:
-            context.update(errors=errors, post=request.POST)
-
-        return self.render_to_response(context)
-
-    def validate(self, request):
-        errors = {}
-        cleaned_data = {}
-
-        try:
-            user = User.objects.get(id=request.session['otp_uid'])
-        except:
-            errors['code'] = _("Missing context")
-        else:
-            if not request.POST.get('code'):
-                errors['code'] = _("Enter the code")
-            else:
-                try:
-                    code = int(request.POST['code'])
-                except Exception:
-                    errors['code'] = _("The code must be a number")
-                else:
-                    try:
-                        otp.verify_totp_token(code, user.otp_secret)
-                    except otp.InvalidTokenError:
-                        errors['code'] = _('Invalid code')
-                    except otp.IncorrectTokenError:
-                        errors['code'] = _('Incorrect code')
-                    else:
-                        cleaned_data['user'] = user
-
-        if errors:
-            cleaned_data.clear()
-
-        return errors, cleaned_data
+        return self.redirect('login')
 
 
-class LoginView(FormView):
-    require_admin = False
-    require_login = False
+class LoginView(_AnonymousView, FormView):
     form_class = forms.LoginForm
     template_name = 'accounts/login.html'
 
     @classmethod
     def login(cls, request, user, redirect=None):
-        if user.otp_active:
-            request.session['otp_uid'] = user.id
-            request.session.modified = True
+        """
+        Perform login.
 
-            suffix = '?next={}'.format(redirect) if redirect else None
-            return cls.redirect('accounts:login_otp', suffix=suffix)
-        else:
-            LoginOtpView.login(request, user)
-            return cls.redirect(next or 'dashboard')
+        :param request: HttpRequest
+        :param user: User instance
+        :param redirect: Redirection url, optional
+        :return: HttpResponse
+        """
+        if not hasattr(user, 'backend'):
+            user.backend = settings.AUTHENTICATION_BACKENDS[0]
+
+        login(request, user)
+        return cls.redirect(redirect or 'dashboard')
 
     def get_context_data(self, **kwargs):
         context = super(LoginView, self).get_context_data(**kwargs)
@@ -721,39 +641,32 @@ class LoginView(FormView):
         return context
 
     def form_valid(self, form):
+        context = self.get_context_data(**self.kwargs)
         user = authenticate(email=form.cleaned_data['email'],
                             password=form.cleaned_data['password'])
 
         if user is not None:
             if not user.is_active:
                 form.add_error('email', 'Account is disabled')
-            else:
-                if user.banned:
-                    form.add_error('email', 'Account is banned')
         else:
             form.add_error('email', 'Invalid Email and/or password')
 
         if not form.is_valid():
             return self.form_invalid(form)
 
-        # TODO: check if OTP is required
-        return self.login(self.request, user)
+        return self.login(self.request, user, context['next'])
 
 
-class LogoutView(View):
+class LogoutView(_AnonymousView):
     """
     Perform account logout.
     """
-    requires_login = False
-    requires_admin = False
-
-    def get(self, request, *args, **kwargs):
+    def dispatch(self, request, *args, **kwargs):
         logout(request)
         return self.redirect('home')
 
-class ResetPasswordView(TemplateView):
-    requires_admin = False
-    requires_login = False
+
+class ResetPasswordView(_AnonymousView):
     template_name = 'accounts/reset_password.html'
 
     def create_token(self, request, user):
@@ -935,193 +848,71 @@ class ResetPasswordUpdateView(TemplateView):
 
         return errors, cleaned_data
 
-class SetLanguageView(View):
-    requires_admin = False
-    requires_login = False
 
-    def get(self, request, *args, **kwargs):
-        return self.set_language(request, kwargs['lc'])
-
-    def set_language(self, request, lang_code):
-        """
-        Set the language.
-
-        :param request: HttpRequest instance
-        :param lang_code: str instance
-        :return: HttpResponse
-        """
-        next = request.GET.get('next', request.POST.get('next'))
-
-        if not is_safe_url(url=next, host=request.get_host()):
-            next = request.META.get('HTTP_REFERER')
-
-            if not is_safe_url(url=next, host=request.get_host()):
-                next = reverse('home')
-
-        response = HttpResponseRedirect(next)
-
-        if lang_code and check_for_language(lang_code):
-            if hasattr(request, 'session'):
-                request.session[LANGUAGE_SESSION_KEY] = lang_code
-            else:
-                response.set_cookie(settings.LANGUAGE_COOKIE_NAME,
-                                    lang_code,
-                                    max_age=settings.LANGUAGE_COOKIE_AGE,
-                                    path=settings.LANGUAGE_COOKIE_PATH,
-                                    domain=settings.LANGUAGE_COOKIE_DOMAIN)
-
-        return response
-
-class SignupView(TemplateView):
-    requires_admin = False
-    requires_login = False
+class SignupView(_AnonymousView, FormView):
+    """
+    New user registration.
+    """
+    form_class = forms.SignupForm
     template_name = 'accounts/signup.html'
 
-    def create_account(self, cleaned_data):
-        alias = None
+    def create_user(self, email):
+        """
+        Create user account.
 
-        while True:
-            alias = User.objects.make_random_password(16)
+        :param email: Email address
+        :return: HttpResponse
+        """
+        password = User.objects.make_random_password(10)
+        user = User.objects.create_user(email, password)
+        user.add_to_log('User account created')
 
-            try:
-                User.objects.get(alias=alias)
-            except User.DoesNotExist:
-                break
-
-        user = User.objects.create_user(cleaned_data['email'],
-                                        cleaned_data['password'],
-                                        alias=alias)
-
-        user.add_message(self.request.META['REMOTE_ADDR'],
-                         tag='signup',
-                         type='native',
-                         user_agent=self.request.META.get('HTTP_USER_AGENT'))
-
-        # Create an activation request
+        # Create activation request
         token = User.objects.make_random_password(64)
-        acr = ActivationRequest.objects.create(user=user,
-                                               token=token)
+        acr = ActivationRequest.objects.create(user=user, token=token)
 
-        # Send welcome Email
+        # Send welcome mail
         suffix = '?u=' + user.alias + '&token=' + token
         activation_url = absolute_url(self.request, 'accounts:activate', suffix=suffix)
         context = {'user': user, 'token': token, 'activation_url': activation_url}
-        msg = EmailMessage(_('Welcome to YDNS'),
+        msg = EmailMessage('Welcome to YDNS',
                            tpl='accounts/welcome.mail',
                            context=context)
         msg.send(to=[user.email])
 
-        messages.success(self.request,
-                         mark_safe(_("We've sent activation instructions to your Email address.\n"
-                                     "Please check your mail box in a few moments.")),
-                         _("Sign up succeeded"))
+        messages.success(self.request, 'We have sent activation instructions to your email address. '
+                                       'Please check your mail box in a few moments.')
+        return self.redirect('login')
 
-    def get_context_data(self, **kwargs):
-        context = super(SignupView, self).get_context_data(**kwargs)
-        context['recaptcha_html'] = captcha.get_html(settings.RECAPTCHA['public_key'])
-        return context
+    def form_valid(self, form):
+        if not self.request.POST.get('terms'):
+            messages.error(self.request, 'You must read and accept our Terms and Conditions in order to sign up.')
+            return self.form_invalid(form)
 
-    def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        errors, cleaned_data = self.validate(request)
+        # Verify reCAPTCHA
+        data = {'secret': settings.RECAPTCHA['SECRET_KEY'],
+                'response': self.request.POST.get('g-recaptcha-response', '')}
 
-        if request.GET.get('from') == 'homepage':
-            for k in ('password_rpt', 'recaptcha'):
-                if k in errors:
-                    del errors[k]
-
-            context.update(errors=errors,
-                           post=request.POST,
-                           from_homepage=True)
-            return self.render_to_response(context)
-
-        if not errors:
-            self.create_account(cleaned_data)
-            return self.redirect('home')
+        try:
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        except RequestException:
+            messages.error(self.request, 'Unable to verify reCAPTCHA. Please try again later.')
+            return self.form_invalid(form)
         else:
-            context.update(errors=errors, post=request.POST)
+            result = r.json()
 
-        return self.render_to_response(context)
+            if not result['status']:
+                messages.error(self.request, 'The reCAPTCHA result is incorrect.')
+                return self.form_invalid(form)
 
-    def validate(self, request):
-        errors = {}
-        cleaned_data = {}
-
-        if not request.POST.get('email'):
-            errors['email'] = _('Field missing')
+        try:
+            User.objects.get(email__iexact=form.cleaned_data['email'])
+        except User.DoesNotExist:
+            pass
         else:
-            try:
-                validate_email(request.POST['email'])
-            except ValidationError:
-                errors['email'] = _('Invalid Email address')
-            else:
-                try:
-                    User.objects.get(email__iexact=request.POST['email'])
-                except User.DoesNotExist:
-                    if is_blacklisted_email(request.POST['email'].strip()):
-                        errors['email'] = _('This Email address cannot be used for registration')
-                    else:
-                        cleaned_data['email'] = request.POST['email']
-                else:
-                    errors['email'] = _('This Email address is already used')
+            form.add_error('email', 'This email address is already in use')
 
-                # TODO: Remove this after the beta is over
-                if not errors:
-                    try:
-                        BetaInvitation.objects.get(email__iexact=request.POST['email'])
-                    except BetaInvitation.DoesNotExist:
-                        errors['email'] = _('Your email address is not permitted to participate on the beta program.')
+        if not form.is_valid():
+            return self.form_invalid(form)
 
-        if not request.POST.get('password'):
-            errors['password'] = _('Field missing')
-        elif len(request.POST['password']) < 6:
-            errors['password'] = _("The password must contain at least 6 characters")
-        if not request.POST.get('password_rpt'):
-            errors['password_rpt'] = _('Field missing')
-
-        if not errors and request.POST['password'] != request.POST['password_rpt']:
-            for k in ('password', 'password_rpt'):
-                errors[k] = _("The password don't match")
-
-        if not errors:
-            cleaned_data['password'] = request.POST['password']
-
-        # reCAPTCHA
-        if not request.POST.get('recaptcha_challenge_field'):
-            errors['recaptcha'] = _('Missing challenge field value')
-        if not request.POST.get('recaptcha_response_field'):
-            errors['recaptcha'] = _('Missing answer')
-
-        if not errors:
-            try:
-                captcha.verify(request.POST['recaptcha_challenge_field'],
-                               request.POST['recaptcha_response_field'],
-                               settings.RECAPTCHA['private_key'],
-                               request.META['REMOTE_ADDR'])
-            except captcha.IncorrectRecaptchaSolution:
-                errors['recaptcha'] = _('Incorrect captcha answer')
-            except captcha.RecaptchaError:
-                errors['recaptcha'] = _('reCAPTCHA error')
-
-        if not request.POST.get('terms'):
-            errors['terms'] = _("You must read and accept our Terms to sign up")
-
-        if errors:
-            cleaned_data = {}
-
-        return errors, cleaned_data
-
-class TwitterSignInView(View):
-    """
-    OAuth2 based login via Twitter.
-
-    No idea why this does not work yet.
-    """
-    requires_admin = False
-    requires_login = False
-
-    def post(self, request, *args, **kwargs):
-        messages.error(request,
-                       _("Twitter sign in is currently not available"),
-                       _("Login error"))
-        return self.redirect('accounts:login')
+        return self.create_user(form.cleaned_data['email'])

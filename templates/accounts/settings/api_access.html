@@ -1,27 +1,30 @@
 {% extends "base.html" %}
-{% load i18n static %}
 
-{% block title %}{% trans "API Access" %} &mdash; YDNS{% endblock %}
+{% block title %}API Access &lsaquo; Settings &lsaquo; YDNS{% endblock %}
 
 {% block content %}
 	<div class="row">
-	    <div class="col-lg-3">
-            {% include "accounts/settings/sidenav.html" %}
+	    <div class="col-lg-3 col-md-3">
+			<section class="card">
+				<div class="card-content">
+					{% include "accounts/settings/sidenav.html" %}
+				</div>
+			</section>
 		</div>
-	    <div class="col-lg-9">
-			<section class="section">
-				<h3 class="section-header page-header">{% trans "API Access" %}</h3>
-				<p>{% trans "Below you'll find the login credentials for use with the API (e.g. for updater clients)." %}</p>
-			    <p>{% trans "For non-native accounts (such as if you're using Google or any other OAuth-based login), this login credentials are mandatory because we don't use passwords for such account types." %}</p>
-
-			    <dl class="dl-horizontal margin-top-20">
-				    <dt>{% trans "Username" %}</dt>
-    				<dd><code>{{ user.alias }}</code> or your E-mail address</dd>
-	    			<dt>{% trans "Password" %}</dt>
-		    		<dd><code>{{ user.api_password }}</code></dd>
-			    </dl>
-
-			    <p><a href="{% url 'accounts:settings:reset_api_password' %}">Reset API password</a></p>
+	    <div class="col-lg-9 col-md-9">
+			<section class="card">
+				<div class="card-content">
+					<h3 class="page-header">API Access</h3>
+					<p>Below you'll find the login credentials for use with the API (e.g. for updater clients).</p>
+					<p>For non-native accounts (such as if you're using Google or any other OAuth-based login), this login credentials are mandatory because we don't use passwords for such account types.</p>
+			    	<dl class="dl-horizontal margin-top-20">
+					    <dt>Username</dt>
+    					<dd><code>{{ user.alias }}</code> or your E-mail address</dd>
+	    				<dt>Password</dt>
+		    			<dd><code>{{ user.api_password }}</code></dd>
+			    	</dl>
+					<p><a href="{% url 'accounts:settings:reset_api_password' %}">Reset API password</a></p>
+				</div>
 	        </section>
 	    </div>
 	</div>
@@ -30,7 +33,7 @@
 {% block js %}
 	<script type="text/javascript">
 		$(function() {
-			$('[data-nav-id="api-access"]').addClass('active');
+			$('[data-nav-id="settings"],[data-nav-id="api-access"]').addClass('active');
 		});
 	</script>
 {% endblock %}

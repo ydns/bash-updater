@@ -13,6 +13,13 @@ YDNS.init = function() {
 	$('[data-toggle="tooltip"]').tooltip();
 };
 
+YDNS.safeForm = function(selector) {
+	$(selector).on("submit", function() {
+		$(this).find("button").attr("disabled", true);
+		$(this).find("button.btn-primary").html('<i class="fa fa-spin fa-refresh fa-fw"></i>');
+	});
+};
+
 YDNS.focusNextError = function(selector) {
 	var el = $(selector).find(".form-group.has-error").find("input");
 

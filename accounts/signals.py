@@ -21,14 +21,3 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ##
-
-from django.conf.urls import patterns, url
-from .views import ChangeStatusView, CreateView, DeleteView, EditView, HomeView
-
-urlpatterns = patterns('',
-    url(r'^$', HomeView.as_view(), name='home'),
-    url(r'^new$', CreateView.as_view(), name='create'),
-    url(r'^(?P<record_id>\d+)/change-status/(?P<choice>enable|disable)$', ChangeStatusView.as_view(), name='change_status'),
-    url(r'^(?P<record_id>\d+)/delete$', DeleteView.as_view(), name='delete'),
-    url(r'^(?P<record_id>\d+)/edit$', EditView.as_view(), name='edit'),
-)

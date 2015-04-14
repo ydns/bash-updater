@@ -29,3 +29,8 @@ class LoginForm(forms.HorizontalForm):
     email = forms.EmailField(label='Email address')
     password = forms.PasswordField()
     field_css = 'col-lg-9 col-md-9'
+
+
+class SignupForm(forms.HorizontalForm):
+    email = forms.EmailField(label='Email address')
+    field_css = 'col-lg-9 col-md-9'

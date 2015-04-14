@@ -22,10 +22,10 @@
 # SOFTWARE.
 ##
 
-from django.conf.urls import patterns, url
-from .views import HomeView, InviteView
+from ydns import forms
 
-urlpatterns = patterns('',
-    url(r'^$', HomeView.as_view(), name='home'),
-    url(r'^invite$', InviteView.as_view(), name='invite'),
-)
+
+class ChangePasswordForm(forms.HorizontalForm):
+    current = forms.PasswordField(placeholder='Your current password…')
+    new = forms.PasswordField(placeholder='New password…')
+    repeat = forms.PasswordField(placeholder='Repeat the new password…')

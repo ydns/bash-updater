@@ -1,8 +1,0 @@
-{% extends "base.mail" %}
-{% load i18n %}
-
-{% block content %}{% blocktrans with domain_name=domain_name %}Hi!
-
-This mail confirms that your domain "{{ domain_name }}" has been completely removed.{% endblocktrans %}
-
-{% endblock %}

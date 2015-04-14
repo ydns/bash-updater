@@ -5,4 +5,3 @@ googler
 python-dateutil
 dnspython3
 netaddr
-jinja2

@@ -1,33 +1,38 @@
 {% extends "base.html" %}
-{% load i18n static %}
 
-{% block title %}{% trans "Delete Account" %} &mdash; YDNS{% endblock %}
+{% block title %}Delete Account &lsaquo; Settings &lsaquo; YDNS{% endblock %}
 
 {% block content %}
 	<div class="row">
-	    <div class="col-lg-3">
-            {% include "accounts/settings/sidenav.html" %}
+	    <div class="col-lg-3 col-md-3">
+			<section class="card">
+				<div class="card-content">
+					{% include "accounts/settings/sidenav.html" %}
+				</div>
+			</section>
 		</div>
-	    <div class="col-lg-9">
-			<section class="section">
-				<h3 class="section-header page-header">{% trans "Delete Account" %}</h3>
-			    <div class="callout callout-danger">
-			    	<h4><i class="fa fa-exclamation-triangle fa-fw"></i> {% trans "Danger" %}</h4>
-			    	<p>{% trans "You are about to delete your user account. If you decide to proceed, your user account including all associated hosts and domains will be deleted." %}</p>
-			    	<p><strong>{% trans "Do you really want to proceed?" %}</strong></p>
-			    	<p></p>
-			    	<form method="post" action="{% url 'accounts:settings:delete_account' %}">
-			    		{% csrf_token %}
-			    		<div class="checkbox">
-			    			<label>
-			    				<input type="checkbox" name="delete" id="id_delete" value="yes">
-			    				{% trans "I understand the consequences of this and want to delete my account now" %}
-			    			</label>
-			    		</div>
-			    		<button type="submit" class="btn btn-primary" id="id_submit_btn" disabled>{% trans "Delete Account" %}</button>
-			    		<a href="{% url 'accounts:settings:home' %}" class="btn btn-link">{% trans "Cancel" %}</a>
-			    	</form>
-			    </div>
+	    <div class="col-lg-9 col-md-9">
+			<section class="card">
+				<div class="card-content">
+					<h3 class="page-header">Delete Account</h3>
+			    	<div class="callout callout-danger">
+			    		<h4><i class="fa fa-exclamation-triangle fa-fw"></i> Attention</h4>
+			    		<p>You are about to delete your user account. If you decide to proceed, your user account including all associated hosts and domains will be deleted.</p>
+			    		<p><strong>Do you really want to proceed?</strong></p>
+			    		<p></p>
+			    		<form method="post" action="{% url 'accounts:settings:delete_account' %}">
+			    			{% csrf_token %}
+			    			<div class="checkbox">
+			    				<label>
+			    					<input type="checkbox" name="delete" id="id_delete" value="yes">
+			    					I understand the consequences of this and want to delete my account now
+			    				</label>
+			    			</div>
+			    			<button type="submit" class="btn btn-primary btn-material" id="id_submit_btn" disabled>Delete Account</button>
+			    			<a href="{% url 'accounts:settings:home' %}" class="btn btn-link btn-material">Cancel</a>
+			    		</form>
+			    	</div>
+				</div>
 			</section>
 		</div>
 	</div>
@@ -36,7 +41,7 @@
 {% block js %}
 	<script type="text/javascript">
 		$(function() {
-			$('[data-nav-id="delete-account"]').addClass('active');
+			$('[data-nav-id="settings"],[data-nav-id="delete-account"]').addClass('active');
 			$('#id_delete').on('change', function() {
 				if ($(this).get(0).checked) {
 					$('#id_submit_btn').removeAttr('disabled');

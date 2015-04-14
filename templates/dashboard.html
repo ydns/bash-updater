@@ -1,85 +1,18 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{% trans "Dashboard" %} &mdash; YDNS{% endblock %}
+{% block title %}Dashboard &lsaquo; YDNS{% endblock %}
 
 {% block content %}
 	<div class="row">
-		<div class="col-lg-4 col-md-4">
-		    <section class="section dashboard-scrollable">
-				<h3 class="section-header">{% trans "Recent Activity" %}</h3>
-				{% if not recent_activity %}
-					<p>{% trans "No log messages found." %}</p>
-					<p class="no-margin-bottom">{% trans "Looks like you're new on board - welcome! :-)" %}</p>
-				{% else %}
-					{% for i in recent_activity %}<small class="text-muted">{% blocktrans with since=i.date_created|timesince %}{{ since }} ago{% endblocktrans %}</small>
-					<p>{{ i.message }}</p>{% endfor %}
-				{% endif %}
-			</section>
-		</div>
-		<div class="col-lg-4 col-md-4">
-		    <section class="section dashboard-scrollable">
-				<h3 class="section-header">{% trans "My Hosts" %}</h3>
-				{% if hosts.count == 0 %}
-					<p>{% trans "You have no hosts on YDNS." %}</p>
-					<p class="no-margin-bottom"><a href="{% url 'hosts:create' %}">{% trans "Create a Host" %}</a></p>
-				{% else %}
-				<table class="dashboard-hosts">
-					<tbody>
-						{% for host in hosts %}<tr>
-							<td>
-								<a href="{% url 'hosts:detail' host.name %}"><strong>{{ host }}</strong></a>
-								<br>
-								{{ host.get_status_label|safe }}
-							</td>
-							<td>
-								{% if host.records.count == 0 %}
-									<span class="text-muted">{% trans "No records" %}</span>
-								{% else %}
-									{% for record in host.records.all %}<span class="text-mono" title="{% blocktrans with rr_type=record.type %}Record type: {{ rr_type }}{% endblocktrans %}" data-toggle="tooltip" data-placement="left">{{ record.content }}</span>{% if not forloop.last %}<br>{% endif %}{% endfor %}
-								{% endif %}
-							</td>
-						</tr>{% endfor %}
-					</tbody>
-				</table>
-				{% endif %}
-			</section>
-		</div>
-		<div class="col-lg-4 col-md-4">
-		    <section class="section dashboard-scrollable">
-				<h4 class="section-header">{% trans "My Domains" %}</h4>
-				{% if domains.count == 0 %}
-					<p>{% trans "You have no domains on YDNS." %}</p>
-					<p class="no-margin-bottom"><a href="{% url 'domains:create' %}">{% trans "Create a Domain" %}</a></p>
-				{% else %}
-				<table class="dashboard-domains">
-					<tbody>
-						{% for domain in domains %}<tr>
-							<td>
-								<a href="{% url 'domains:detail' domain.name %}"><strong>{{ domain }}</strong></a>
-								<br>
-								{{ domain.get_status_label|safe }} {{ domain.get_access_type.get_label }}
-							</td>
-							<td>
-								{% if domain.hosts.count == 0 %}
-									<span class="text-muted">{% trans "No hosts" %}</span>
-								{% else %}
-									{% blocktrans count counter=domain.hosts.count %}{{ counter }} host{% plural %}{{ counter }} hosts{% endblocktrans %}
-								{% endif %}
-							</td>
-						</tr>{% endfor %}
-					</tbody>
-				</table>
-				{% endif %}
+	    <div class="col-lg-offset-3 col-lg-6">
+			<section class="card">
+			    <div class="card-header">
+					<h3>Dashboard</h3>
+				</div>
+				<div class="card-content">
+			    	Content here
+				</div>
 			</section>
 		</div>
 	</div>
-{% endblock %}
-
-{% block js %}
-	<script type="text/javascript">
-		$(function() {
-			$('[data-toggle="tooltip"]').tooltip();
-		});
-	</script>
 {% endblock %}

@@ -3,23 +3,25 @@
 {% block title %}Get Started &lsaquo; YDNS{% endblock %}
 
 {% block content %}
-	<section class="card-panel">
-		<h3 class="page-header">Getting Started</h3>
-		<p>YDNS is a free service that offers DNS hosting, including dynamic DNS.</p>
-		<p>If you're new to YDNS and like to sign up, <a href="{% url 'signup' %}">click here</a>. In case you already got an account, you can <a href="{% url 'login' %}">login</a> right here.</p>
+	<section class="card">
+		<div class="card-content">
+			<h3 class="page-header">Getting Started</h3>
+			<p>YDNS is a free service that offers DNS hosting, including dynamic DNS.</p>
+			<p>If you're new to YDNS and like to sign up, <a href="{% url 'signup' %}">click here</a>. In case you already got an account, you can <a href="{% url 'login' %}">login</a> right here.</p>
 
-		<br>
-		<h4>Feature Overview</h4>
-		<ul>
-			<li>Dynamic DNS</li>
-			<li>Full IPv6 support, as well as support for IDN-based domains</li>
-			<li>Domain hosting (DNS only)</li>
-			<li>API for updating records</li>
-			<li>Community-based project</li>
-		</ul>
+			<br>
+			<h4>Feature Overview</h4>
+			<ul>
+				<li>Dynamic DNS</li>
+				<li>Full IPv6 support, as well as support for IDN-based domains</li>
+				<li>Domain hosting (DNS only)</li>
+				<li>API for updating records</li>
+				<li>Community-based project</li>
+			</ul>
 
-		<br>
-		<h4>Contributing</h4>
-		<p>YDNS started as a one-man project to provide dynamic DNS services and evolved into a mid-size project that offers simple DNS hosting services. We're currently looking for people who'd like to contribute to the source code of our software, as well as documentation contributions and supporters. If you like to contribute in any way you can contact us via email at <a href="mailto:support@ydns.io">support@ydns.io</a>.</p>
+			<br>
+			<h4>Contributing</h4>
+			<p>YDNS started as a one-man project to provide dynamic DNS services and evolved into a mid-size project that offers simple DNS hosting services. We're currently looking for people who'd like to contribute to the source code of our software, as well as documentation contributions and supporters. If you like to contribute in any way you can contact us via email at <a href="mailto:support@ydns.io">support@ydns.io</a>.</p>
+		</div>
 	</section>
 {% endblock %}

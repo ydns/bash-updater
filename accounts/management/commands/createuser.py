@@ -68,7 +68,6 @@ class Command(BaseCommand):
 
             email = args[0]
             password = None
-            alias = None
 
             if options['password']:
                 while True:
@@ -81,21 +80,11 @@ class Command(BaseCommand):
                             password = s
                             break
 
-            # Generate alias
-            while True:
-                alias = User.objects.make_random_password(16)
-
-                try:
-                    User.objects.get(alias=alias)
-                except User.DoesNotExist:
-                    break
-
             # Create the account
-            kwargs = {'is_active': True,
-                      'alias': alias}
+            kwargs = {'active': True}
 
             if options['admin']:
-                kwargs['is_admin'] = True
+                kwargs['admin'] = True
 
             user = User.objects.create_user(email, password, **kwargs)
             self.stdout.write('User account #%d created.' % user.id)

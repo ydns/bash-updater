@@ -22,21 +22,16 @@
 # SOFTWARE.
 ##
 
-from django.conf.urls import patterns, url
-from .views import (ApiAccessView, ChangePasswordView, ClearJournalView, DeleteAccountView, HomeView, JournalView,
-                    ResetApiPasswordView, TwoFactorAuthView, TwoFactorInstallInstructionsView,
-                    TwoFactorRecoveryCodesView, TwoFactorSetupView)
+from django.conf.urls import url
+from . import views
 
-urlpatterns = patterns('',
-    url(r'^$', HomeView.as_view(), name='home'),
-    url(r'^api-access/reset-password$', ResetApiPasswordView.as_view(), name='reset_api_password'),
-    url(r'^api-access$', ApiAccessView.as_view(), name='api_access'),
-    url(r'^change-password$', ChangePasswordView.as_view(), name='change_password'),
-    url(r'^delete-account$', DeleteAccountView.as_view(), name='delete_account'),
-    url(r'^journal/clear$', ClearJournalView.as_view(), name='clear_journal'),
-    url(r'^journal$', JournalView.as_view(), name='journal'),
-    url(r'^two-factor/installation-instructions$', TwoFactorInstallInstructionsView.as_view(), name='two_factor_instructions'),
-    url(r'^two-factor/recovery-codes\.txt$', TwoFactorRecoveryCodesView.as_view(), name='two_factor_recovery_codes'),
-    url(r'^two-factor/setup$', TwoFactorSetupView.as_view(), name='two_factor_setup'),
-    url(r'^two-factor$', TwoFactorAuthView.as_view(), name='two_factor_auth'),
+
+urlpatterns = (
+    url(r'^$', views.HomeView.as_view(), name='home'),
+    url(r'^api-access/reset-password$', views.ResetApiPasswordView.as_view(), name='reset_api_password'),
+    url(r'^api-access$', views.ApiAccessView.as_view(), name='api_access'),
+    url(r'^change-password$', views.ChangePasswordView.as_view(), name='change_password'),
+    url(r'^delete-account$', views.DeleteAccountView.as_view(), name='delete_account'),
+    url(r'^journal/clear$', views.ClearJournalView.as_view(), name='clear_journal'),
+    url(r'^journal$', views.JournalView.as_view(), name='journal'),
 )

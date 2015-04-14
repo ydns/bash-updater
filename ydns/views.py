@@ -31,7 +31,7 @@ from ydns.utils.http import absolute_url
 from .models import Domain, DomainLogMessage, Host
 
 
-class _BaseMixin(generic.View):
+class _BaseMixin(object):
     """
     Base mixin for class-based views (CBV).
 
@@ -57,7 +57,7 @@ class _BaseMixin(generic.View):
         if not request.user.is_authenticated():
             if self.require_login or self.require_admin:
                 return self.redirect_insufficient_privileges(request)
-        elif self.require_admin and not request.user.is_admin:
+        elif self.require_admin and not request.user.admin:
             return self.redirect_insufficient_privileges(request)
 
         return super(_BaseMixin, self).dispatch(request, *args, **kwargs)
@@ -91,16 +91,60 @@ class _BaseMixin(generic.View):
         return cls.redirect('login', suffix='?next={}'.format(request.path))
 
 
-class View(_BaseMixin):
-    pass
-
-
-class FormView(_BaseMixin, generic.FormView):
+class View(_BaseMixin, generic.View):
     pass
 
 
 class TemplateView(_BaseMixin, generic.TemplateView):
     pass
+
+
+class FormView(TemplateView):
+    """
+    A form view modeled after Django's very own one.
+    """
+    initial = {}
+    form_class = None
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def form_valid(self, form):
+        raise NotImplementedError()
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_form()
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_initial(self):
+        return self.initial.copy()
+
+    def get_form_class(self):
+        return self.form_class
+
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        return form_class(**self.get_form_kwargs())
+
+    def get_form_kwargs(self):
+        kwargs = {'initial': self.get_initial()}
+
+        if self.request.method in ('POST', 'PUT'):
+            kwargs.update(data=self.request.POST, files=self.request.FILES)
+
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def put(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
 class DashboardView(TemplateView):

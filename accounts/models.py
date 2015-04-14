@@ -30,38 +30,32 @@ from ydns.models import Domain, Host
 from .enum import UserType
 
 
-class ActivationRequest(models.Model):
+class _UserTokenModel(models.Model):
+    """
+    Abstract model for user tokens.
+    """
+    class Meta:
+        abstract = True
+
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    date_created = models.DateTimeField(default=timezone.now)
+    token = models.TextField()
+
+
+class ActivationRequest(_UserTokenModel):
     """
     Activation request for new accounts.
     """
     class Meta:
-        db_table = 'activation_request'
-
-    user = models.ForeignKey('User', on_delete=models.CASCADE)
-    date_created = models.DateTimeField(default=timezone.now)
-    token = models.CharField(max_length=64)
+        db_table = 'activation_requests'
 
 
-class BlacklistedEmail(models.Model):
+class PasswordRequest(_UserTokenModel):
     """
-    Blacklisted email address pattern.
+    Password reset requests.
     """
     class Meta:
-        db_table = 'ebl'
-
-    name = models.TextField()
-    user = models.ForeignKey('accounts.User', null=True)
-    date_created = models.DateTimeField(default=timezone.now)
-    reason = models.TextField(null=True)
-
-
-class ResetPasswordRequest(models.Model):
-    user = models.ForeignKey('User')
-    date_created = models.DateTimeField(default=timezone.now)
-    token = models.CharField(max_length=64)
-
-    class Meta:
-        db_table = 'password_reset_requests'
+        db_table = 'password_requests'
 
 
 class UserManager(BaseUserManager):
@@ -69,10 +63,38 @@ class UserManager(BaseUserManager):
     User object manager.
     """
     def create_user(self, email, password=None, **kwargs):
-        user = self.model(email=self.normalize_email(email), **kwargs)
+        """
+        Create user account.
+
+        :param email: Email address
+        :param password: Optional password
+        :param kwargs: Keyword arguments
+        :return: User instance
+        """
+        api_password = self.make_random_password(40)
+
+        # Create account
+        user = self.model(email=self.normalize_email(email),
+                          alias=self.get_alias(),
+                          api_password=api_password,
+                          **kwargs)
         user.set_password(password)
         user.save(using=self._db)
         return user
+
+    def get_alias(self):
+        """
+        Get a random alias which is not in use.
+
+        :return: str
+        """
+        while True:
+            alias = self.make_random_password(16)
+
+            try:
+                self.get(alias=alias)
+            except self.model.DoesNotExist:
+                return alias
 
 
 class User(AbstractBaseUser):
@@ -85,11 +107,9 @@ class User(AbstractBaseUser):
 
     alias = models.CharField(max_length=16)
     email = models.EmailField(max_length=255, unique=True)
-    is_active = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
+    admin = models.BooleanField(default=False)
     type = EnumField(UserType, default=UserType.NATIVE)
-    otp_secret = models.CharField(max_length=10, null=True)
-    otp_active = models.BooleanField(default=False)
     api_password = models.CharField(max_length=40)
     date_joined = models.DateTimeField(default=timezone.now)
     journal = models.ManyToManyField('ydns.Message', related_name='user_journal')
@@ -107,27 +127,8 @@ class User(AbstractBaseUser):
         """
         return self.journal.create(message=message, user=self)
 
-    @property
-    def domains(self):
-        return Domain.objects.filter(owner=self)
-
     def get_full_name(self):
         return self.email
 
     def get_short_name(self):
         return self.email
-
-    @property
-    def hosts(self):
-        return Host.objects.filter(user=self)
-
-
-class OtpRecoveryCode(models.Model):
-    """
-    One-time passwords recovery codes.
-    """
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    code = models.CharField(max_length=24)
-
-    class Meta:
-        db_table = 'otp_recovery_codes'

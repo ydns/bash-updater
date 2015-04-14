@@ -26,52 +26,13 @@
 
             <!-- Navigation links and content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-collapse">
-			    {% if user.is_authenticated %}<ul class="nav navbar-nav navbar-left">
-				    <li data-nav-id="domains"><a href="{% url 'domains:home' %}">Domains</a></li>
-					<li data-nav-id="hosts"><a href="{% url 'hosts:home' %}">My Hosts</a></li>
-					{% if user.is_admin %}<li data-nav-id="cp" class="dropdown">
-					    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-							Control Panel
-							<i class="fa fa-angle-down"></i>
-						</a>
-					    <ul class="dropdown-menu" role="menu">
-							<li><a href="{% url 'cp:home' %}">Overview</a></li>
-							<li class="divider"></li>
-							<li><a href="{% url 'cp:users:home' %}">User Accounts</a></li>
-							<li><a href="{% url 'cp:dbl:home' %}">Domain Blacklist</a></li>
-							<li><a href="{% url 'cp:ebl:home' %}">Email Blacklist</a></li>
-							<li><a href="{% url 'cp:hbl:home' %}">Host Blacklist</a></li>
-							<li class="divider"></li>
-							<li><a href="{% url 'cp:mail:create' %}">Send mail</a></li>
-							<li><a href="{% url 'cp:mail:broadcast' %}">Send broadcast</a></li>
-						</ul>
-					</li>{% endif %}
-					<li data-nav-id="donate"><a href="{% url 'donate' %}">Donate</a></li>
-				    <li class="dropdown">
-						<button type="button" class="btn navbar-btn btn-primary dropdown-toggle" data-toggle="dropdown" role="button">
-							Create
-						</button>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="{% url 'hosts:create' %}">New Host</a></li>
-							<li><a href="{% url 'domains:create' %}">New Domain</a></li>
-						</ul>
-					</li>
-			    </ul>{% endif %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if not user.is_authenticated %}
-                    <li><a href="{% url 'accounts:login' %}">Login</a></li>
-                    <li><a href="{% url 'accounts:signup' %}"><strong>Sign up</strong></a></li>
+                    	<li><a href="{% url 'login' %}">Login</a></li>
+                    	<li><a href="{% url 'signup' %}"><strong>Sign up</strong></a></li>
                     {% else %}
-                    <li class="dropdown">
-                        <button type="button" class="btn btn-link dropdown-toggle gravatar-28" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <img src="{% gravatar_url user.email 28 %}" class="user-avatar" title="{{ user.email }}" data-placement="bottom">
-							<i class="fa fa-angle-down"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-							<li><a href="{% url 'accounts:settings:home' %}">Settings</a></li>
-                            <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-                        </ul>
-                    </li>
+						<li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+						<li data-nav-id="settings"><a href="{% url 'accounts:settings:home' %}" title="Settings" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-cog"></i></a></li>
                     {% endif %}
                 </ul>
             </div>

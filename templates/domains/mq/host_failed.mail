@@ -1,8 +1,0 @@
-{% extends "base.mail" %}
-{% load i18n %}
-
-{% block content %}{% blocktrans with name=name %}Hi!
-
-Your request for host "{{ name }}" has been accepted by it's domain owner, but unfortunately the name is already used by someone else.{% endblocktrans %}
-
-{% endblock %}

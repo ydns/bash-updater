@@ -192,14 +192,6 @@ body#landing-page .button-start:hover {
 a.waves-effect .waves-ripple {
   z-index: -1; }
 
-.card-panel {
-  padding: 20px;
-  margin: 0.5rem 0 1rem 0;
-  border-radius: 2px;
-  background-color: #fafafa;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-}
-
 .navbar-default {
   border: none;
 }
@@ -213,9 +205,18 @@ a.waves-effect .waves-ripple {
 .navbar-default .navbar-nav>li>a {
   color: #fff;
 }
-.navbar-default .navbar-nav>li>a:hover {
+.navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-nav>li.active>a,
+.navbar-default .navbar-nav>li.active>a:focus,
+.navbar-default .navbar-nav>li.active>a:hover {
   background: #00acc1;
   color: #fff;
+}
+.navbar-default .btn-link.gravatar {
+  color: #fff;
+}
+.navbar-default .btn-link.gravatar:hover {
+  text-decoration: none;
 }
 
 /* Footer */
@@ -245,13 +246,6 @@ footer.footer p:last-child {
 
 #content .container section.card-panel {
   margin-top: 10px;
-}
-
-section.card-panel > h1,
-section.card-panel > h2,
-section.card-panel > h3,
-section.card-panel > h4 {
-  margin-top: 0;
 }
 
 /* Material design */
@@ -310,4 +304,111 @@ section.card-panel > h4 {
   border-color: #aaa;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+}
+
+/* Cards */
+.card {
+  display: block;
+  margin-bottom: 20px;
+  border-radius: 2px;
+  background-color: #fafafa;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+.card .card-header {
+  border-bottom: 1px solid rgba(160, 160, 160, .2);
+}
+.card .card-content {
+  padding: 20px;
+}
+.card .card-content > h3 {
+  margin-top: 0;
+}
+.card .card-content *:last-child {
+  margin-bottom: 0;
+}
+.card hr {
+  border-color: rgba(160, 160, 160, 0.2);
+  margin: 5px 0;
+}
+.card > h1,
+.card > h2,
+.card > h3,
+.card > h4 {
+  margin-top: 0;
+}
+
+/* Login specific */
+.card .card-oauth-login {
+  margin-top: -5px;
+}
+.card .card-oauth-login > table {
+  width: 100%;
+  max-width: 100%;
+  table-layout: fixed;
+}
+.card .card-oauth-login > table td {
+  text-align: center;
+  padding: 20px;
+}
+.card .card-oauth-login > table td:not(:last-child) {
+  border-right: 1px solid rgba(160, 160, 160, 0.2);
+}
+
+/* Navs */
+.nav-list .nav-header {
+  color: #bbb;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.nav-list .nav-header:not(:first-child) {
+  margin-top: 20px;
+}
+.nav-list > li > a {
+  padding: 5px 0;
+}
+.nav-list > li > a:hover {
+  background-color: transparent;
+}
+.nav-list > li.active > a {
+  font-weight: bold;
+}
+
+/* Callouts */
+.callout {
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+}
+.callout h4 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.callout p:last-child {
+  margin-bottom: 0;
+}
+.callout code {
+  border-radius: 3px;
+}
+.bcallout + .callout {
+  margin-top: -5px;
+}
+.callout-danger {
+  border-left-color: #ce4844;
+}
+.callout-danger h4 {
+  color: #ce4844;
+}
+.callout-warning {
+  border-left-color: #aa6708;
+}
+.callout-warning h4 {
+  color: #aa6708;
+}
+.callout-info {
+  border-left-color: #1b809e;
+}
+.callout-info h4 {
+  color: #1b809e;
 }

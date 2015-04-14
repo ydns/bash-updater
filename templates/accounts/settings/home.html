@@ -1,63 +1,31 @@
 {% extends "base.html" %}
-{% load i18n static %}
 
-{% block title %}{% trans "Settings" %} &mdash; YDNS{% endblock %}
-
-{% block header %}
-	<link rel="stylesheet" type="text/css" href="{% static "css/select2.css" %}">
-{% endblock %}
+{% block title %}Settings &lsaquo; YDNS{% endblock %}
 
 {% block content %}
 	<div class="row">
-	    <div class="col-lg-3">
-            {% include "accounts/settings/sidenav.html" %}
+	    <div class="col-lg-3 col-md-3">
+			<section class="card">
+				<div class="card-content">
+					{% include "accounts/settings/sidenav.html" %}
+				</div>
+			</section>
 		</div>
-	    <div class="col-lg-9">
-			<section class="section">
-				<h3 class="section-header page-header">{% trans "Account" %}</h3>
-			    <form class="aui signup-form form-horizontal" id="signup-form" method="post" action="{% url 'accounts:settings:home' %}">
-			    	{% csrf_token %}
-			    	<div class="form-group">
-			    		<label class="col-lg-2 control-label">{% trans "Email Address" %}</label>
-			    		<div class="col-lg-10">
-			    			<div class="form-control-static">{{ user.email }}</div>
-			    		</div>
-			    	</div>
-			    	<div class="form-group">
-			    		<label class="col-lg-2 control-label">{% trans "Account Type" %}</label>
-			    		<div class="col-lg-10">
-			    			<div class="form-control-static">
-			    				<span class="label label-warning">{{ user.get_type.name }}</span>
-			    			</div>
-			    		</div>
-			    	</div>
-			    	<div class="form-group">
-			    		<label for="id_lang" class="col-lg-2 control-label">{% trans "Language" %}</label>
-			    		<div class="col-lg-4">
-			    			<select id="id_lang" name="lang" required class="form-control" style="width:100%">
-			    			    <option value="">{% trans "Default" %}</option>
-			    				{% get_current_language as LANGUAGE_CODE %}{% get_available_languages as LANGUAGES %}
-                                {% for lang_code, name in LANGUAGES %}<option{% if user.language and lang_code == user.language %} selected{% endif %} value="{{ lang_code }}">{% get_language_info for lang_code as lci %}{{ lci.name }} ({{ lci.name_local }})</option>{% endfor %}
-			    			</select>
-			    		</div>
-			    	</div>
-			    	<div class="form-group">
-			    		<div class="col-lg-offset-2 col-lg-10">
-			    			<button type="submit" class="btn btn-primary">{% trans "Apply changes" %}</button>
-			    		</div>
-			    	</div>
-			    </form>
+	    <div class="col-lg-9 col-md-9">
+			<section class="card">
+				<div class="card-content">
+					<h3 class="page-header">Settings</h3>
+					<p>Please use the navigation on the left side to access a specific category.</p>
+				</div>
 			</section>
 		</div>
 	</div>
 {% endblock %}
 
 {% block js %}
-	<script type="text/javascript" src="{% static "js/select2.min.js" %}"></script>
 	<script type="text/javascript">
 		$(function() {
-			$('.aui select').select2();
-			$('[data-nav-id="account"]').addClass('active');
+			$('[data-nav-id="settings"],[data-nav-id="account"]').addClass('active');
 		});
 	</script>
 {% endblock %}
