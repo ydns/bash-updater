@@ -28,7 +28,6 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFou
 from django.utils import timezone
 from django.views.generic import View
 from netaddr import IPAddress, AddrConversionError, AddrFormatError
-from ydns.models import Host, Record
 from ydns.views import TemplateView
 
 class CurrentIpAddressView(View):

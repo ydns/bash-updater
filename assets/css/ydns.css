@@ -208,7 +208,10 @@ a.waves-effect .waves-ripple {
 .navbar-default .navbar-nav>li>a:hover,
 .navbar-default .navbar-nav>li.active>a,
 .navbar-default .navbar-nav>li.active>a:focus,
-.navbar-default .navbar-nav>li.active>a:hover {
+.navbar-default .navbar-nav>li.active>a:hover,
+.navbar-default .navbar-nav .open>a,
+.navbar-default .navbar-nav .open>a:focus,
+.navbar-default .navbar-nav .open>a:hover {
   background: #00acc1;
   color: #fff;
 }
@@ -337,6 +340,9 @@ footer.footer p:last-child {
   border-color: rgba(160, 160, 160, 0.2);
   margin: 5px 0;
 }
+.card hr.more-padding {
+  margin: 15px 0;
+}
 .card > h1,
 .card > h2,
 .card > h3,
@@ -378,6 +384,13 @@ footer.footer p:last-child {
 }
 .nav-list > li.active > a {
   font-weight: bold;
+}
+.nav-list > li .badge {
+  float: right;
+  border-radius: 2px;
+  background-color: transparent;
+  border: 1px solid #ddd;
+  color: #666;
 }
 
 /* Callouts */
@@ -452,6 +465,7 @@ footer.footer p:last-child {
 .table-sm {
   font-size: 12px;
 }
+.table-no-border,
 .table-no-border>thead>tr>th,
 .table-no-border>tbody>tr>td {
   border: none;
@@ -460,4 +474,9 @@ footer.footer p:last-child {
 /* Text overrides */
 .text-warning {
   color: #f9a825;
+}
+
+/* Dashboard */
+.table>tbody>tr>td.dashboard-host {
+  padding-left: 2em;
 }

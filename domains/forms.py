@@ -1,4 +1,4 @@
-##
+ ##
 # YDNS Core
 #
 # Copyright (c) 2015 Christian Jurk <commx@commx.ws>
@@ -22,18 +22,31 @@
 # SOFTWARE.
 ##
 
-from django.conf.urls import include, url
-from . import signals as _signals  # signal machinery
-from . import views
+from django.core.exceptions import ValidationError
+from ydns import forms
+from .enum import DomainAccessType
+from .utils import validate_domain_name, DomainValidationResult
 
-urlpatterns = (
-    url(r'^activate/(?P<alias>\S{16})/(?P<token>\S{64})$', views.ActivationView.as_view(), name='activate'),
-    url(r'^admin/', include('accounts.admin.urls', namespace='admin')),
-    url(r'^logout$', views.LogoutView.as_view(), name='logout'),
-    url(r'^oauth/facebook$', views.FacebookSignInView.as_view(), name='facebook_sign_in'),
-    url(r'^oauth/github$', views.GithubSignInView.as_view(), name='github_sign_in'),
-    url(r'^oauth/google$', views.GoogleSignInView.as_view(), name='google_sign_in'),
-    url(r'^reset-password/(?P<alias>\S{16})/(?P<token>\S{64})$', views.SetPasswordView.as_view(), name='set_password'),
-    url(r'^reset-password$', views.ResetPasswordView.as_view(), name='reset_password'),
-    url(r'^settings/', include('accounts.settings.urls', namespace='settings')),
-)
+
+class CreateForm(forms.HorizontalForm):
+    name = forms.CharField(placeholder='example.xyz',
+                           label='Domain name')
+    access_type = forms.ChoiceField(label='Access Type')
+    public_owner = forms.BooleanField(label='Publish owner details for this domain', required=False)
+
+    field_css = 'col-lg-9 col-md-9'
+
+    def __init__(self, access_type_choices, **kwargs):
+        super(CreateForm, self).__init__(**kwargs)
+        self.fields['access_type'].choices = access_type_choices
+
+    def clean_access_type(self):
+        return DomainAccessType(self.cleaned_data['access_type'])
+
+    def clean_name(self):
+        result, servers, message = validate_domain_name(self.cleaned_data['name'])
+
+        if result != DomainValidationResult.OK:
+            raise ValidationError(str(result))
+
+        return self.cleaned_data['name'].encode('idna').decode('ascii').lower()

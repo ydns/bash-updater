@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load fmt %}
+
+{% block title %}User Manager &lsaquo; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-12 col-md-12">
+			<section class="card">
+				<div class="card-content">
+					<h3 class="page-header">User Manager</h3>
+					<p>Showing entry {{ pagination.page.start_index }} - {{ pagination.page.end_index }} (of {{ pagination.paginator.count }} entries)</p>
+					<table class="table table-condensed table-striped table-hover table-sm table-no-border">
+						<thead>
+							<tr>
+								<th>No.</th>
+								<th>Email address</th>
+								<th>Type</th>
+								<th>Creation date</th>
+								<th>Last login</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for o in pagination.page %}<tr>
+								<td>{{ forloop.counter }}</td>
+								<td><a href="{% url 'accounts:admin:detail' o.id %}">{{ o.email }}</a></td>
+								<td>{{ o.type }}</td>
+								<td>{{ o.date_joined|fmt_timesince }}</td>
+								<td>{{ o.last_login|fmt_timesince }}</td>
+								<td>{{ o.status_label }}</td>
+							</tr>{% endfor %}
+						</tbody>
+					</table>
+			    	{{ pagination }}
+				</div>
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			YDNS.setActiveSection('admin');
+		});
+	</script>
+{% endblock %}

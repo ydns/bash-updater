@@ -25,8 +25,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from ydns.fields import EnumField
-from ydns.models import Domain, Host
 from .enum import UserType
 
 
@@ -132,3 +132,13 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return self.email
+
+    @property
+    def status_label(self):
+        if self.active:
+            s = '<span class="label label-success label-subtle">Active</span>'
+        elif ActivationRequest.objects.filter(user=self).count() > 0:
+            s = '<span class="label label-info label-subtle">New</span>'
+        else:
+            s = '<span class="label label-default label-subtle">Inactive</span>'
+        return mark_safe(s)

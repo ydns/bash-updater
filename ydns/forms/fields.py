@@ -26,8 +26,8 @@ from django import forms
 from django.forms import widgets
 from .widgets import RecaptchaInput
 
-__all__ = ['BooleanField', 'CharField', 'DateField', 'DecimalField', 'EmailField', 'FileField', 'IntegerField',
-           'PasswordField', 'RecaptchaField', 'TextField']
+__all__ = ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DecimalField', 'EmailField', 'FileField',
+           'IntegerField', 'PasswordField', 'RecaptchaField', 'TextField']
 
 
 class BooleanField(forms.BooleanField):
@@ -56,7 +56,7 @@ class InputMixin(forms.Field):
         if 'form-control' not in klass.split(' '):
             klass += ' form-control'
 
-        attrs['class'] = klass
+        attrs['class'] = klass.strip()
 
         return attrs
 
@@ -65,7 +65,23 @@ class CharField(forms.CharField, InputMixin):
     widget = widgets.TextInput
 
 
-ChoiceField = forms.ChoiceField
+class ChoiceField(forms.ChoiceField):
+    widget = widgets.Select
+
+    def widget_attrs(self, widget):
+        attrs = super(ChoiceField, self).widget_attrs(widget)
+
+        if self.required:
+            attrs.update(required=self.required)
+
+        klass = attrs.get('class') or ''
+
+        if 'form-control' not in klass.split(' '):
+            klass += ' form-control'
+
+        attrs['class'] = klass.strip()
+
+        return attrs
 
 
 class DateField(forms.DateField, InputMixin):

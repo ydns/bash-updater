@@ -22,18 +22,30 @@
 # SOFTWARE.
 ##
 
-from django.conf.urls import include, url
-from . import signals as _signals  # signal machinery
-from . import views
+from ydns.utils.enum import StrEnum
 
-urlpatterns = (
-    url(r'^activate/(?P<alias>\S{16})/(?P<token>\S{64})$', views.ActivationView.as_view(), name='activate'),
-    url(r'^admin/', include('accounts.admin.urls', namespace='admin')),
-    url(r'^logout$', views.LogoutView.as_view(), name='logout'),
-    url(r'^oauth/facebook$', views.FacebookSignInView.as_view(), name='facebook_sign_in'),
-    url(r'^oauth/github$', views.GithubSignInView.as_view(), name='github_sign_in'),
-    url(r'^oauth/google$', views.GoogleSignInView.as_view(), name='google_sign_in'),
-    url(r'^reset-password/(?P<alias>\S{16})/(?P<token>\S{64})$', views.SetPasswordView.as_view(), name='set_password'),
-    url(r'^reset-password$', views.ResetPasswordView.as_view(), name='reset_password'),
-    url(r'^settings/', include('accounts.settings.urls', namespace='settings')),
-)
+
+class RecordType(StrEnum):
+    A = 'A'
+    AAAA = 'AAAA'
+    AFSDB = 'AFSDB'
+    CERT = 'CERT'
+    CNAME = 'CNAME'
+    DNSKEY = 'DNSKEY'
+    DS = 'DS'
+    HINFO = 'HINFO'
+    KEY = 'KEY'
+    LOC = 'LOC'
+    MX = 'MX'
+    NAPTR = 'NAPTR'
+    NS = 'NS'
+    NSEC = 'NSEC'
+    PTR = 'PTR'
+    RP = 'RP'
+    RRSIG = 'RSIG'
+    SOA = 'SOA'
+    SPF = 'SPF'
+    SSHFP = 'SSHFP'
+    SRV = 'SRV'
+    TLSA = 'TLSA'
+    TXT = 'TXT'

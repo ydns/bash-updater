@@ -26,12 +26,25 @@
 
             <!-- Navigation links and content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-collapse">
+				{% if user.is_authenticated %}<ul class="nav navbar-nav">
+					<li data-nav-id="dashboard"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+					<li data-nav-id="create-host"><a href="#">Create Host</a></li>
+					<li data-nav-id="add-domain"><a href="{% url 'domains:create' %}">Add Domain</a></li>
+				</ul>{% endif %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if not user.is_authenticated %}
                     	<li><a href="{% url 'login' %}">Login</a></li>
                     	<li><a href="{% url 'signup' %}"><strong>Sign up</strong></a></li>
                     {% else %}
 						<li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+						{% if user.admin %}<li data-nav-id="admin" class="dropdown" title="Admin" data-toggle="tooltip" data-placement="bottom">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-magic"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-menu-right" role="menu">
+								<li><a href="{% url 'accounts:admin:home' %}">User Manager</a></li>
+							</ul>
+						</li>{% endif %}
 						<li data-nav-id="settings"><a href="{% url 'accounts:settings:home' %}" title="Settings" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-cog"></i></a></li>
                     {% endif %}
                 </ul>

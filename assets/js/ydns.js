@@ -28,6 +28,14 @@ YDNS.focusNextError = function(selector) {
 	}
 };
 
+YDNS.setActiveSection = function(names) {
+    var n = names.split(",");
+
+    for (var i in n) {
+        $('[data-nav-id=' + n[i] + ']').addClass('active');
+    }
+};
+
 $(function() {
 	YDNS.init();
 });

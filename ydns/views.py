@@ -25,10 +25,8 @@
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.utils.safestring import mark_safe
 from django.views import generic
-from ydns.utils.http import absolute_url
-from .models import Domain, DomainLogMessage, Host
+from domains.models import Domain
 
 
 class _BaseMixin(object):
@@ -156,6 +154,31 @@ class DashboardView(TemplateView):
     require_admin = False
     require_login = True
     template_name = 'dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        context['domains'] = self.get_domains(self.request.user)
+        return context
+
+    @staticmethod
+    def get_domains(user):
+        """
+        Get domains a specific user has access to.
+
+        :param user: User instance
+        :return:
+        """
+        domains = set()
+
+        for domain in Domain.objects.all():
+            if domain.owner == user:
+                domains.add(domain)
+            else:
+                # TODO: Look if the user has any records in this domain
+                # TODO: Look if the user has any pending host requests
+                pass
+
+        return domains
 
 
 class DonateView(_AnonymousView):
