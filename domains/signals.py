@@ -22,31 +22,33 @@
 # SOFTWARE.
 ##
 
-from django.db import models
-from django.utils import timezone
-from ydns.fields import EnumField
-from .enum import RecordType
+from django.db.models.signals import post_save, pre_delete
+from django.dispatch import receiver
+from .models import Domain
+from .utils import create_basic_records
 
 
-class Record(models.Model):
+@receiver(post_save, sender=Domain)
+def _handle_new_domain(sender, instance, created, **kwargs):
     """
-    PowerDNS based record.
+    Signal handler for domain creation.
+
+    :param sender: Model
+    :param instance: Instance
+    :param created: Whether the instance has been created (bool)
+    :param kwargs: Keyword arguments
     """
-    class Meta:
-        db_table = 'records'
-        ordering = ('name',)
+    if created:
+        create_basic_records(instance)
 
-    domain = models.ForeignKey('domains.Domain', on_delete=models.PROTECT)
-    name = models.CharField(max_length=255, null=True)
-    type = EnumField(RecordType)
-    content = models.TextField(null=True)
-    ttl = models.IntegerField(null=True)
-    prio = models.IntegerField(null=True)
-    change_date = models.IntegerField(null=True)
-    disabled = models.BooleanField(default=False)
-    ordername = models.CharField(max_length=255, null=True)
-    auth = models.BooleanField(default=True)
 
-    date_created = models.DateTimeField(default=timezone.now)
-    date_modified = models.DateTimeField(default=timezone.now)
-    owner = models.ForeignKey('accounts.User', null=True)
+@receiver(pre_delete, sender=Domain)
+def _handle_domain_removal(sender, instance, **kwargs):
+    """
+    Signal handler for domain deletion.
+
+    :param sender: Model
+    :param instance: Instance
+    :param kwargs: Keyword arguments
+    """
+    instance.records.all().delete()

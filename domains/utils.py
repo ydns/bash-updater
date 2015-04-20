@@ -22,10 +22,63 @@
 # SOFTWARE.
 ##
 
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 from .common import PRIMARY_NS, SECONDARY_NS
 from .enum import DomainValidationResult
+from .records.enum import RecordType
 
 import dns.resolver
+
+
+def create_basic_records(domain):
+    """
+    Create basic records for a new domain.
+
+    :param domain: Domain
+    """
+
+    # Start of Authority (SOA)
+    update_serial(domain)
+
+    # Name server (NS)
+    for s in ('ns1.ydns.io', 'ns2.ydns.io'):
+        domain.records.create(domain=domain, type=RecordType.NS, content=s)
+
+
+def update_serial(domain):
+    """
+    Update serial for a domain.
+
+    If no SOA record exists, such record is created and returned.
+    Otherwise, the serial is updated.
+
+    :param domain: Domain
+    :return: Record
+    """
+    s = timezone.now().strftime('%Y%m%d')
+    content = '{name}. hostmaster.yns.io. ({serial} 3600 1800 604800 600)'
+
+    try:
+        soa_record = domain.records.get(type=RecordType.SOA)
+    except ObjectDoesNotExist:
+        s += '00'
+        soa_record = domain.records.create(domain=domain,
+                                           type=RecordType.SOA,
+                                           content=content.format(name=domain.name, serial=s))
+        return soa_record
+
+    else:
+        inc = int(soa_record.content[8:])
+
+        if soa_record.content[:8] == s:
+            inc += 1
+
+        s += '%02d' % inc
+        soa_record.content = content.format(name=domain.name, serial=s)
+        soa_record.date_modified = timezone.now()
+        soa_record.save()
+        return soa_record
 
 
 def validate_domain_name(name):

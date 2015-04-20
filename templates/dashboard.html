@@ -3,16 +3,15 @@
 
 {% block title %}Dashboard &lsaquo; YDNS{% endblock %}
 
+{% block segment_class %}segment{% endblock %}
+
 {% block content %}
-	<section class="card">
-		<div class="card-content">
-			<h3 class="page-header">
-				Dashboard
-			</h3>
+	<div class="row">
+		<div class="col-lg-12 white">
 			{% if not domains %}
 				<p>You don't have any domains and hosts yet.</p>
 			{% else %}
-				<table class="table table-condensed table-striped table-hover table-sm table-no-border">
+				<table class="table table-condensed table-no-border">
 					<thead>
 						<tr>
 							<th>Domain</th>
@@ -34,17 +33,11 @@
 							<td><em class="text-muted">not available</em></td>
 							<td>{{ domain.status_label }}</td>
 						</tr>{% endfor %}
-						<!--<tr>
-							<td class="dashboard-host"><a href="#">my.ydns.io</a></td>
-							<td>MOW</td>
-							<td>MOW</td>
-							<td>MOW</td>
-						</tr>-->
 					</tbody>
 				</table>
 			{% endif %}
 		</div>
-	</section>
+	</div>
 {% endblock %}
 
 {% block js %}

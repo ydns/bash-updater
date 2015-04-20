@@ -36,6 +36,11 @@ class _BaseView(TemplateView):
 
 
 class _DomainView(_BaseView):
+    @property
+    def domain(self):
+        context = self.get_context_data(**self.kwargs)
+        return context['domain']
+
     def get_context_data(self, **kwargs):
         context = super(_DomainView, self).get_context_data(**kwargs)
         context['domain'] = get_object_or_404(Domain, name=self.kwargs['name'])
@@ -72,6 +77,21 @@ class CreateView(_BaseView, FormView):
         kwargs = super(CreateView, self).get_form_kwargs()
         kwargs['access_type_choices'] = self.get_access_type_choices()
         return kwargs
+
+
+class DeleteView(_DomainView):
+    """
+    Delete a domain.
+    """
+    template_name = 'domains/delete.html'
+
+    def post(self, request, *args, **kwargs):
+        domain = self.domain
+        domain_name = str(domain)
+        domain.delete()
+        request.user.add_to_log('Deleted domain %s' % domain_name)
+        messages.info(request, 'Domain "%s" deleted.' % domain_name)
+        return self.redirect('dashboard')
 
 
 class DetailView(_DomainView):
