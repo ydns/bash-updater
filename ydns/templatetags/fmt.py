@@ -22,6 +22,7 @@
 # SOFTWARE.
 ##
 
+from dateutil.relativedelta import relativedelta
 from django import template
 from django.template.defaultfilters import date as filter_date
 from django.utils import timezone
@@ -31,7 +32,7 @@ import math
 register = template.Library()
 
 
-@register.filter
+@register.filter(expects_localtime=True, is_safe=False)
 def fmt_timesince(d):
     """
     Formatter for time since.
@@ -47,19 +48,13 @@ def fmt_timesince(d):
         return 'moments ago'
     elif secs >= 60 and secs < 3600:
         mins = math.floor(secs / 60)
-
-        if mins == 1:
-            return '1 minute ago'
-        else:
-            return '%d minutes ago' % mins
+        return '{} minute{} ago'.format(mins, '' if mins == 1 else 's')
     elif secs >= 3600 and secs < 3600 * 3:
         hours = math.floor(secs / 3600)
-
-        if hours == 1:
-            return '1 hour ago'
-        else:
-            return '%d hours ago' % hours
+        return '{} hour{} ago'.format(hours, '' if hours == 1 else 's')
     elif now.date() == d.date():
-        return filter_date(d, 'H:i')
+        return 'Today, {}'.format(filter_date(d, 'H:i'))
+    elif now.date() - relativedelta(days=1) == d.date():
+        return 'Yesterday, {}'.format(filter_date(d, 'H:i'))
     else:
         return filter_date(d, 'N j, Y H:i')

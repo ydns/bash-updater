@@ -24,6 +24,7 @@
 
 from django.core.urlresolvers import reverse
 
+
 def absolute_url(request, url, suffix=None, *args, **kwargs):
     """
     Build absolute URL by using a resolver pattern.

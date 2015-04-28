@@ -3,53 +3,16 @@
 
 {% block title %}{{ domain }} &lsaquo; YDNS{% endblock %}
 
-{% block segment_class %}{% endblock %}
-
 {% block content %}
-	<div class="row as-table">
-		<div class="col-lg-3 col-md-3 col-xs-12 as-table-cell no-float white">
-			<div>
-				{% include "domains/sidenav.html" %}
-			</div>
-		</div>
-		<div class="col-lg-9 col-md-3 col-xs-12 as-table-cell no-float white">
-			<div>
-					<h3 class="page-header">{{ domain }}</h3>
-					<div class="row">
-						<div class="col-lg-6">
-							<dl class="dl-horizontal">
-								<dt>Owner</dt>
-								<dd>
-									{% if not domain.public_owner %}
-										<em class="text-muted">Undisclosed</em>
-									{% else %}
-										{{ domain.owner|urlize }}
-									{% endif %}
-								</dd>
-								<dt>Access type</dt>
-								<dd>{{ domain.access_type }}</dd>
-								<dt>&nbsp;</dt><dd>&nbsp;</dd>
-								<dt>Status</dt>
-								<dd>{{ domain.status_label }}</dd>
-							</dl>
-						</div>
-						<div class="col-lg-6">
-							<dl class="dl-horizontal">
-								<dt>Creation date</dt>
-								<dd>{{ domain.date_created|fmt_timesince }}</dd>
-							</dl>
-						</div>
-					</div>
-			</div>
-		</div>
-	</div>
-	<!--<div class="row">
+	<div class="row">
 		<div class="col-lg-3 col-md-3">
-			<div style="background:#f2f2f2; height:100%; min-height:100%">
-				{% include "domains/sidenav.html" %}
-			</div>
+			<section class="card">
+				<div class="card-content">
+					{% include "domains/sidenav.html" %}
+				</div>
+			</section>
 		</div>
-	    <div class="col-lg-9 col-md-9">
+		<div class="col-lg-9 col-md-9">
 			<section class="card">
 				<div class="card-content">
 					<h3 class="page-header">{{ domain }}</h3>
@@ -81,7 +44,7 @@
 				</div>
 			</section>
 		</div>
-	</div>-->
+	</div>
 {% endblock %}
 
 {% block js %}

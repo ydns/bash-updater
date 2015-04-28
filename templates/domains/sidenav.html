@@ -1,6 +1,6 @@
 <ul class="nav nav-list">
-	<li class="nav-header">General</li>
+	<li class="nav-header">{{ domain }}</li>
 	<li data-nav-id="domain"><a href="{% url 'domains:detail' domain.name %}">Domain</a></li>
-	{% if domain.owner == user %}<li data-nav-id="records"><a href="#">Records <span class="badge">{{ domain.records.count }}</span></a></li>
+	{% if domain.owner == user %}<li data-nav-id="records"><a href="{% url 'domains:records:home' domain.name %}">Records <span class="badge">{{ domain.records.count }}</span></a></li>
 	<li data-nav-id="delete-domain"><a href="{% url 'domains:delete' domain.name %}">Delete Domain</a></li>{% endif %}
 </ul>

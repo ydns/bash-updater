@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load fmt %}
+
+{% block title %}Edit {{ record }} &lsaquo; Records &lsaquo; {{ domain }} &lsaquo; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-3 col-md-3">
+			<section class="card">
+				<div class="card-content">
+					{% include "domains/sidenav.html" %}
+				</div>
+			</section>
+		</div>
+		<div class="col-lg-9 col-md-9">
+			<section class="card">
+				<div class="card-content">
+					<h3 class="page-header">
+						Edit {{ record }}
+					</h3>
+					<form id="form-edit" class="form-horizontal" method="post" action="{% url 'domains:records:edit' domain.name record.padded_id %}">
+						{% csrf_token %}
+						{{ form }}
+						<div class="form-group margin">
+							<div class="col-lg-offset-2 col-md-offset-3 col-lg-10 col-md-9">
+								<button type="submit" class="btn btn-primary btn-material">Update Record</button>
+								<a href="{% url 'domains:records:detail' domain.name record.padded_id %}" class="btn btn-link btn-material">Cancel</a>
+							</div>
+						</div>
+					</form>
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			YDNS.setActiveSection('records');
+			YDNS.safeForm('#form-edit');
+			$('#id_type').on('change', typeChanged);
+			typeChanged();
+		});
+
+		function typeChanged() {
+			var type = $('#id_type').val();
+
+			if (type == 'MX') {
+				$('[data-field-name=ttl],[data-field-name=prio]').show();
+			} else {
+				$('[data-field-name=ttl],[data-field-name=prio]').hide();
+			}
+		}
+	</script>
+{% endblock %}

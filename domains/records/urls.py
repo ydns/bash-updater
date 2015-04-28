@@ -22,9 +22,13 @@
 # SOFTWARE.
 ##
 
-from ydns.views import TemplateView
+from django.conf.urls import url
+from . import views
 
-class HomeView(TemplateView):
-    require_admin = False
-    require_login = False
-    template_name = 'api/home.html'
+urlpatterns = (
+    url(r'^$', views.HomeView.as_view(), name='home'),
+    url(r'^new$', views.CreateView.as_view(), name='create'),
+    url(r'^(?P<record_id>\d+)/delete$', views.DeleteView.as_view(), name='delete'),
+    url(r'^(?P<record_id>\d+)/edit$', views.EditView.as_view(), name='edit'),
+    url(r'^(?P<record_id>\d+)$', views.DetailView.as_view(), name='detail'),
+)

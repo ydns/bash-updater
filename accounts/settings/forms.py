@@ -29,3 +29,13 @@ class ChangePasswordForm(forms.HorizontalForm):
     current = forms.PasswordField(placeholder='Your current password…')
     new = forms.PasswordField(placeholder='New password…')
     repeat = forms.PasswordField(placeholder='Repeat the new password…')
+
+
+class ChangeTimezoneForm(forms.HorizontalForm):
+    timezone = forms.ChoiceField()
+
+    label_css = 'col-lg-2 col-md-3'
+
+    def __init__(self, timezone_choices, **kwargs):
+        super(ChangeTimezoneForm, self).__init__(**kwargs)
+        self.fields['timezone'].choices = timezone_choices

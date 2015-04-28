@@ -22,45 +22,51 @@
 # SOFTWARE.
 ##
 
-from django.conf import settings
-from requests.exceptions import RequestException
+import re
 
-import requests
-
-
-##
-# Simple reCAPTCHA support for reCAPTCHA v2.0
-##
-
-# Verification URL
-_url_verify = 'https://www.google.com/recaptcha/api/siteverify'
+_re_chrome = re.compile(r'Chrome/(\S+)')
+_re_safari = re.compile(r'Safari/(\S+)')
+_re_osx_ver = re.compile(r'OS X ([A-Za-z0-9_]+)')
 
 
-class RecaptchaError(ValueError):
-    pass
-
-
-def verify(response, remote_ip=None):
+def parse(s):
     """
-    Verify user response.
+    Parse user agent string.
 
-    Raises RecaptchaError in case the response cannot be verified or is invalid.
-
-    :param response: User response (str)
-    :param remote_ip: Remote IP (optional)
+    :param s: str
+    :return: dict
     """
-    data = {'secret': settings.RECAPTCHA_SECRET_KEY,
-            'response': response}
+    ua = {'os': None,
+          'os_version': None,
+          'browser': None,
+          'browser_version': None}
 
-    if remote_ip:
-        data['remoteip'] = remote_ip
+    if 'OS X' in s:
+        ua['os'] = 'OS X'
 
-    try:
-        r = requests.post(_url_verify, data=data)
-    except RequestException as exc:
-        raise RecaptchaError(str(exc))
-    else:
-        reply = r.json()
+        match = _re_osx_ver.findall(s)
+        if match:
+            ver_str = match[0].replace('_', '.')
+            ua['os_version'] = ver_str
+    elif 'X11' in s:
+        if 'Linux' in s:
+            ua['os'] = 'Linux'
+        else:
+            ua['os'] = 'X11'
+    elif 'Windows' in s:
+        ua['os'] = 'Windows'
 
-        if not reply['success']:
-            raise RecaptchaError(', '.join(reply['error-codes']))
+    if 'Chrome/' in s:
+        match = _re_chrome.findall(s)
+        if match:
+            ua['browser'] = 'Google Chrome'
+            ua['browser_version'] = match[0]
+    elif 'Safari/' in s:
+        match = _re_safari.findall(s)
+        if match:
+            ua['browser'] = 'Safari'
+            ua['browser_version'] = match[0]
+    elif 'MSIE' in s:
+        ua['browser'] = 'Internet Explorer'
+
+    return ua

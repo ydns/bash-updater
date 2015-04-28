@@ -29,13 +29,14 @@ import json
 
 __all__ = ['EnumField', 'JsonField']
 
+
 class EnumField(models.Field, metaclass=models.SubfieldBase):
     """
     Simple enumeration field type.
     """
     def __init__(self, enum, *args, **kwargs):
         if not issubclass(enum, Enum):
-            raise TypeError('%s must be a subclass of Enum' % enum)
+            raise TypeError('{!r} must be a subclass of Enum'.format(enum))
         self.enum = enum
         super(EnumField, self).__init__(*args, **kwargs)
 

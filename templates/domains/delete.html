@@ -43,7 +43,7 @@
 {% block js %}
 	<script type="text/javascript">
 		$(function() {
-			YDNS.setActiveSection('domain,delete-domain');
+			YDNS.setActiveSection('delete-domain');
 			$('#id_delete').on('change', function() {
 				if ($(this).get(0).checked) {
 					$('#id_submit_btn').removeAttr('disabled');

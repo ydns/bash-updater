@@ -349,6 +349,9 @@ footer.footer p:last-child {
 }
 .card hr {
   border-color: rgba(160, 160, 160, 0.2);
+  margin: 20px 0;
+}
+.card.login hr {
   margin: 5px 0;
 }
 .card hr.more-padding {
@@ -490,15 +493,4 @@ footer.footer p:last-child {
 /* Dashboard */
 .table>tbody>tr>td.dashboard-host {
   padding-left: 2em;
-}
-
-/* Helpers */
-.as-table {
-  display: table;
-}
-.as-table-cell {
-  display: table-cell;
-}
-.no-float {
-  float: none;
 }

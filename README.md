@@ -2,18 +2,10 @@
 
 This repository contains the backend and front-end code for the development release of YDNS.
 
-## Requirements
-
-* Python 3.4+
-* Django 1.7+
-* dnspython3
-* netaddr
-* googler
-
 ## Installation
 
 1. Check out the source code
-2. Create a virtual environment and install all the dependencies using `pip install -r requirements.txt`
+2. Create a virtual environment and install all the dependencies using `pip3 install -r requirements.txt`
 3. Rename `ydns/local_settins.example.py` to `ydns/local_settings.py` and adjust the configuration. If you'd like to use the OAuth2 login features, you may have to obtain appropriate API credentials
 4. Setup a database and add the configuration to your local_settings.py
 5. Apply database migrations by using `./manage.py migrate` inside your YDNS folder

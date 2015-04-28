@@ -45,7 +45,7 @@ class RecaptchaInput(widgets.Widget):
         return value
 
     def render(self, name, value, attrs=None):
-        return format_html('<div class="g-recaptcha" data-sitekey="{}"></div>'.format(settings.RECAPTCHA_PUBLIC_KEY))
+        return format_html('<div class="g-recaptcha" data-sitekey="{}"></div>'.format(settings.RECAPTCHA_SITE_KEY))
 
     def value_from_datadict(self, data, files, name):
         return data.get('g-recaptcha-response', None)

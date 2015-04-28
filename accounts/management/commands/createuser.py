@@ -28,6 +28,7 @@ from django.core.validators import validate_email, ValidationError
 from getpass import getpass
 from optparse import make_option
 
+
 class Command(BaseCommand):
     """
     This management command is used to create user accounts
@@ -56,15 +57,15 @@ class Command(BaseCommand):
             try:
                 validate_email(args[0])
             except ValidationError:
-                return self.stderr.write('%r is not a valid email address' % args[0])
+                return self.stderr.write('{!r} is not a valid email address'.format(args[0]))
             else:
                 try:
                     user = User.objects.get(email__iexact=args[0])
                 except User.DoesNotExist:
                     pass
                 else:
-                    return self.stderr.write('Email address %r is already taken by user account #%d' % (
-                        user.email, user.id))
+                    return self.stderr.write('Email address {!r} is already '
+                                             'taken by user account #{}'.format(user.email, user.id))
 
             email = args[0]
             password = None
@@ -81,10 +82,10 @@ class Command(BaseCommand):
                             break
 
             # Create the account
-            kwargs = {'active': True}
+            kwargs = {'is_active': True}
 
             if options['admin']:
-                kwargs['admin'] = True
+                kwargs['is_admin'] = True
 
             user = User.objects.create_user(email, password, **kwargs)
-            self.stdout.write('User account #%d created.' % user.id)
+            self.stdout.write('User account #{} created.'.format(user.id))

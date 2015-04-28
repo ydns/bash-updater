@@ -28,6 +28,7 @@ from urllib.parse import urlencode
 
 register = template.Library()
 
+
 class GravatarUrlNode(template.Node):
     """
     Template node for generating Gravatar urls.
@@ -62,12 +63,13 @@ class GravatarUrlNode(template.Node):
                 pass
             else:
                 if not isinstance(size, int):
-                    raise template.TemplateSyntaxError('%r must be an integer' % size)
+                    raise template.TemplateSyntaxError('{!r} must be an integer'.format(size))
 
             gravatar_url = 'https://www.gravatar.com/avatar/' + md5(email.lower().encode()).hexdigest()
             gravatar_url += '?' + urlencode({'s': str(self.size)})
 
             return gravatar_url
+
 
 @register.tag
 def gravatar_url(parser, token):
@@ -81,7 +83,7 @@ def gravatar_url(parser, token):
     split_token = token.split_contents()
 
     if len(split_token) < 2:
-        raise template.TemplateSyntaxError('%r requires arguments' % token.contents.split()[0])
+        raise template.TemplateSyntaxError('{!r} requires arguments'.format(token.contents.split()[0]))
 
     email = split_token[1]
     size = 40
@@ -89,6 +91,6 @@ def gravatar_url(parser, token):
     if len(split_token) == 3:
         size = split_token[2]
     elif len(split_token) > 3:
-        raise template.TemplateSyntaxError('%r takes at most two arguments' % token.contents.split()[0])
+        raise template.TemplateSyntaxError('{!r} takes at most two arguments'.format(token.contents.split()[0]))
 
     return GravatarUrlNode(email, size)

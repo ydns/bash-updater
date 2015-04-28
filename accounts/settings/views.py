@@ -24,11 +24,15 @@
 
 from accounts.enum import UserType
 from accounts.models import User
+from accounts.utils import activate_timezone, deactivate_timezone
+from collections import OrderedDict
+from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseNotFound
-from ydns.utils.mail import EmailMessage
 from ydns.views import FormView, TemplateView
 from . import forms
+
+import pytz
 
 
 class _BaseView(TemplateView):
@@ -127,3 +131,71 @@ class ResetApiPasswordView(_BaseView):
                                'configuration to use the new API password.')
 
         return self.redirect('accounts:settings:api_access')
+
+
+class TimezoneView(_BaseView, FormView):
+    """
+    View or modify account timezone.
+    """
+    form_class = forms.ChangeTimezoneForm
+    template_name = 'accounts/settings/timezone.html'
+
+    def form_valid(self, form):
+        tzname = form.cleaned_data['timezone']
+        user = self.request.user
+
+        if tzname == settings.TIME_ZONE:
+            if user.timezone:
+                user.timezone = None
+                user.save()
+                user.add_to_log('Timezone setting removed')
+                messages.info(self.request, 'Timezone setting removed.')
+                deactivate_timezone(self.request)
+        elif tzname != user.timezone:
+            user.timezone = tzname
+            user.save()
+            user.add_to_log('Timezone set to {}'.format(tzname))
+            messages.info(self.request, 'Timezone set to {}'.format(tzname))
+            activate_timezone(self.request)
+
+        return self.redirect('accounts:settings:timezone')
+
+    def get_form_kwargs(self):
+        kwargs = super(TimezoneView, self).get_form_kwargs()
+        kwargs['timezone_choices'] = self.get_timezone_choices()
+        return kwargs
+
+    def get_initial(self):
+        initial = super(TimezoneView, self).get_initial()
+
+        if self.request.user.timezone:
+            initial['timezone'] = self.request.user.timezone
+        else:
+            initial['timezone'] = settings.TIME_ZONE
+
+        return initial
+
+    @staticmethod
+    def get_timezone_choices():
+        """
+        Collect grouped timezone choices.
+
+        :return: tuple
+        """
+        tz_group = OrderedDict()
+
+        for tz in pytz.common_timezones:
+            if '/' in tz:
+                a, b = tz.split('/', 1)
+            else:
+                a, b = 'Other', tz
+
+            if a not in tz_group:
+                tz_group[a] = []
+
+            tz_group[a].append((tz, b.replace('_', ' ')))
+
+        for k in tz_group.keys():
+            tz_group[k] = tuple(sorted(tz_group[k], key=lambda x: x[1]))
+
+        return tuple(tz_group.items())

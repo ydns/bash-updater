@@ -22,9 +22,34 @@
 # SOFTWARE.
 ##
 
-from ydns.views import TemplateView
 
-class HomeView(TemplateView):
-    require_admin = False
-    require_login = False
-    template_name = 'api/home.html'
+def activate_timezone(request):
+    """
+    Set user timezone for the current session.
+
+    This ensures that the timezone is persistent within the session
+    in conjunction with an additional middleware that activates the
+    timezone on every request.
+
+    :param request: HttpRequest
+    """
+    if not request.user.is_authenticated():
+        raise AttributeError('user must be authenticated')
+
+    user = request.user
+
+    if user.timezone:
+        request.session['django_timezone'] = user.timezone
+        request.session.modified = True
+    elif 'django_timezone' in request.session:
+        del request.session['django_timezone']
+
+
+def deactivate_timezone(request):
+    """
+    Remove timezone from user session.
+
+    :param request: HttpRequest
+    """
+    if 'django_timezone' in request.session:
+        del request.session['django_timezone']

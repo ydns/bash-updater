@@ -45,7 +45,7 @@ class Pagination(object):
         self.page = page
 
     def __len__(self):
-        return self.paginator.count
+        return self.paginator.num_pages
 
     def __str__(self):
         return mark_safe(self.render())
@@ -76,20 +76,20 @@ class Pagination(object):
             else:
                 url = self.get_url()
 
-            s += '<li><a href="%s"><i class="fa fa-angle-left"></i></a></li>' % url
+            s += '<li><a href="{}"><i class="fa fa-angle-left"></i></a></li>'.format(url)
 
         # page range
-        pagerange = 4
+        page_range = 4
 
-        if self.page.number - pagerange <= 1:
+        if self.page.number - page_range <= 1:
             start = 1
             end = 6
-        elif self.page.number >= (self.paginator.num_pages - pagerange):
+        elif self.page.number >= (self.paginator.num_pages - page_range):
             start = self.paginator.num_pages - 5
             end = self.paginator.num_pages
         else:
-            start = self.page.number - pagerange
-            end = self.page.number + pagerange
+            start = self.page.number - page_range
+            end = self.page.number + page_range
 
         i = start
         while i < (end + 1):
@@ -103,15 +103,16 @@ class Pagination(object):
                     url = self.get_url(**{param: str(i)})
                 else:
                     url = self.get_url()
-                s += '<a href="%s">%d</a>' % (url, i)
+                s += '<a href="{}">{}</a>'.format(url, i)
                 s += '</li>'
 
             i += 1
 
         if self.page.has_next():
             url = self.get_url(**{param: str(self.page.next_page_number())})
-            s += '<li><a href="%s"><i class="fa fa-angle-right"></i></a></li>' % url
+            s += '<li><a href="{}"><i class="fa fa-angle-right"></i></a></li>'.format(url)
 
         s += '</ul>'
         s += '</nav>'
+
         return s

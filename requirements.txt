@@ -1,7 +1,7 @@
-django
+django>=1.8
 requests
 requests-oauthlib
-googler
 python-dateutil
 dnspython3
 netaddr
+pytz

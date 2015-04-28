@@ -25,10 +25,12 @@
 from django.core.mail import EmailMessage as _EmailMessage
 from django.template.loader import render_to_string
 
+
 class EmailMessage(_EmailMessage):
     """
     Template-based email message.
     """
+
     def __init__(self, subject, tpl, context=None, from_email=None):
         """
         Initialize a email message instance.

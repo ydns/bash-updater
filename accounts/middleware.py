@@ -22,9 +22,27 @@
 # SOFTWARE.
 ##
 
-from ydns.views import TemplateView
+from django.utils import timezone
 
-class HomeView(TemplateView):
-    require_admin = False
-    require_login = False
-    template_name = 'api/home.html'
+import pytz
+
+
+class TimezoneMiddleware(object):
+    """
+    A middleware that takes care of the user timezone during requests.
+    """
+
+    @staticmethod
+    def process_request(request):
+        """
+        Handle requests.
+
+        :param request: HttpRequest
+        :return:
+        """
+        tzname = request.session.get('django_timezone', None)
+
+        if tzname:
+            timezone.activate(pytz.timezone(tzname))
+        else:
+            timezone.deactivate()

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load fmt %}
+
+{% block title %}Records &lsaquo; {{ domain }} &lsaquo; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-3 col-md-3">
+			<section class="card">
+				<div class="card-content">
+					{% include "domains/sidenav.html" %}
+				</div>
+			</section>
+		</div>
+		<div class="col-lg-9 col-md-9">
+			<section class="card">
+				<div class="card-content">
+					<h3 class="page-header">
+						Records
+						<span class="pull-right">
+							<a href="{% url 'domains:records:create' domain.name %}" class="btn btn-link" title="Add Record" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-plus"></i></a>
+						</span>
+					</h3>
+
+					{% if pagination|length == 0 %}
+						<p>No records found.</p>
+					{% else %}
+						<table class="table table-condensed table-striped table-hover table-sm table-no-border">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Name</th>
+									<th>Type</th>
+									<th>Creation date</th>
+									<th>Last modified</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for o in pagination.page %}<tr>
+									<td><a href="{% url 'domains:records:detail' domain.name o.padded_id %}">#{{ o.padded_id }}</a></td>
+									<td>{{ o }}</td>
+									<td>{{ o.type }}</td>
+									<td>{{ o.date_created|fmt_timesince }}</td>
+									<td>{{ o.date_modified|fmt_timesince }}</td>
+									<td>{{ o.status_label }}</td>
+								</tr>{% endfor %}
+							</tbody>
+						</table>
+			    		{% if pagination|length > 1 %}{{ pagination }}{% endif %}
+					{% endif %}
+				</div>
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			YDNS.setActiveSection('records');
+		});
+	</script>
+{% endblock %}

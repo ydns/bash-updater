@@ -122,7 +122,7 @@ class TextField(forms.CharField, InputMixin):
 
     def __init__(self, rows=3, placeholder=None, *args, **kwargs):
         if not isinstance(rows, int):
-            raise TypeError('rows must be an int, got %r' % rows)
+            raise TypeError('rows must be an int, got {!r}'.format(rows))
 
         self.rows = rows
         self.placeholder = placeholder

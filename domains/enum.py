@@ -31,7 +31,6 @@ class DomainAccessType(StrEnum):
     """
     PUBLIC = 'Public'
     PRIVATE = 'Private'
-    MODERATED = 'Moderated'
 
 
 class DomainStatus(StrEnum):

@@ -59,6 +59,22 @@ class Domain(models.Model):
     def __str__(self):
         return self.name.encode('ascii').decode('idna')
 
+    def delete(self, using=None):
+        self.records.all().delete()
+        return super(Domain, self).delete(using)
+
+    def get_permissions(self, user):
+        s = set()
+
+        if not user.is_authenticated():
+            if self.access_type == DomainAccessType.PUBLIC:
+                s.add('r')
+        elif user.is_admin or user == self.owner:
+            for k in 'rwa':
+                s.add(k)
+
+        return s
+
     @property
     def is_idn(self):
         """

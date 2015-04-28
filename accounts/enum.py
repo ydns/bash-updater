@@ -26,6 +26,9 @@ from ydns.utils.enum import StrEnum
 
 
 class UserType(StrEnum):
+    """
+    Type enumeration for user accounts.
+    """
     NATIVE = 'Native'
     GOOGLE = 'Google'
     FACEBOOK = 'Facebook'

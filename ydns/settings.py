@@ -11,6 +11,8 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = []
 INSTALLED_APPS = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -27,7 +29,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware'
+    'django.middleware.security.SecurityMiddleware',
+    'accounts.middleware.TimezoneMiddleware',
+    'ydns.middleware.ContextualNavigationMiddleware',
 )
 ROOT_URLCONF = 'ydns.urls'
 WSGI_APPLICATION = 'ydns.wsgi.application'
@@ -41,6 +45,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'ydns.context_processors.navbar_context',
             ]
         },
     },

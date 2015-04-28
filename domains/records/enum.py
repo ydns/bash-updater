@@ -26,6 +26,9 @@ from ydns.utils.enum import StrEnum
 
 
 class RecordType(StrEnum):
+    """
+    Supported DNS resource record types (RR).
+    """
     A = 'A'
     AAAA = 'AAAA'
     AFSDB = 'AFSDB'
@@ -49,3 +52,32 @@ class RecordType(StrEnum):
     SRV = 'SRV'
     TLSA = 'TLSA'
     TXT = 'TXT'
+
+    @property
+    def is_usable(self):
+        """
+        Return whether a record type is usable for users.
+
+        :return: bool
+        """
+        return self in (RecordType.A,
+                        RecordType.AAAA,
+                        RecordType.AFSDB,
+                        RecordType.CERT,
+                        RecordType.CNAME,
+                        RecordType.DNSKEY,
+                        RecordType.DS,
+                        RecordType.HINFO,
+                        RecordType.KEY,
+                        RecordType.LOC,
+                        RecordType.MX,
+                        RecordType.NAPTR,
+                        RecordType.NSEC,
+                        RecordType.PTR,
+                        RecordType.RP,
+                        RecordType.RRSIG,
+                        RecordType.SPF,
+                        RecordType.SSHFP,
+                        RecordType.SRV,
+                        RecordType.TLSA,
+                        RecordType.TXT)

@@ -22,17 +22,19 @@
 # SOFTWARE.
 ##
 
-def messages(request):
+
+def navbar_context(request):
     """
-    Context processor for system messages.
+    Create HTML code for contextual navbar entries.
 
     :param request: HttpRequest
     :return: dict
     """
-    result = {}
+    d = {}
 
-    if request.session.get('_sysmsgs'):
-        result['sys_messages'] = request.session['_sysmsgs']
-        request.session['_sysmsgs'].clear()
+    if hasattr(request, 'navbar_context'):
+        nc = request.navbar_context
+        if nc:
+            d['navbar_context_html'] = nc
 
-    return result
+    return d

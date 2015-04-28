@@ -40,15 +40,3 @@ def _handle_new_domain(sender, instance, created, **kwargs):
     """
     if created:
         create_basic_records(instance)
-
-
-@receiver(pre_delete, sender=Domain)
-def _handle_domain_removal(sender, instance, **kwargs):
-    """
-    Signal handler for domain deletion.
-
-    :param sender: Model
-    :param instance: Instance
-    :param kwargs: Keyword arguments
-    """
-    instance.records.all().delete()

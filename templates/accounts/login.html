@@ -5,10 +5,10 @@
 {% block content %}
 	<div class="row">
 	    <div class="col-lg-offset-3 col-lg-6">
-			<section class="card">
+			<section class="card login">
 				<div class="card-content">
 					<h3 class="page-header">Login</h3>
-			    	<form id="login-form" class="login-form form-horizontal" method="post" action="{% url 'login' %}">
+			    	<form id="login-form" class="login-form form-horizontal" method="post" action="{% url 'login' %}" autocomplete="off">
 			    		{% csrf_token %}
 						{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
 						{{ form }}
@@ -29,21 +29,21 @@
                         			<form class="connect-button" method="post" action="{% url 'accounts:google_sign_in' %}">
 			    						{% csrf_token %}
 			    						{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-			    						<button type="submit" class="btn btn-link btn-block btn-lg" title="Login using Google" data-toggle="tooltip"><i class="fa fa-google fa-2x"></i></button>
+			    						<button type="submit" class="btn btn-link btn-block btn-lg" title="Login using Google" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-google fa-2x"></i></button>
 			    					</form>
 								</td>
 								<td>
 			    					<form class="connect-button" method="post" action="{% url 'accounts:facebook_sign_in' %}">
 			    						{% csrf_token %}
 			    						{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-			    						<button type="submit" class="btn btn-link btn-block btn-lg" title="Login using Facebook" data-toggle="tooltip"><i class="fa fa-facebook fa-2x"></i></button>
+			    						<button type="submit" class="btn btn-link btn-block btn-lg" title="Login using Facebook" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-facebook fa-2x"></i></button>
 			    					</form>
 								</td>
 								<td>
 			    					<form class="connect-button" method="post" action="{% url 'accounts:github_sign_in' %}">
 			    						{% csrf_token %}
 			    						{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-			    						<button type="submit" class="btn btn-link btn-block btn-lg" title="Login using GitHub" data-toggle="tooltip"><i class="fa fa-github fa-2x"></i></button>
+			    						<button type="submit" class="btn btn-link btn-block btn-lg" title="Login using GitHub" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-github fa-2x"></i></button>
 			    					</form>
 								</td>
 							</tr>

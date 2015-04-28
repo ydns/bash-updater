@@ -40,6 +40,13 @@ class _BaseMixin(object):
     require_login = True
     require_admin = True
 
+    @classmethod
+    def as_view(cls, **kwargs):
+        view = super(_BaseMixin, cls).as_view(**kwargs)
+        view.cls = cls
+        view.cls_kwargs = kwargs
+        return view
+
     def dispatch(self, request, *args, **kwargs):
         """
         Request dispatch method.

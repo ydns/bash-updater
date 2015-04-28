@@ -26,11 +26,16 @@ from accounts.models import User
 from base64 import b64decode
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound, JsonResponse
 from django.utils import timezone
-from django.views.generic import View
 from netaddr import IPAddress, AddrConversionError, AddrFormatError
 from ydns.views import TemplateView
 
-class CurrentIpAddressView(View):
+
+class _BaseView(TemplateView):
+    require_admin = False
+    require_login = False
+
+
+class CurrentIpAddressView(_BaseView):
     """
     The resource for returning the current IP address as seen
     by the YDNS web server.
@@ -38,7 +43,8 @@ class CurrentIpAddressView(View):
     def get(self, request, *args, **kwargs):
         return HttpResponse(request.META['REMOTE_ADDR'], content_type='text/plain')
 
-class CurrentIpAddressJsonView(View):
+
+class CurrentIpAddressJsonView(_BaseView):
     """
     The resource for returning the current IP address as seen
     by the YDNS web server. (JSON version)
@@ -56,21 +62,19 @@ class CurrentIpAddressJsonView(View):
         return JsonResponse({'ip': request.META['REMOTE_ADDR'],
                              'address_type': address_type})
 
-class DocumentationPdfView(TemplateView):
-    requires_admin = False
-    requires_login = False
 
+class DocumentationPdfView(_BaseView):
     def get(self, request, *args, **kwargs):
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'inline; filename="YDNS_APIv1_Documentation.pdf"'
         return response
 
-class HomeView(TemplateView):
-    requires_admin = False
-    requires_login = False
+
+class HomeView(_BaseView):
     template_name = 'api/v1/home.html'
 
-class UpdateView(View):
+
+class UpdateView(_BaseView):
     """
     The resource for issuing update calls to API v1.
 

@@ -30,6 +30,7 @@
 					<li data-nav-id="dashboard"><a href="{% url 'dashboard' %}">Dashboard</a></li>
 					<li data-nav-id="create-host"><a href="#">Create Host</a></li>
 					<li data-nav-id="add-domain"><a href="{% url 'domains:create' %}">Add Domain</a></li>
+					{{ navbar_context_html }}
 				</ul>{% endif %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if not user.is_authenticated %}
@@ -55,7 +56,7 @@
 	{% include "alerts.html" %}
 
 	<section id="content" role="main">
-		<div class="{% block segment_class %}segment{% endblock %}">
+		<div class="segment">
 	    	{% block pre_content %}{% endblock %}
     		<div class="container">
             	{% block content %}{% endblock %}
@@ -77,6 +78,8 @@
 				<a href="//www.facebook.com/ydns.io" target="_blank" class="social" title="Visit us on Facebook"><i class="fa fa-facebook-square fa-2x"></i></a>
 				&nbsp;
 				<a href="//twitter.com/tfmtde" target="_blank" class="social" title="Visit us on Twitter"><i class="fa fa-twitter-square fa-2x"></i></a>
+				&nbsp;
+				<a href="//github.com/ydns/ydns" target="_blank" class="social" title="Visit us on GitHub"><i class="fa fa-github-square fa-2x"></i></a>
 			</p>
 		</div>
     </footer>

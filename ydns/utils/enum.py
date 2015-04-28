@@ -26,5 +26,9 @@ from enum import Enum
 
 
 class StrEnum(str, Enum):
+    """
+    Enumeration with strings.
+    """
+
     def __str__(self):
         return self.value

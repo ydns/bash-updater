@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load fmt %}
 
 {% block title %}Journal &lsaquo; Settings &lsaquo; YDNS{% endblock %}
 
@@ -29,7 +30,7 @@
 						</thead>
 						<tbody>
 							{% for msg in user.journal.all %}<tr>
-								<td>{{ msg.date_created|date:'N j, Y H:i T' }}</td>
+								<td>{{ msg.date_created|fmt_timesince }}</td>
 								<td>{{ msg.message }}</td>
 							</tr>{% endfor %}
 						</tbody>

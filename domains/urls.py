@@ -22,12 +22,13 @@
 # SOFTWARE.
 ##
 
-from django.conf.urls import url
+from django.conf.urls import include, url
 from . import signals as _signals
 from . import views
 
 urlpatterns = (
     url(r'^new$', views.CreateView.as_view(), name='create'),
-    url(r'^(?P<name>\S+)/delete$', views.DeleteView.as_view(), name='delete'),
-    url(r'^(?P<name>\S+)$', views.DetailView.as_view(), name='detail'),
+    url(r'^(?P<name>[a-zA-Z0-9-.]+)/delete$', views.DeleteView.as_view(), name='delete'),
+    url(r'^(?P<name>[a-zA-Z0-9-.]+)/records/', include('domains.records.urls', namespace='records')),
+    url(r'^(?P<name>[a-zA-Z0-9-.]+)$', views.DetailView.as_view(), name='detail'),
 )

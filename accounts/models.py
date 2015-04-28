@@ -107,11 +107,12 @@ class User(AbstractBaseUser):
 
     alias = models.CharField(max_length=16)
     email = models.EmailField(max_length=255, unique=True)
-    active = models.BooleanField(default=False)
-    admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     type = EnumField(UserType, default=UserType.NATIVE)
     api_password = models.CharField(max_length=40)
     date_joined = models.DateTimeField(default=timezone.now)
+    timezone = models.CharField(max_length=100, null=True)
     journal = models.ManyToManyField('ydns.Message', related_name='user_journal')
 
     objects = UserManager()
@@ -135,7 +136,7 @@ class User(AbstractBaseUser):
 
     @property
     def status_label(self):
-        if self.active:
+        if self.is_active:
             s = '<span class="label label-success label-subtle">Active</span>'
         elif ActivationRequest.objects.filter(user=self).count() > 0:
             s = '<span class="label label-info label-subtle">New</span>'

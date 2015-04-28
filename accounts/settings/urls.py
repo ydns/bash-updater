@@ -34,4 +34,5 @@ urlpatterns = (
     url(r'^delete-account$', views.DeleteAccountView.as_view(), name='delete_account'),
     url(r'^journal/clear$', views.ClearJournalView.as_view(), name='clear_journal'),
     url(r'^journal$', views.JournalView.as_view(), name='journal'),
+    url(r'^timezone$', views.TimezoneView.as_view(), name='timezone'),
 )

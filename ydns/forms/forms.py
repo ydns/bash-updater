@@ -110,7 +110,7 @@ class HorizontalForm(forms.Form):
                     if 'hidden' in cls_list and (bf.data or bf.errors):
                         cls_list.remove('hidden')
 
-                s += '<div class="{0}" data-field-name="{1}">'.format(' '.join(cls_list), name)
+                s += '<div class="{}" data-field-name="{}">'.format(' '.join(cls_list), name)
 
                 if bf.label:
                     label = force_text(bf.label)

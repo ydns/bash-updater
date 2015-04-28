@@ -82,7 +82,7 @@ class LockView(_UserView):
             user.add_to_log('Account locked')
             messages.info(request, 'User account %s has been locked.' % user)
         else:
-            messages.error(request, 'Cannot lock user account %s, because it is already inactive.' % user)
+            messages.error(request, 'Cannot lock user account {!s}, because it is already inactive.'.format(user))
 
         return self.redirect('accounts:admin:detail', args=(user.id,))
 
@@ -96,8 +96,8 @@ class UnlockView(_UserView):
             user.active = True
             user.save()
             user.add_to_log('Account unlocked')
-            messages.info(request, 'User account %s has been unlocked.' % user)
+            messages.info(request, 'User account {!s} has been unlocked.'.format(user))
         else:
-            messages.error(request, 'Cannot unlock user account %s, because it is not locked.' % user)
+            messages.error(request, 'Cannot unlock user account {!s}, because it is not locked.'.format(user))
 
         return self.redirect('accounts:admin:detail', args=(user.id,))

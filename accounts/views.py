@@ -34,8 +34,9 @@ from django.utils import timezone
 from ydns.utils.http import absolute_url
 from ydns.utils.mail import EmailMessage
 from ydns.views import FormView, TemplateView, View
-from .enum import UserType
 from . import forms
+from .enum import UserType
+from .utils import activate_timezone, deactivate_timezone
 
 import json
 
@@ -91,61 +92,39 @@ class FacebookSignInView(View):
     URL_GET_TOKEN = 'https://graph.facebook.com/oauth/access_token'
     URL_PROFILE = 'https://graph.facebook.com/me?'
 
-    def create_user(self, email):
+    @staticmethod
+    def create_user(email):
         """
         Create a new user account.
 
         :param email: Email address
         :return:
         """
-        alias = None
-
-        while True:
-            alias = User.objects.make_random_password(16)
-
-            try:
-                User.objects.get(alias=alias)
-            except User.DoesNotExist:
-                break
-
         user = User.objects.create_user(email,
-                                        type=UserType.facebook,
-                                        alias=alias,
+                                        type=UserType.FACEBOOK,
                                         is_active=True)
 
-        user.add_message(self.request.META['REMOTE_ADDR'],
-                         tag='signup',
-                         type='facebook',
-                         user_agent=self.request.META.get('HTTP_USER_AGENT'))
+        user.add_to_log('Account created via Facebook login')
 
         # Send welcome Email
         context = {'user': user}
-        msg = EmailMessage(_('Welcome to YDNS'),
+        msg = EmailMessage('Welcome to YDNS',
                            tpl='accounts/welcome_facebook.mail',
                            context=context)
         msg.send(to=[user.email])
 
         return user
 
-    def do_login(self, request, user):
+    @staticmethod
+    def login(request, user):
         """
         Perform actual login.
 
         :param request: HttpRequest
         :param user: User
         """
-        user.add_message(request.META['REMOTE_ADDR'],
-                         tag='login',
-                         type='facebook',
-                         user_agent=request.META.get('HTTP_USER_AGENT'))
-
-        if user.otp_active:
-            request.session['otp_uid'] = user.id
-            request.session.modified = True
-            return self.redirect('accounts:login_otp')
-        else:
-            LoginOtpView.login(request, user)
-            return self.redirect('dashboard')
+        user.add_to_log('Login via Facebook')
+        return LoginView.login(request, user)
 
     def get(self, request, *args, **kwargs):
         """
@@ -157,37 +136,32 @@ class FacebookSignInView(View):
         :return: HttpResponse
         """
         if not request.GET.get('state'):
-            return self.response_error(request, _("Missing state property."), title=_("Facebook OAuth2 error"))
+            return self.response_error(request, 'Missing state property.')
         elif not request.GET.get('code'):
-            return self.response_error(request, _("Missing code property."), title=_("Facebook OAuth2 error"))
+            return self.response_error(request, 'Missing code property.')
 
         state = request.GET['state']
         code = request.GET['code']
 
         if state != request.session.get('fb_state'):
-            return self.response_error(request, _("Invalid state"), title=_("Facebook OAuth2 error"))
+            return self.response_error(request, 'Invalid state.')
 
         facebook.redirect_uri = absolute_url(request, 'accounts:facebook_sign_in')
         facebook.scope = ''  # need to reset scope to '', because otherwise we'll get trouble
 
         try:
             facebook.fetch_token(self.URL_GET_TOKEN,
-                               code=code,
-                               client_secret=settings.FACEBOOK_APP_SECRET)
+                                 code=code,
+                                 client_secret=settings.FACEBOOK_APP_SECRET)
         except Exception:
-            return self.response_error(request,
-                                       _("An error occurred while verifying Facebook's response. "
-                                         "Please try again later"),
-                                       _("Facebook OAuth2 error"))
+            return self.response_error(request, 'An error occurred while verifying response.')
 
         response = facebook.get(self.URL_PROFILE)
 
         try:
             data = json.loads(response.content.decode('utf-8'))
         except ValueError:
-            return self.response_error(request,
-                                       _("Facebook's response has an invalid format."),
-                                       _("Facebook OAuth2 error"))
+            return self.response_error(request, 'Invalid response format.')
 
         email_address = None
 
@@ -195,40 +169,22 @@ class FacebookSignInView(View):
             email_address = data['email']
 
         if not email_address:
-            return self.response_error(request,
-                                       _("No valid account-based email address found."),
-                                       _("Facebook OAuth2 error"))
+            return self.response_error(request, 'No valid account-based email address found.')
 
         # Now check if the account exists and login
+        user = None
+
         try:
             user = User.objects.get(email__iexact=email_address)
         except User.DoesNotExist:
-            # TODO: Beta check
-            try:
-                BetaInvitation.objects.get(email__iexact=email_address)
-            except BetaInvitation.DoesNotExist:
-                return self.response_error(request,
-                                           _("Your email address is not permitted to participate on the beta test."),
-                                           _("Facebook OAuth2 error"))
-
             user = self.create_user(email_address)
 
-        # Check if the user is banned
-        ban = user.get_ban()
-
-        if ban:
-            return self.response_error(request,
-                                       _("Your user account is banned: %s") % ban.reason,
-                                       _("Facebook OAuth2 error"))
-
-        if user.type == UserType.facebook:
-            self.do_login(request, user)
-            return self.redirect('home')
+        if not user.is_active:
+            return self.response_error(request, 'Your account is inactive.')
+        elif user.type != UserType.FACEBOOK:
+            return self.response_error(request, 'Account type mismatch.')
         else:
-            return self.response_error(request,
-                                       _("There is already an account with the same Email address, "
-                                         "but with a different account type."),
-                                       _("Login aborted"))
+            return self.login(request, user)
 
     def post(self, request, *args, **kwargs):
         """
@@ -251,9 +207,11 @@ class FacebookSignInView(View):
 
         return self.redirect(authorization_url)
 
-    def response_error(self, request, message, title):
-        messages.error(request, message, title)
-        return self.redirect('accounts:login')
+    @classmethod
+    def response_error(cls, request, message):
+        messages.error(request, message)
+        return cls.redirect('accounts:login')
+
 
 class GithubSignInView(View):
     """
@@ -268,65 +226,43 @@ class GithubSignInView(View):
     URL_GET_TOKEN = 'https://github.com/login/oauth/access_token'
     URL_USER_PROFILE = 'https://api.github.com/user'
 
-    def create_user(self, email):
+    @staticmethod
+    def create_user(email):
         """
         Create a new user account.
 
         :param email: Email address
         :return:
         """
-        alias = None
-
-        while True:
-            alias = User.objects.make_random_password(16)
-
-            try:
-                User.objects.get(alias=alias)
-            except User.DoesNotExist:
-                break
-
         user = User.objects.create_user(email,
-                                        type=UserType.github,
-                                        alias=alias,
+                                        type=UserType.GITHUB,
                                         is_active=True)
 
-        user.add_message(self.request.META['REMOTE_ADDR'],
-                         tag='signup',
-                         type='github',
-                         user_agent=self.request.META.get('HTTP_USER_AGENT'))
+        user.add_to_log('Account created via GitHub login')
 
         # Send welcome Email
         context = {'user': user}
-        msg = EmailMessage(_('Welcome to YDNS'),
+        msg = EmailMessage('Welcome to YDNS',
                            tpl='accounts/welcome_github.mail',
                            context=context)
         msg.send(to=[user.email])
 
         return user
 
-    def do_login(self, request, user):
+    @staticmethod
+    def login(request, user):
         """
         Perform actual login.
 
         :param request: HttpRequest
         :param user: User
         """
-        user.add_message(request.META['REMOTE_ADDR'],
-                         tag='login',
-                         type='github',
-                         user_agent=request.META.get('HTTP_USER_AGENT'))
-
-        if user.otp_active:
-            request.session['otp_uid'] = user.id
-            request.session.modified = True
-            return self.redirect('accounts:login_otp')
-        else:
-            LoginOtpView.login(request, user)
-            return self.redirect('dashboard')
+        user.add_to_log('Login via GitHub')
+        return LoginView.login(request, user)
 
     def get(self, request, *args, **kwargs):
         """
-        Verify the OAuth2 response from Github.
+        Verify the OAuth2 response from GitHub.
 
         :param request: HttpRequest
         :param args: tuple
@@ -334,15 +270,15 @@ class GithubSignInView(View):
         :return: HttpResponse
         """
         if not request.GET.get('state'):
-            return self.response_error(request, _("Missing state property."), title=_("GitHub OAuth2 error"))
+            return self.response_error(request, 'Missing state property.')
         elif not request.GET.get('code'):
-            return self.response_error(request, _("Missing code property."), title=_("GitHub OAuth2 error"))
+            return self.response_error(request, 'Missing code property.')
 
         state = request.GET['state']
         code = request.GET['code']
 
         if state != request.session.get('github_state'):
-            return self.response_error(request, _("Invalid state"), title=_("GitHub OAuth2 error"))
+            return self.response_error(request, 'Invalid state.')
 
         github.redirect_uri = absolute_url(request, 'accounts:github_sign_in')
         github.scope = ''  # need to reset scope to '', because otherwise we'll get trouble
@@ -352,19 +288,14 @@ class GithubSignInView(View):
                                code=code,
                                client_secret=settings.GITHUB_CLIENT_SECRET)
         except Exception:
-            return self.response_error(request,
-                                       _("An error occurred while verifying GitHub's response. "
-                                         "Please try again later"),
-                                       _("GitHub OAuth2 error"))
+            return self.response_error(request, 'An error occurred while verifying response.')
 
         response = github.get(self.URL_USER_PROFILE)
 
         try:
             data = json.loads(response.content.decode('utf-8'))
         except ValueError:
-            return self.response_error(request,
-                                       _("GitHub's response has an invalid format."),
-                                       _("GitHub OAuth2 error"))
+            return self.response_error(request, 'Invalid response format.')
 
         email_address = None
 
@@ -372,40 +303,20 @@ class GithubSignInView(View):
             email_address = data['email']
 
         if not email_address:
-            return self.response_error(request,
-                                       _("No valid account-based email address found."),
-                                       _("GitHub OAuth2 error"))
+            return self.response_error(request, 'No valid account-based email address found.')
 
         # Now check if the account exists and login
         try:
             user = User.objects.get(email__iexact=email_address)
         except User.DoesNotExist:
-            # TODO: Beta check
-            try:
-                BetaInvitation.objects.get(email__iexact=email_address)
-            except BetaInvitation.DoesNotExist:
-                return self.response_error(request,
-                                           _("Your email address is not permitted to participate on the beta test."),
-                                           _("GitHub OAuth2 error"))
-
             user = self.create_user(email_address)
 
-        # Check if the user is banned
-        ban = user.get_ban()
-
-        if ban:
-            return self.response_error(request,
-                                       _("Your user account is banned: %s") % ban.reason,
-                                       _("GitHub OAuth2 error"))
-
-        if user.type == UserType.github:
-            self.do_login(request, user)
-            return self.redirect('home')
+        if not user.is_active:
+            return self.response_error(request, 'Your account is inactive.')
+        elif user.type != UserType.GITHUB:
+            return self.response_error(request, 'Account type mismatch.')
         else:
-            return self.response_error(request,
-                                       _("There is already an account with the same Email address, "
-                                         "but with a different account type."),
-                                       _("Login aborted"))
+            return self.login(request, user)
 
     def post(self, request, *args, **kwargs):
         """
@@ -428,9 +339,11 @@ class GithubSignInView(View):
 
         return self.redirect(authorization_url)
 
-    def response_error(self, request, message, title):
-        messages.error(request, message, title)
-        return self.redirect('accounts:login')
+    @classmethod
+    def response_error(cls, request, message):
+        messages.error(request, message)
+        return cls.redirect('accounts:login')
+
 
 class GoogleSignInView(_AnonymousView):
     """
@@ -444,7 +357,8 @@ class GoogleSignInView(_AnonymousView):
     URL_GET_TOKEN = 'https://accounts.google.com/o/oauth2/token'
     URL_PLUS_API_PEOPLE_GET = 'https://www.googleapis.com/plus/v1/people/me'
 
-    def create_user(self, email):
+    @staticmethod
+    def create_user(email):
         """
         Create a new user account.
 
@@ -453,9 +367,9 @@ class GoogleSignInView(_AnonymousView):
         """
         user = User.objects.create_user(email,
                                         type=UserType.GOOGLE,
-                                        active=True)
+                                        is_active=True)
 
-        user.add_to_log('User account created via Google OAuth2 login')
+        user.add_to_log('Account created via Google login')
 
         # Send welcome Email
         context = {'user': user}
@@ -466,25 +380,16 @@ class GoogleSignInView(_AnonymousView):
 
         return user
 
-    def do_login(self, request, user):
+    @staticmethod
+    def login(request, user):
         """
         Perform actual login.
 
         :param request: HttpRequest
         :param user: User
         """
-        user.add_message(request.META['REMOTE_ADDR'],
-                         tag='login',
-                         type='google',
-                         user_agent=request.META.get('HTTP_USER_AGENT'))
-
-        if user.otp_active:
-            request.session['otp_uid'] = user.id
-            request.session.modified = True
-            return self.redirect('accounts:login_otp')
-        else:
-            LoginOtpView.login(request, user)
-            return self.redirect('dashboard')
+        user.add_to_log('Login via Google')
+        return LoginView.login(request, user)
 
     def get(self, request, *args, **kwargs):
         """
@@ -496,15 +401,15 @@ class GoogleSignInView(_AnonymousView):
         :return: HttpResponse
         """
         if not request.GET.get('state'):
-            return self.response_error(request, _("Missing state property."), title=_("Google OAuth2 error"))
+            return self.response_error(request, 'Missing state property.')
         elif not request.GET.get('code'):
-            return self.response_error(request, _("Missing code property."), title=_("Google OAuth2 error"))
+            return self.response_error(request, 'Missing code property.')
 
         state = request.GET['state']
         code = request.GET['code']
 
         if state != request.session.get('gapi_state'):
-            return self.response_error(request, _("Invalid state"), title=_("Google OAuth2 error"))
+            return self.response_error(request, 'Invalid state.')
 
         google.redirect_uri = absolute_url(request, 'accounts:google_sign_in')
         google.scope = ''  # need to reset scope to '', because otherwise we'll get trouble
@@ -514,19 +419,14 @@ class GoogleSignInView(_AnonymousView):
                                code=code,
                                client_secret=settings.GAPI_CLIENT_SECRET)
         except Exception:
-            return self.response_error(request,
-                                       _("An error occurred while verifying Google's response. "
-                                         "Please try again later"),
-                                       _("Google OAuth2 error"))
+            return self.response_error(request, 'An error occurred while verifying response.')
 
         response = google.get(self.URL_PLUS_API_PEOPLE_GET)
 
         try:
             data = json.loads(response.content.decode('utf-8'))
         except ValueError:
-            return self.response_error(request,
-                                       _("Google's response has an invalid format."),
-                                       _("Google OAuth2 error"))
+            return self.response_error(request, 'Invalid response format.')
 
         email_address = None
 
@@ -537,39 +437,22 @@ class GoogleSignInView(_AnonymousView):
                     break
 
         if not email_address:
-            return self.response_error(request,
-                                       _("No valid account-based email address found."),
-                                       _("Google OAuth2 error"))
+            return self.response_error(request, 'No valid account-based email address found.')
 
         # Now check if the account exists and login
+        user = None
+
         try:
             user = User.objects.get(email__iexact=email_address)
         except User.DoesNotExist:
-            # TODO: Beta check
-            try:
-                BetaInvitation.objects.get(email__iexact=email_address)
-            except BetaInvitation.DoesNotExist:
-                return self.response_error(request,
-                                           _("Your email address is not permitted to participate on the beta test."),
-                                           _("Google OAuth2 error"))
-
             user = self.create_user(email_address)
 
-        # Check if the user is banned
-        ban = user.get_ban()
-
-        if ban:
-            return self.response_error(request,
-                                       _("Your user account is banned: %s") % ban.reason,
-                                       _("Google OAuth2 error"))
-
-        if user.type == UserType.google:
-            return self.do_login(request, user)
+        if not user.is_active:
+            return self.response_error(request, 'Your account is inactive.')
+        elif user.type != UserType.GOOGLE:
+            return self.response_error(request, 'Account type mismatch.')
         else:
-            return self.response_error(request,
-                                       _("There is already an account with the same Email address, "
-                                         "but with a different account type."),
-                                       _("Login aborted"))
+            return self.login(request, user)
 
     def post(self, request, *args, **kwargs):
         """
@@ -595,9 +478,10 @@ class GoogleSignInView(_AnonymousView):
 
         return self.redirect(authorization_url)
 
-    def response_error(self, request, message, title):
-        messages.error(request, message, title)
-        return self.redirect('login')
+    @classmethod
+    def response_error(cls, request, message):
+        messages.error(request, message)
+        return cls.redirect('login')
 
 
 class LoginView(_AnonymousView, FormView):
@@ -618,6 +502,10 @@ class LoginView(_AnonymousView, FormView):
             user.backend = settings.AUTHENTICATION_BACKENDS[0]
 
         login(request, user)
+
+        if user.timezone:
+            activate_timezone(request)
+
         return cls.redirect(redirect or 'dashboard')
 
     def get_context_data(self, **kwargs):
@@ -649,6 +537,7 @@ class LogoutView(_AnonymousView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated():
             logout(request)
+            deactivate_timezone(request)
             messages.info(request, 'You have been logged out.')
         return self.redirect('home')
 

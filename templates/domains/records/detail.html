@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load fmt %}
+
+{% block title %}{{ record }} &lsaquo; Records &lsaquo; {{ domain }} &lsaquo; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-3 col-md-3">
+			<section class="card">
+				<div class="card-content">
+					{% include "domains/sidenav.html" %}
+				</div>
+			</section>
+		</div>
+		<div class="col-lg-9 col-md-9">
+			<section class="card">
+				<div class="card-content">
+					<h3 class="page-header">
+						{{ record }}
+						<span class="pull-right">
+							{% if record.is_editable %}<a href="{% url 'domains:records:edit' domain.name record.padded_id %}" class="btn btn-link" title="Edit Record" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-pencil"></i></a>{% endif %}
+							{% if record.is_deletable %}<a href="{% url 'domains:records:delete' domain.name record.padded_id %}" onclick="return confirm('Are you sure?')" class="btn btn-link" title="Delete Record" data-toggle="tooltip" data-placement="bottom"><i class="fa fa-trash-o"></i></a>{% endif %}
+						</span>
+					</h3>
+					<div class="row">
+						<div class="col-lg-6 col-md-6">
+							<dl class="dl-horizontal">
+								<dt>Type</dt>
+								<dd>{{ record.type }}</dd>
+								<dt>Current content</dt>
+								<dd>{{ record.content }}</dd>
+								{% if record.ttl %}<dt>TTL</dt>
+								<dd>{{ record.ttl }} second{% if record.ttl != 1 %}s{% endif %}</dd>{% endif %}
+								{% if record.prio %}<dt>Priority</dt>
+								<dd>{{ record.prio }}</dd>{% endif %}
+								<dt>Status</dt>
+								<dd>{{ record.status_label }}</dd>
+							</dl>
+						</div>
+						<div class="col-lg-6 col-md-6">
+							<dl class="dl-horizontal">
+								<dt>Creation date</dt>
+								<dd>{{ record.date_created|fmt_timesince }}</dd>
+								<dt>Last modified</dt>
+								<dd>{{ record.date_modified|fmt_timesince }}</dd>
+								<dt>Owner</dt>
+								<dd>
+									{% if record.owner %}
+										{{ record.owner }}
+									{% else %}
+										<span class="text-muted">not available</span>
+									{% endif %}
+								</dd>
+							</dl>
+						</div>
+					</div>
+					{% if record.recent_updates.count > 0 %}
+						<hr>
+						<table class="table table-condensed table-sm table-no-border">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Changes</th>
+									<th>User Agent</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for o in record.recent_updates|slice:':50' %}{% with ua=o.ua %}<tr>
+									<td>{{ o.date_created|fmt_timesince }}</td>
+									<td>{{ o.summary }}</td>
+									<td>
+										{% if ua.icon %}<i class="fa fa-{{ ua.icon }} fa-fw"></i>{% endif %}
+										{{ ua.s|default:o.user_agent|default:'Unknown' }}
+									</td>
+								</tr>{% endwith %}{% endfor %}
+							</tbody>
+						</table>
+					{% endif %}
+				</div>
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			YDNS.setActiveSection('records');
+		});
+	</script>
+{% endblock %}

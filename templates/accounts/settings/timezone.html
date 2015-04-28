@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Timezone &lsaquo; Settings &lsaquo; YDNS{% endblock %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-3 col-md-3">
+			<section class="card">
+				<div class="card-content">
+					{% include "accounts/settings/sidenav.html" %}
+				</div>
+			</section>
+		</div>
+	    <div class="col-lg-9 col-md-9">
+			<section class="card">
+				<div class="card-content">
+					<h3 class="page-header">Timezone</h3>
+					<form id="form-edit" class="form-horizontal" method="post" action="{% url 'accounts:settings:timezone' %}">
+						{% csrf_token %}
+						{{ form }}
+						<div class="form-group margin">
+							<div class="col-lg-offset-2 col-md-offset-3 col-lg-10 col-md-9">
+								<button type="submit" class="btn btn-primary btn-material">Save changes</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</section>
+		</div>
+	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript">
+		$(function() {
+			$('[data-nav-id="settings"],[data-nav-id="timezone"]').addClass('active');
+		});
+	</script>
+{% endblock %}

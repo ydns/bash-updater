@@ -42,8 +42,12 @@ def create_basic_records(domain):
     update_serial(domain)
 
     # Name server (NS)
-    for s in ('ns1.ydns.io', 'ns2.ydns.io'):
-        domain.records.create(domain=domain, type=RecordType.NS, content=s)
+    for s in (PRIMARY_NS[0], SECONDARY_NS[0]):
+        domain.records.create(name=domain.name,
+                              domain=domain,
+                              type=RecordType.NS,
+                              content=s,
+                              owner=domain.owner)
 
 
 def update_serial(domain):
@@ -64,8 +68,10 @@ def update_serial(domain):
     except ObjectDoesNotExist:
         s += '00'
         soa_record = domain.records.create(domain=domain,
+                                           name=domain.name,
                                            type=RecordType.SOA,
-                                           content=content.format(name=domain.name, serial=s))
+                                           content=content.format(name=domain.name, serial=s),
+                                           owner=domain.owner)
         return soa_record
 
     else:
@@ -74,7 +80,7 @@ def update_serial(domain):
         if soa_record.content[:8] == s:
             inc += 1
 
-        s += '%02d' % inc
+        s += '{0:02}'.format(inc)
         soa_record.content = content.format(name=domain.name, serial=s)
         soa_record.date_modified = timezone.now()
         soa_record.save()

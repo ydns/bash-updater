@@ -36,14 +36,28 @@ class _BaseView(TemplateView):
 
 
 class _DomainView(_BaseView):
+    require_perms = ''
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.require_perms:
+            context = self.get_context_data(**kwargs)
+            s = context['domain_permissions']
+
+            for c in self.require_perms:
+                if c not in s:
+                    return self.redirect_insufficient_privileges(request)
+        return super(_DomainView, self).dispatch(request, *args, **kwargs)
+
     @property
     def domain(self):
-        context = self.get_context_data(**self.kwargs)
-        return context['domain']
+        if not hasattr(self, '_domain'):
+            self._domain = self.get_context_data(**self.kwargs)['domain']
+        return self._domain
 
     def get_context_data(self, **kwargs):
         context = super(_DomainView, self).get_context_data(**kwargs)
         context['domain'] = get_object_or_404(Domain, name=self.kwargs['name'])
+        context['domain_permissions'] = context['domain'].get_permissions(self.request.user)
         return context
 
 
@@ -66,7 +80,7 @@ class CreateView(_BaseView, FormView):
                                        access_type=form.cleaned_data['access_type'],
                                        public_owner=form.cleaned_data['public_owner'],
                                        status=DomainStatus.OK)
-        messages.success(self.request, 'Domain "%s" added.' % domain)
+        messages.success(self.request, 'Domain "{!s}" added.'.format(domain))
         return self.redirect('dashboard')
 
     @staticmethod
@@ -83,16 +97,19 @@ class DeleteView(_DomainView):
     """
     Delete a domain.
     """
+    require_perms = 'wa'
     template_name = 'domains/delete.html'
 
     def post(self, request, *args, **kwargs):
         domain = self.domain
         domain_name = str(domain)
         domain.delete()
-        request.user.add_to_log('Deleted domain %s' % domain_name)
-        messages.info(request, 'Domain "%s" deleted.' % domain_name)
+        request.user.add_to_log('Deleted domain {}'.format(domain_name))
+        messages.info(request, 'Domain "{}" deleted.'.format(domain_name))
         return self.redirect('dashboard')
 
 
 class DetailView(_DomainView):
+    require_login = False
+    require_perms = 'r'
     template_name = 'domains/detail.html'
