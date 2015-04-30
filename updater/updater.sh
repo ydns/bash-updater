@@ -46,6 +46,7 @@ usage () {
 	echo "  -H HOST        YDNS host to update"
 	echo "  -u USERNAME    YDNS username for authentication"
 	echo "  -p PASSWORD    YDNS password for authentication"
+	echo "  -i INTERFACE   Use the local IP address for the given interface"
 	echo "  -v             Display version"
 	echo "  -V             Enable verbose output"
 	exit 0
@@ -59,7 +60,7 @@ update_ip_address () {
 		-u "$YDNS_USER:$YDNS_PASSWD" \
 		--silent \
 		--sslv3 \
-		https://ydns.eu/api/v1/update/?host=$YDNS_HOST`
+		https://ydns.eu/api/v1/update/?host=${YDNS_HOST}\&ip=${current_ip}`
 
 	echo $ret
 }
@@ -86,8 +87,9 @@ write_msg () {
 }
 
 verbose=0
+local_interface_addr=
 
-while getopts "hH:p:u:vV" opt; do
+while getopts "hH:i:p:u:vV" opt; do
 	case $opt in
 		h)
 			usage
@@ -95,6 +97,10 @@ while getopts "hH:p:u:vV" opt; do
 
 		H)
 			YDNS_HOST=$OPTARG
+			;;
+
+		i)
+			local_interface_addr=$OPTARG
 			;;
 
 		p)
@@ -115,8 +121,13 @@ while getopts "hH:p:u:vV" opt; do
 	esac
 done
 
-# Retrieve current public IP address
-current_ip=`curl --silent --sslv3 https://ydns.eu/api/v1/ip`
+if [ $local_interface_addr == "" ]; then
+	# Retrieve current public IP address
+	current_ip=`curl --silent --sslv3 https://ydns.eu/api/v1/ip`
+else
+	# Retrieve current local IP address for a given interface
+	current_ip=$(ip addr | awk '/inet/ && /'${local_interface_addr}'/{sub(/\/.*$/,"",$2); print $2}')
+fi
 write_msg "Current IP: $current_ip"
 
 # Get last known IP address that was stored locally
