@@ -1,2 +1,0 @@
-Project lead:
-  Christian Jurk <commx@commx.ws>
