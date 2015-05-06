@@ -29,7 +29,7 @@ YDNS_LASTIP_FILE="/tmp/ydns_last_ip"
 ##
 # Don't change anything below.
 ##
-YDNS_UPD_VERSION="20141015.1"
+YDNS_UPD_VERSION="20150506.1"
 
 if ! hash curl 2>/dev/null; then
 	echo "ERROR: cURL is missing."
@@ -120,14 +120,25 @@ while getopts "hH:i:p:u:vV" opt; do
 			;;
 	esac
 done
+ 
+if [ "$local_interface_addr" != "" ]; then
+	# Retrieve current local IP address for a given interface
+    
+    if hash ip 2>/dev/null; then
+        current_ip=$(ip addr | awk '/inet/ && /'${local_interface_addr}'/{sub(/\/.*$/,"",$2); print $2}')
+    fi
+fi
 
-if [ $local_interface_addr == "" ]; then
+if [ "$current_ip" = "" ]; then
 	# Retrieve current public IP address
 	current_ip=`curl --silent --sslv3 https://ydns.eu/api/v1/ip`
-else
-	# Retrieve current local IP address for a given interface
-	current_ip=$(ip addr | awk '/inet/ && /'${local_interface_addr}'/{sub(/\/.*$/,"",$2); print $2}')
+    
+    if [ "$current_ip" = "" ]; then
+        write_msg "Error: Unable to retrieve current public IP address." 2
+        exit 92
+    fi
 fi
+
 write_msg "Current IP: $current_ip"
 
 # Get last known IP address that was stored locally
