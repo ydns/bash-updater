@@ -13,6 +13,22 @@ First, ensure that your host has [curl](http://curl.haxx.se) installed.
 3. Edit the script and update the user and host information to fit your configuration
 4. Run the script (either by single call or set up a cronjob to run it periodically)
 
+## Crontab Setup
+
+To run this script every 15 minutes using `crontab`, add the following line to your crontab list:
+
+```bash
+*/15 * * * * /path/to/script/updater.sh > /dev/null
+```
+
+Although this works on most all implementations of `crontab`, for more portability use this instead:
+
+```bash
+0,15,30,45 * * * * /path/to/script/updater.sh > /dev/null
+````
+
+**NOTE:** To gain access to the crontab list to edit and add entries, execute `crontab -e` at the terminal
+
 ## Further notes
 
 The code is licensed under the GNU Public License, version 3.
