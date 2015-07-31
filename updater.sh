@@ -35,10 +35,10 @@ fi
 
 # if this fails with error 60 your certificate store does not contain the certificate,
 # either add it or use -k (disable certificate check
-ret=`curl --basic \
+ret=$(curl --basic \
 	-u "$YDNS_USER:$YDNS_PASSWD" \
 	--silent \
-	https://ydns.eu/api/v1/update/?host=$YDNS_HOST`
+	https://ydns.eu/api/v1/update/?host=$YDNS_HOST)
 
 if [ "$ret" != "ok" ]; then
 	echo "Update failed: $ret"
