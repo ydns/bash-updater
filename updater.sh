@@ -48,7 +48,7 @@ fi
 ret=$(curl --basic \
 	-u "$YDNS_USER:$YDNS_PASSWD" \
 	--silent \
-	https://ydns.eu/api/v1/update/?host=$YDNS_HOST)
+	https://ydns.eu/api/v1/update/?host="$YDNS_HOST")
 
 if [ "$ret" != "ok" ]; then
 	echo "Update failed: $ret"
