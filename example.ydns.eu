@@ -1,0 +1,3 @@
+YDNS_USER="user@host.xx"
+YDNS_PASSWD="secret"
+YDNS_HOST="example.ydns.eu"

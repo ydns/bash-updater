@@ -16,14 +16,24 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+if [ -z "${1}" ] && [ ! -r /usr/local/etc/ydns-config ] ; then
+    echo "Usage: $0: Supply the config file as /usr/local/etc/ydns-config or as the only arguement"
+    echo "Bailing."
+    exit 20
+fi
 
-##
-# Define your yDNS account details and host you'd like to update.
-##
+if [ ! -r "${1}" ] ; then
+    echo "Unable to read ${1}"
+    exit 25
+fi
 
-YDNS_USER="user@host.xx"
-YDNS_PASSWD="secret"
-YDNS_HOST="myhost.ydns.eu"
+if [ ! -z "${1}" ] ; then
+    CONFIGFILE="${1}"
+else
+    CONFIGFILE=/usr/local/etc/ydns-config
+fi
+
+. "${CONFIGFILE}"
 
 ##
 # Don't change anything below.
