@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # yDNS Updater, updates your yDNS host.
-# Copyright (C) 2013 Christian Jurk <cj@ydns.eu>
+# Copyright (C) 2013-2015 TFMT UG (haftungsbeschr.) <support@ydns.io>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ YDNS_LASTIP_FILE="/tmp/ydns_last_ip"
 ##
 # Don't change anything below.
 ##
-YDNS_UPD_VERSION="20150506.1"
+YDNS_UPD_VERSION="20150506.2"
 
 if ! hash curl 2>/dev/null; then
 	echo "ERROR: cURL is missing."
@@ -60,7 +60,7 @@ update_ip_address () {
 		-u "$YDNS_USER:$YDNS_PASSWD" \
 		--silent \
 		--sslv3 \
-		https://ydns.eu/api/v1/update/?host=${YDNS_HOST}\&ip=${current_ip}`
+		https://ydns.io/api/v1/update/?host=${YDNS_HOST}\&ip=${current_ip}`
 
 	echo $ret
 }
@@ -131,7 +131,7 @@ fi
 
 if [ "$current_ip" = "" ]; then
 	# Retrieve current public IP address
-	current_ip=`curl --silent --sslv3 https://ydns.eu/api/v1/ip`
+	current_ip=`curl --silent --sslv3 https://ydns.io/api/v1/ip`
     
     if [ "$current_ip" = "" ]; then
         write_msg "Error: Unable to retrieve current public IP address." 2
