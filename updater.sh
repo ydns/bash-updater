@@ -59,7 +59,6 @@ update_ip_address () {
 	ret=`curl --basic \
 		-u "$YDNS_USER:$YDNS_PASSWD" \
 		--silent \
-		--sslv3 \
 		https://ydns.io/api/v1/update/?host=${YDNS_HOST}\&ip=${current_ip}`
 
 	echo $ret
@@ -120,10 +119,10 @@ while getopts "hH:i:p:u:vV" opt; do
 			;;
 	esac
 done
- 
+
 if [ "$local_interface_addr" != "" ]; then
 	# Retrieve current local IP address for a given interface
-    
+
     if hash ip 2>/dev/null; then
         current_ip=$(ip addr | awk '/inet/ && /'${local_interface_addr}'/{sub(/\/.*$/,"",$2); print $2}')
     fi
@@ -131,8 +130,8 @@ fi
 
 if [ "$current_ip" = "" ]; then
 	# Retrieve current public IP address
-	current_ip=`curl --silent --sslv3 https://ydns.io/api/v1/ip`
-    
+	current_ip=`curl --silent https://ydns.io/api/v1/ip`
+
     if [ "$current_ip" = "" ]; then
         write_msg "Error: Unable to retrieve current public IP address." 2
         exit 92
