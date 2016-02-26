@@ -24,7 +24,7 @@
 YDNS_USER="user@host.xx"
 YDNS_PASSWD="secret"
 YDNS_HOST="myhost.ydns.eu"
-YDNS_LASTIP_FILE="/tmp/ydns_last_ip"
+YDNS_LASTIP_FILE="/tmp/ydns_last_ip_$YDNS_HOST"
 
 ##
 # Don't change anything below.
@@ -96,6 +96,7 @@ while getopts "hH:i:p:u:vV" opt; do
 
 		H)
 			YDNS_HOST=$OPTARG
+			YDNS_LASTIP_FILE="/tmp/ydns_last_ip_$YDNS_HOST"
 			;;
 
 		i)
