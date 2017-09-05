@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
-# yDNS Updater, updates your yDNS host.
-# Copyright (C) 2013-2015 TFMT UG (haftungsbeschr.) <support@ydns.io>
+# YDNS updater script
+# Copyright (C) 2013-2017 TFMT UG (haftungsbeschränkt) <support@ydns.io>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,9 @@
 
 
 ##
-# Define your yDNS account details and host you'd like to update.
+# Define your YDNS account details and host you'd like to update.
+# In case you'd like to update multiple hosts at once, provide the hosts
+# separated by space.
 ##
 
 YDNS_USER="user@host.xx"
@@ -29,7 +31,7 @@ YDNS_LASTIP_FILE="/tmp/ydns_last_ip_$YDNS_HOST"
 ##
 # Don't change anything below.
 ##
-YDNS_UPD_VERSION="20150506.2"
+YDNS_UPD_VERSION="20170905.1"
 
 if ! hash curl 2>/dev/null; then
 	echo "ERROR: cURL is missing."
@@ -56,12 +58,16 @@ usage () {
 update_ip_address () {
 	# if this fails with error 60 your certificate store does not contain the certificate,
 	# either add it or use -k (disable certificate check
-	ret=`curl --basic \
-		-u "$YDNS_USER:$YDNS_PASSWD" \
-		--silent \
-		https://ydns.io/api/v1/update/?host=${YDNS_HOST}\&ip=${current_ip}`
+	ret=
 
-	echo $ret
+	for host in $YDNS_HOST; do
+		ret=`curl --basic \
+			-u "$YDNS_USER:$YDNS_PASSWD" \
+			--silent \
+			https://ydns.io/api/v1/update/?host=${host}\&ip=${current_ip}`
+	done
+
+	echo ${ret//[[:space:]]/}
 }
 
 ## Shorthand function to display version
@@ -87,6 +93,7 @@ write_msg () {
 
 verbose=0
 local_interface_addr=
+custom_host=
 
 while getopts "hH:i:p:u:vV" opt; do
 	case $opt in
@@ -95,8 +102,7 @@ while getopts "hH:i:p:u:vV" opt; do
 			;;
 
 		H)
-			YDNS_HOST=$OPTARG
-			YDNS_LASTIP_FILE="/tmp/ydns_last_ip_$YDNS_HOST"
+			custom_host="$custom_host $OPTARG"
 			;;
 
 		i)
@@ -120,6 +126,11 @@ while getopts "hH:i:p:u:vV" opt; do
 			;;
 	esac
 done
+
+if [ "$custom_host" != "" ]; then
+	YDNS_HOST=$custom_host
+	YDNS_LASTIP_FILE="/tmp/ydns_last_ip_${YDNS_HOST// /_}"
+fi
 
 if [ "$local_interface_addr" != "" ]; then
 	# Retrieve current local IP address for a given interface
